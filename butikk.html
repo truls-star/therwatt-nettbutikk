@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Butikk – Therwatt AS</title>
+  <meta name="description" content="Utforsk vårt utvalg av varmepumper, geoenergi- og VVS-produkter. Søke- og filterfunksjon, handlekurv og enkel bestilling." />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body class="store-page">
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-logo"></span> Therwatt AS</a>
+      <nav class="menu" aria-label="Meny">
+        <a href="index.html" data-page="index.html">Hjem</a>
+        <a href="tjenester.html" data-page="tjenester.html">Tjenester</a>
+        <a href="om-oss.html" data-page="om-oss.html">Om oss</a>
+        <a href="butikk.html" data-page="butikk.html">Butikk</a>
+        <a href="kontakt.html" data-page="kontakt.html" class="btn primary">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Nettbutikk</h1>
+        <p class="lead">Finn produkter til vannbårne varmeanlegg, varmepumper og geoenergi. Alle priser er inklusive 20&nbsp;% rabatt fra bruttopris.</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="shop-controls">
+          <input id="searchInput" type="text" placeholder="Søk på varenr. eller navn" />
+          <select id="categorySelect"></select>
+          <button type="button" id="clearFilters" class="btn-clear">Nullstill</button>
+          <button type="button" id="openCart" class="btn-cart">Handlekurv (<span id="cartCount">0</span>)</button>
+        </div>
+        <div id="status" class="note" style="margin-bottom:10px;"></div>
+        <div id="productList" class="grid grid-cols-3"></div>
+        <div class="pagination">
+          <button type="button" id="prevPage" class="btn">Forrige</button>
+          <span id="pageInfo" class="page-info">Side 1 av 1</span>
+          <button type="button" id="nextPage" class="btn">Neste</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Cart drawer overlay -->
+  <div id="cartDrawer">
+    <div class="drawer">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2>Handlekurv</h2>
+        <button type="button" id="closeCart" class="btn">Lukk</button>
+      </div>
+      <div class="cart-items"></div>
+      <div class="subtotal">Sum: <span id="cartSubtotal">0 kr</span></div>
+      <div class="cart-buttons">
+        <button type="button" id="emptyCart" class="btn">Tøm kurv</button>
+      </div>
+      <div style="margin-top:20px;">
+        <form name="order" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="ordre-sendt.html">
+          <input type="hidden" name="form-name" value="order" />
+          <p style="display:none;"><label>Ikke fyll ut: <input name="bot-field" /></label></p>
+          <input type="hidden" id="orderPayload" name="orderPayload" />
+          <label for="customerName">Navn</label>
+          <input id="customerName" name="customerName" required />
+          <label for="customerEmail">E-post</label>
+          <input id="customerEmail" name="customerEmail" type="email" required />
+          <label for="customerPhone">Telefon</label>
+          <input id="customerPhone" name="customerPhone" />
+          <label for="customerNote">Notat</label>
+          <textarea id="customerNote" name="customerNote"></textarea>
+          <button type="submit" class="btn primary" style="margin-top:12px; width:100%;">Send ordre</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <div>© <span id="year"></span> Therwatt AS. Alle rettigheter.</div>
+      <div class="footer-links">
+        <a href="index.html">Hjem</a>
+        <a href="tjenester.html">Tjenester</a>
+        <a href="om-oss.html">Om oss</a>
+        <a href="kontakt.html">Kontakt</a>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/main.js"></script>
+  <script src="assets/store.js"></script>
+</body>
+</html>

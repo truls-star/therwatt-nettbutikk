@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kontakt oss – Therwatt AS</title>
+  <meta name="description" content="Ta kontakt med Therwatt AS for uforpliktende befaring eller mer informasjon om varmepumper, geoenergi og vannbårne varmeanlegg." />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-logo"></span> Therwatt AS</a>
+      <nav class="menu" aria-label="Meny">
+        <a href="index.html" data-page="index.html">Hjem</a>
+        <a href="tjenester.html" data-page="tjenester.html">Tjenester</a>
+        <a href="om-oss.html" data-page="om-oss.html">Om oss</a>
+        <a href="butikk.html" data-page="butikk.html">Butikk</a>
+        <a href="kontakt.html" data-page="kontakt.html" class="btn primary">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Kontakt oss</h1>
+        <p class="lead">Send en forespørsel med detaljer om ditt prosjekt og vi tar kontakt for en uforpliktende prat.</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="grid grid-cols-2">
+          <div class="card">
+            <h3>Kontaktinformasjon</h3>
+            <p>Fyll inn riktig telefonnummer, e-post og org.nr før publisering.</p>
+            <ul class="list">
+              <li><strong>Telefon:</strong> <a href="tel:+4700000000">+47 00 00 00 00</a></li>
+              <li><strong>E-post:</strong> <a href="mailto:post@therwatt.no">post@therwatt.no</a></li>
+              <li><strong>Org.nr:</strong> 000 000 000</li>
+              <li><strong>Adresse:</strong> Oppdater adresse</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Kontaktskjema</h3>
+            <p>Dette skjemaet sender e-post via Netlify Forms. Oppdater action hvis du bruker annen backend.</p>
+            <form name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="takke.html">
+              <input type="hidden" name="form-name" value="kontakt" />
+              <p style="display:none;">
+                <label>Ikke fyll ut: <input name="bot-field" /></label>
+              </p>
+              <label for="name">Navn</label>
+              <input id="name" name="name" type="text" required />
+              <label for="phone">Telefon</label>
+              <input id="phone" name="phone" type="tel" />
+              <label for="message">Melding</label>
+              <textarea id="message" name="message" placeholder="Hva gjelder det?"></textarea>
+              <button type="submit" class="btn primary">Send melding</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <div>© <span id="year"></span> Therwatt AS. Alle rettigheter.</div>
+      <div class="footer-links">
+        <a href="index.html">Hjem</a>
+        <a href="tjenester.html">Tjenester</a>
+        <a href="butikk.html">Butikk</a>
+        <a href="om-oss.html">Om oss</a>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/main.js"></script>
+</body>
+</html>
