@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Butikk – Therwatt AS</title>
+  <meta name="description" content="Nettbutikk med søk, filter, handlekurv og Stripe-betaling." />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body data-page="butikk.html">
+  <div class="topbar">
+    <div class="wrap">
+      <div class="nav">
+        <a class="brand" href="index.html">
+          <div class="logo" aria-hidden="true"></div>
+          <div><div style="font-weight:900;">Therwatt AS</div><small>Geoenergi, varmepumper og varme</small></div>
+        </a>
+        <nav class="menu" aria-label="Meny">
+          <a href="index.html" data-page="index.html">Hjem</a>
+          <a href="tjenester.html" data-page="tjenester.html">Tjenester</a>
+          <a href="butikk.html" data-page="butikk.html">Butikk</a>
+          <a href="om-oss.html" data-page="om-oss.html">Om oss</a>
+          <a href="kontakt.html" data-page="kontakt.html" class="btn">Kontakt</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <header class="hero">
+      <div class="wrap">
+        <div class="kicker">Butikk</div>
+        <h1>Produkter</h1>
+        <p class="lead" id="pricingNote">Laster priskonfigurasjon…</p>
+
+        <div class="card" style="margin-top:14px;">
+          <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;">
+            <div style="flex: 1 1 280px;">
+              <label for="q" style="display:block; font-size:13px; color:var(--muted); margin:0 0 6px;">Søk</label>
+              <input id="q" type="text" placeholder="Søk på varenr eller tekst…" />
+            </div>
+
+            <div style="flex: 1 1 240px;">
+              <label for="cat" style="display:block; font-size:13px; color:var(--muted); margin:0 0 6px;">Varegruppe</label>
+              <select id="cat">
+                <option value="">Alle</option>
+              </select>
+            </div>
+
+            <div style="flex: 0 0 auto;">
+              <button id="clear" class="btn secondary" type="button">Nullstill</button>
+            </div>
+
+            <div style="flex: 0 0 auto; margin-left:auto;">
+              <button id="openCart" class="btn" type="button">Handlekurv (<span id="cartCount">0</span>)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="note" id="status" style="margin-top:10px;"></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="wrap">
+        <div id="list" class="grid3"></div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:16px;">
+          <button id="prev" class="btn secondary" type="button">Forrige</button>
+          <div class="note">Side <span id="pageNo">1</span> av <span id="pageTotal">1</span></div>
+          <button id="next" class="btn secondary" type="button">Neste</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" style="position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; z-index:100;">
+    <div style="position:absolute; right:0; top:0; height:100%; width:min(520px, 95vw); background:rgba(15,22,32,.98); border-left:1px solid rgba(35,50,71,.8); padding:16px; overflow:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <h2 style="margin:0;">Handlekurv</h2>
+        <button id="closeCart" class="btn secondary" type="button">Lukk</button>
+      </div>
+
+      <div id="cartItems" style="margin-top:12px;"></div>
+
+      <div class="card" style="margin-top:12px;">
+        <div style="display:flex; justify-content:space-between; gap:10px;">
+          <div style="font-weight:800;">Sum</div>
+          <div style="font-weight:900;"><span id="cartSum">0</span> kr</div>
+        </div>
+        <div class="note" style="margin-top:8px;">
+          Betaling skjer via Stripe Checkout. Frakt/levering avklares etter bestilling.
+        </div>
+      </div>
+
+      <div class="card form" style="margin-top:12px;">
+        <h3 style="margin:0 0 8px;">Kasse</h3>
+        <label for="customerEmail">E-post (kvittering)</label>
+        <input id="customerEmail" type="email" placeholder="epost@domene.no" />
+
+        <label for="customerNote">Notat (adresse, prosjektnavn, osv.)</label>
+        <textarea id="customerNote" placeholder="Skriv leveringsadresse og evt. info her…"></textarea>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+          <button id="checkoutBtn" class="btn" type="button">Betal med kort</button>
+          <button id="emptyCart" class="btn secondary" type="button">Tøm kurv</button>
+        </div>
+
+        <p class="note" style="margin-top:10px;">Du blir sendt til Stripe for betaling.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div>© <span id="year"></span> Therwatt AS. Alle rettigheter.</div>
+        <div class="footer-links">
+          <a href="index.html">Hjem</a>
+          <a href="tjenester.html">Tjenester</a>
+          <a href="kontakt.html">Kontakt</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/main.js"></script>
+  <script src="assets/store.js"></script>
+</body>
+</html>
