@@ -3,60 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nettbutikk – Therwatt</title>
-  <meta name="description" content="Therwatt nettbutikk med produkter gruppert etter forretningsområde og varegruppe. Prisene er basert på bruttopris + mva.">
+  <title>Produkt – Therwatt</title>
+  <meta name="description" content="Produktside med pris, beskrivelse og mulighet for kjøp eller tilbudsforespørsel.">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
   <header class="topbar">
     <div class="container nav">
       <a class="brand" href="index.html"><span class="brand-mark"></span> Therwatt</a>
-      <nav class="menu" aria-label="Hovedmeny">
+      <nav class="menu">
         <a href="index.html" data-page="index.html">Forside</a>
         <a href="butikk.html" data-page="butikk.html">Nettbutikk</a>
         <a href="om-oss.html" data-page="om-oss.html">Om oss</a>
         <a href="kontakt.html" data-page="kontakt.html">Kontakt</a>
       </nav>
-      <button class="btn secondary" id="openCart">Handlekurv (<span id="cartCount">0</span>)</button>
+      <button class="btn secondary" id="openCart" type="button">Handlekurv (<span id="cartCount">0</span>)</button>
     </div>
   </header>
 
-  <main class="container shop-layout">
-    <aside class="sidebar">
-      <h3>Søk</h3>
-      <input id="q" class="search" type="search" placeholder="Søk på varenummer, navn eller gruppe">
-      <div class="section-head" style="margin:16px 0 10px"><div><h3>Forretningsområder</h3></div></div>
-      <div id="areaNav" class="filter-chip-wrap"></div>
-      <div class="section-head" style="margin:10px 0 10px"><div><h3>Varegrupper</h3></div></div>
-      <div id="groupNav" class="sidebar-list"></div>
-      <div style="margin-top:16px">
-        <button class="btn ghost" id="resetFilters" type="button">Nullstill filtre</button>
-      </div>
-    </aside>
-
-    <section class="shop-main">
-      <div class="shop-toolbar">
-        <div>
-          <div class="kicker">Nettbutikk</div>
-          <h1 style="font-size:2.1rem;margin:0">Produkter</h1>
-          <div id="resultCount" class="muted">0 produkter</div>
-        </div>
-        <div class="muted">Prisvisning: bruttopris + mva</div>
-      </div>
-
-      <div id="productGrid" class="product-grid"></div>
-      <div id="emptyState" class="empty-state" hidden>
-        <h3>Ingen produkter funnet</h3>
-        <p class="muted">Prøv et annet søk eller fjern filtrene.</p>
-      </div>
-
-      <div class="pagination">
-        <button class="btn secondary" id="prevPage" type="button">Forrige</button>
-        <div id="pageInfo" class="muted">Side 1 av 1</div>
-        <button class="btn secondary" id="nextPage" type="button">Neste</button>
-      </div>
-    </section>
-  </main>
+  <main id="productPage"></main>
 
   <div id="cartDrawer" hidden>
     <div class="drawer">
@@ -69,7 +34,6 @@
         <span>Sum</span>
         <span id="cartTotal">0 kr</span>
       </div>
-      <p class="muted">Checkout er klargjort for Stripe. Legg inn STRIPE_SECRET_KEY i Netlify når du vil aktivere betaling.</p>
       <input type="hidden" id="checkoutPayload">
       <button class="btn" id="checkoutButton" type="button">Gå til betaling</button>
     </div>
@@ -81,7 +45,6 @@
         <h2>Be om tilbud</h2>
         <button class="btn ghost" id="quoteClose" type="button">Lukk</button>
       </div>
-      <p class="muted">Bruk dette skjemaet for større varer eller produkter som bør avklares før bestilling.</p>
       <div id="quoteSummary" style="font-weight:800;margin-bottom:14px"></div>
       <form name="quote" method="POST" data-netlify="true" action="tilbud-send.html">
         <input type="hidden" name="form-name" value="quote">
@@ -100,13 +63,9 @@
             <label for="quotePhone">Telefon</label>
             <input class="input" id="quotePhone" name="quotePhone">
           </div>
-          <div class="form-group">
-            <label for="quoteCompany">Firma</label>
-            <input class="input" id="quoteCompany" name="quoteCompany">
-          </div>
           <div class="form-group full">
             <label for="quoteMessage">Melding</label>
-            <textarea class="input" id="quoteMessage" name="quoteMessage" placeholder="Beskriv prosjekt, ønsket levering eller andre avklaringer."></textarea>
+            <textarea class="input" id="quoteMessage" name="quoteMessage"></textarea>
           </div>
         </div>
         <button class="btn" type="submit">Send forespørsel</button>
@@ -117,7 +76,7 @@
   <footer class="footer">
     <div class="container footer-grid">
       <div>© <span id="year"></span> Therwatt AS</div>
-      <div>Butikken er bygget fra prisfil og er klar for videre berikelse med NOBB-data.</div>
+      <div><a href="butikk.html">Tilbake til butikk</a></div>
     </div>
   </footer>
 
