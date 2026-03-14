@@ -1,13 +1,15 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   try {
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+      return { statusCode: 200, body: JSON.stringify({ error: 'STRIPE_SECRET_KEY mangler. Legg den inn i Netlify før betaling aktiveres.' }) };
+    }
+    const Stripe = require('stripe');
+    const stripe = new Stripe(stripeKey);
     const body = JSON.parse(event.body || '{}');
     const items = Array.isArray(body.items) ? body.items : [];
-    if (!items.length) {
-      return { statusCode: 400, body: JSON.stringify({ error: 'Ingen varer i handlekurven' }) };
-    }
-    const baseUrl = process.env.URL || process.env.DEPLOY_PRIME_URL || 'http://localhost:8888';
+    if (!items.length) return { statusCode: 400, body: JSON.stringify({ error: 'Handlekurven er tom.' }) };
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
@@ -15,18 +17,15 @@ exports.handler = async (event) => {
         quantity: item.qty,
         price_data: {
           currency: 'nok',
-          unit_amount: Math.round(item.price * 100),
-          product_data: {
-            name: item.name,
-            metadata: { sku: item.sku || '' },
-          },
-        },
+          product_data: { name: item.name },
+          unit_amount: Math.round(Number(item.price || 0) * 100)
+        }
       })),
-      success_url: `${baseUrl}/ordre-sendt.html`,
-      cancel_url: `${baseUrl}/butikk.html`,
+      success_url: `${process.env.URL || ''}/ordre-sendt.html`,
+      cancel_url: `${process.env.URL || ''}/butikk.html`
     });
     return { statusCode: 200, body: JSON.stringify({ url: session.url }) };
   } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message || 'Checkout feilet' }) };
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
