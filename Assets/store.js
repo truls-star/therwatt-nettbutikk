@@ -1,292 +1,383 @@
+
 (() => {
   const PRODUCTS_URL = 'assets/products.json';
+  const META_URL = 'assets/meta.json';
   const PAGE_SIZE = 24;
-  const VAT = 1.25;
-  const DEFAULT_DISCOUNT = 0.10;
-  const DISCOUNTS = {
-    'VVS': 0.10,
-    'Verktøy': 0.10,
-    'Vann- og miljøteknikk': 0.10,
-    'Industri': 0.10,
-    standard: 0.10,
-  };
-
-  let allProducts = [];
-  let filtered = [];
-  let page = 1;
-  let selectedArea = '';
-  let selectedCategory = '';
-  let search = '';
-
   const $ = (id) => document.getElementById(id);
-  const fmt = (n) => new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(n || 0);
-  const safe = (s) => String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
-  function discountFor(product) {
-    return DISCOUNTS[product.business_area] ?? DISCOUNTS.standard ?? DEFAULT_DISCOUNT;
+  let PRODUCTS = [];
+  let META = {areas: []};
+  let FILTERED = [];
+  let PAGE = 1;
+  let CART = loadCart();
+
+  function fmtCurrency(v) {
+    return new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(v || 0);
   }
 
-  function priceInclVat(product) {
-    return product.gross_price * (1 - discountFor(product)) * VAT;
+  function getDiscount(product) {
+    const cfg = window.TH_CONFIG || {};
+    const productMap = cfg.productDiscounts || {};
+    const groupMap = cfg.groupDiscounts || {};
+    if (productMap[product.sku] != null) return Number(productMap[product.sku]) || 0;
+    if (groupMap[product.group] != null) return Number(groupMap[product.group]) || 0;
+    return Number(cfg.defaultGroupDiscount || 0);
+  }
+
+  function getPriceInclVat(product) {
+    const cfg = window.TH_CONFIG || {};
+    const vat = 1 + Number(cfg.vatRate || 0.25);
+    const discount = getDiscount(product);
+    return Number(product.gross_price || 0) * (1 - discount) * vat;
+  }
+
+  function isQuoteOnly(product) {
+    const cfg = window.TH_CONFIG || {};
+    const groups = cfg.quoteGroups || [];
+    if (groups.includes(product.group)) return true;
+    return getPriceInclVat(product) >= Number(cfg.quoteThresholdInclVat || 25000);
   }
 
   function loadCart() {
-    try { return JSON.parse(localStorage.getItem('therwatt_cart_v3') || '[]'); } catch { return []; }
+    try { return JSON.parse(localStorage.getItem('therwatt_cart_v8') || '[]'); } catch { return []; }
   }
-
-  function saveCart(cart) {
-    localStorage.setItem('therwatt_cart_v3', JSON.stringify(cart));
-    updateCartCount();
+  function saveCart() {
+    localStorage.setItem('therwatt_cart_v8', JSON.stringify(CART));
+    updateCartBadge();
   }
-
-  function updateCartCount() {
-    const count = loadCart().reduce((sum, item) => sum + item.qty, 0);
-    if ($('cartCount')) $('cartCount').textContent = String(count);
-    if ($('cartCountFab')) $('cartCountFab').textContent = String(count);
+  function updateCartBadge() {
+    const badge = $('cartCount');
+    if (badge) badge.textContent = String(CART.reduce((s, x) => s + x.qty, 0));
   }
 
   function addToCart(product) {
-    const cart = loadCart();
-    const idx = cart.findIndex(item => item.sku === product.sku);
-    const price = priceInclVat(product);
-    if (idx >= 0) cart[idx].qty += 1;
-    else cart.push({ sku: product.sku, name: product.name, unit: product.unit, price, qty: 1 });
-    saveCart(cart);
+    const idx = CART.findIndex(x => x.sku === product.sku);
+    const line = { sku: product.sku, name: product.name, group: product.group, unit: product.unit, price: getPriceInclVat(product), qty: 1 };
+    if (idx >= 0) CART[idx].qty += 1; else CART.push(line);
+    saveCart();
     renderCart();
   }
 
   function changeQty(sku, delta) {
-    const cart = loadCart();
-    const idx = cart.findIndex(item => item.sku === sku);
-    if (idx === -1) return;
-    cart[idx].qty = Math.max(0, cart[idx].qty + delta);
-    const next = cart.filter(i => i.qty > 0);
-    saveCart(next);
-    renderCart();
+    const idx = CART.findIndex(x => x.sku === sku);
+    if (idx >= 0) {
+      CART[idx].qty = Math.max(0, CART[idx].qty + delta);
+      CART = CART.filter(x => x.qty > 0);
+      saveCart();
+      renderCart();
+    }
   }
 
-  function emptyCart() {
-    saveCart([]);
-    renderCart();
+  function cartSum() {
+    return CART.reduce((sum, item) => sum + item.price * item.qty, 0);
   }
 
-  function cartTotal(cart) {
-    return cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+  function getParams() {
+    const params = new URLSearchParams(location.search);
+    return {
+      q: params.get('q') || '',
+      area: params.get('area') || '',
+      group: params.get('group') || '',
+      page: Number(params.get('page') || 1)
+    };
   }
 
-  function buildAreaList() {
-    const counts = new Map();
-    allProducts.forEach(p => counts.set(p.business_area, (counts.get(p.business_area) || 0) + 1));
-    const sorted = [...counts.entries()].sort((a,b) => a[0].localeCompare(b[0], 'nb'));
-    $('areaList').innerHTML = sorted.map(([area, count]) => `
-      <button class="filter-btn ${selectedArea === area ? 'active' : ''}" type="button" data-area="${safe(area)}">
-        <span>${safe(area)}</span><small>${count}</small>
-      </button>`).join('');
-    $('areaList').querySelectorAll('[data-area]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const value = btn.getAttribute('data-area');
-        selectedArea = selectedArea === value ? '' : value;
-        selectedCategory = '';
-        page = 1;
-        applyFilters();
-      });
+  function setParams(next) {
+    const current = getParams();
+    const merged = { ...current, ...next };
+    const params = new URLSearchParams();
+    if (merged.q) params.set('q', merged.q);
+    if (merged.area) params.set('area', merged.area);
+    if (merged.group) params.set('group', merged.group);
+    if (merged.page && merged.page > 1) params.set('page', merged.page);
+    history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+  }
+
+  function filterProducts() {
+    const params = getParams();
+    PAGE = params.page || 1;
+    FILTERED = PRODUCTS.filter(p => {
+      const q = params.q.toLowerCase().trim();
+      const matchesQ = !q || `${p.sku} ${p.name} ${p.group} ${p.business_area}`.toLowerCase().includes(q);
+      const matchesArea = !params.area || p.business_area === params.area;
+      const matchesGroup = !params.group || p.group === params.group;
+      return matchesQ && matchesArea && matchesGroup;
     });
   }
 
-  function buildCategoryList() {
-    const source = selectedArea ? allProducts.filter(p => p.business_area === selectedArea) : allProducts;
-    const counts = new Map();
-    source.forEach(p => counts.set(p.category, (counts.get(p.category) || 0) + 1));
-    const sorted = [...counts.entries()].sort((a,b) => a[0].localeCompare(b[0], 'nb'));
-    $('categoryList').innerHTML = sorted.map(([cat, count]) => `
-      <button class="filter-btn ${selectedCategory === cat ? 'active' : ''}" type="button" data-category="${safe(cat)}">
-        <span>${safe(cat)}</span><small>${count}</small>
-      </button>`).join('');
-    $('categoryList').querySelectorAll('[data-category]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const value = btn.getAttribute('data-category');
-        selectedCategory = selectedCategory === value ? '' : value;
-        page = 1;
-        applyFilters();
-      });
-    });
-  }
-
-  function renderChips() {
-    const chips = [];
-    if (selectedArea) chips.push(`<span class="chip">Område: ${safe(selectedArea)}</span>`);
-    if (selectedCategory) chips.push(`<span class="chip">Gruppe: ${safe(selectedCategory)}</span>`);
-    if (search) chips.push(`<span class="chip">Søk: ${safe(search)}</span>`);
-    $('activeChips').innerHTML = chips.join('');
-  }
-
-  function applyFilters() {
-    filtered = allProducts.filter(p => {
-      if (selectedArea && p.business_area !== selectedArea) return false;
-      if (selectedCategory && p.category !== selectedCategory) return false;
-      if (search) {
-        const hay = `${p.sku} ${p.name} ${p.category} ${p.business_area}`.toLowerCase();
-        if (!hay.includes(search.toLowerCase())) return false;
-      }
-      return true;
-    }).sort((a,b) => {
-      return a.business_area.localeCompare(b.business_area, 'nb') || a.category.localeCompare(b.category, 'nb') || a.name.localeCompare(b.name, 'nb');
-    });
-    buildAreaList();
-    buildCategoryList();
-    renderChips();
-    renderProducts();
+  function buildSidebar() {
+    const areaWrap = $('areaNav');
+    const groupWrap = $('groupNav');
+    if (areaWrap) {
+      const currentArea = getParams().area;
+      areaWrap.innerHTML = META.areas.map(area => {
+        const active = currentArea === area.name ? 'active-chip' : '';
+        return `<a class="filter-chip ${active}" href="butikk.html?area=${encodeURIComponent(area.name)}">${area.name}</a>`;
+      }).join('');
+    }
+    if (groupWrap) {
+      const current = getParams();
+      const relevantAreas = current.area ? META.areas.filter(a => a.name === current.area) : META.areas;
+      const groups = [...new Set(relevantAreas.flatMap(a => a.groups.map(g => g.name)))].sort((a,b)=>a.localeCompare(b,'nb'));
+      groupWrap.innerHTML = groups.map(name => {
+        const active = current.group === name ? 'active-list' : '';
+        const hrefParams = new URLSearchParams();
+        if (current.area) hrefParams.set('area', current.area);
+        hrefParams.set('group', name);
+        return `<a class="sidebar-link ${active}" href="butikk.html?${hrefParams.toString()}">${name}</a>`;
+      }).join('');
+    }
   }
 
   function renderProducts() {
-    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-    page = Math.min(Math.max(page, 1), totalPages);
-    const items = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    $('resultMeta').textContent = `${filtered.length.toLocaleString('nb-NO')} produkter` + (selectedArea ? ` i ${selectedArea}` : '');
-    $('pageInfo').textContent = `Side ${page} av ${totalPages}`;
-    $('prevPage').disabled = page <= 1;
-    $('nextPage').disabled = page >= totalPages;
+    const list = $('productGrid');
+    const empty = $('emptyState');
+    if (!list) return;
+    filterProducts();
+    buildSidebar();
 
-    $('productList').innerHTML = items.map(p => {
-      const price = priceInclVat(p);
-      return `
-        <article class="product-card">
-          <div class="product-media"><img loading="lazy" src="/api/nobb-image?sku=${encodeURIComponent(p.sku)}" alt="${safe(p.name)}" onerror="this.onerror=null;this.src='assets/images/no-image.jpg'" /></div>
-          <div class="product-body">
-            <div class="product-meta">${safe(p.business_area)} · ${safe(p.category)}</div>
-            <div class="product-title">${safe(p.name)}</div>
-            <div class="product-meta">Varenr: <strong>${safe(p.sku)}</strong> · Enhet: ${safe(p.unit)}</div>
-            <div class="price-wrap">
+    const totalPages = Math.max(1, Math.ceil(FILTERED.length / PAGE_SIZE));
+    PAGE = Math.min(Math.max(PAGE, 1), totalPages);
+    const start = (PAGE - 1) * PAGE_SIZE;
+    const items = FILTERED.slice(start, start + PAGE_SIZE);
+
+    $('resultCount').textContent = `${FILTERED.length.toLocaleString('nb-NO')} produkter`;
+    if (!items.length) {
+      list.innerHTML = '';
+      if (empty) empty.hidden = false;
+    } else {
+      if (empty) empty.hidden = true;
+      list.innerHTML = items.map(product => {
+        const price = getPriceInclVat(product);
+        const quoteOnly = isQuoteOnly(product);
+        const discount = getDiscount(product);
+        return `
+          <article class="product-card">
+            <a class="product-image" href="produkt.html?sku=${encodeURIComponent(product.sku)}">
+              <img src="${product.image || '/assets/images/no-image.jpg'}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.src='/assets/images/no-image.jpg'">
+            </a>
+            <div class="product-meta-top">${product.business_area} / ${product.group}</div>
+            <h3><a href="produkt.html?sku=${encodeURIComponent(product.sku)}">${escapeHtml(product.name)}</a></h3>
+            <p class="product-desc">${escapeHtml(product.description_short || '')}</p>
+            <div class="product-specs">Varenr: ${product.sku} · Enhet: ${product.unit}</div>
+            <div class="product-price-row">
               <div>
-                <div class="price-main">${fmt(price)}</div>
-                <div class="price-note">inkl. mva · rabatt ${Math.round(discountFor(p) * 100)} %</div>
+                <div class="product-price">${fmtCurrency(price)}</div>
+                <div class="price-note">Bruttopris + mva${discount ? ` · Rabatt ${Math.round(discount*100)}%` : ''}</div>
               </div>
+              ${quoteOnly
+                ? `<button class="btn secondary quote-btn" data-sku="${product.sku}">Be om tilbud</button>`
+                : `<button class="btn add-btn" data-sku="${product.sku}">Legg i kurv</button>`
+              }
             </div>
-            <div class="product-actions">
-              <button class="btn secondary" type="button" data-quick="${safe(p.sku)}">Se gruppe</button>
-              <button class="btn primary" type="button" data-add="${safe(p.sku)}">Legg i kurv</button>
-            </div>
-          </div>
-        </article>`;
-    }).join('');
+          </article>
+        `;
+      }).join('');
+    }
 
-    $('productList').querySelectorAll('[data-add]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const sku = btn.getAttribute('data-add');
-        const product = allProducts.find(p => p.sku === sku);
-        if (product) addToCart(product);
-      });
-    });
+    $('pageInfo').textContent = `Side ${PAGE} av ${totalPages}`;
+    $('prevPage').disabled = PAGE <= 1;
+    $('nextPage').disabled = PAGE >= totalPages;
 
-    $('productList').querySelectorAll('[data-quick]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const sku = btn.getAttribute('data-quick');
-        const product = allProducts.find(p => p.sku === sku);
-        if (!product) return;
-        selectedArea = product.business_area;
-        selectedCategory = product.category;
-        page = 1;
-        applyFilters();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
+    document.querySelectorAll('.add-btn').forEach(btn => btn.addEventListener('click', () => {
+      const product = PRODUCTS.find(p => p.sku === btn.dataset.sku);
+      if (product) addToCart(product);
+    }));
+    document.querySelectorAll('.quote-btn').forEach(btn => btn.addEventListener('click', () => openQuote(PRODUCTS.find(p => p.sku === btn.dataset.sku))));
+  }
+
+  function renderFeatured() {
+    const areas = $('featuredAreas');
+    const groups = $('featuredGroups');
+    if (areas) {
+      areas.innerHTML = META.areas.map(area => `
+        <a class="category-tile" href="butikk.html?area=${encodeURIComponent(area.name)}">
+          <div class="tile-kicker">Forretningsområde</div>
+          <div class="tile-title">${area.name}</div>
+          <div class="tile-copy">${area.groups.length} varegrupper</div>
+        </a>
+      `).join('');
+    }
+    if (groups) {
+      const topGroups = Object.entries(PRODUCTS.reduce((acc,p)=>{acc[p.group]=(acc[p.group]||0)+1;return acc;},{}))
+        .sort((a,b)=>b[1]-a[1]).slice(0,8);
+      groups.innerHTML = topGroups.map(([group,count]) => `
+        <a class="mini-tile" href="butikk.html?group=${encodeURIComponent(group)}">
+          <span>${group}</span>
+          <small>${count.toLocaleString('nb-NO')} produkter</small>
+        </a>
+      `).join('');
+    }
   }
 
   function renderCart() {
-    const cart = loadCart();
-    const total = cartTotal(cart);
-    $('cartItems').innerHTML = cart.length ? cart.map(item => `
-      <div class="drawer-card">
-        <div class="cart-line">
+    const wrap = $('cartItems');
+    if (!wrap) return;
+    if (!CART.length) {
+      wrap.innerHTML = '<p class="muted">Handlekurven er tom.</p>';
+    } else {
+      wrap.innerHTML = CART.map(item => `
+        <div class="cart-item">
           <div>
-            <strong>${safe(item.name)}</strong><br>
-            <span class="muted">${safe(item.sku)} · ${safe(item.unit)}</span>
+            <strong>${escapeHtml(item.name)}</strong>
+            <div class="muted">${item.sku} · ${item.unit}</div>
           </div>
-          <div><strong>${fmt(item.qty * item.price)}</strong></div>
+          <div class="cart-controls">
+            <button type="button" class="qty-btn" data-dec="${item.sku}">−</button>
+            <span>${item.qty}</span>
+            <button type="button" class="qty-btn" data-inc="${item.sku}">+</button>
+          </div>
+          <div class="cart-line">${fmtCurrency(item.price * item.qty)}</div>
         </div>
-        <div class="qty-row">
-          <button class="btn secondary" type="button" data-dec="${safe(item.sku)}">−</button>
-          <span>${item.qty}</span>
-          <button class="btn secondary" type="button" data-inc="${safe(item.sku)}">+</button>
-        </div>
-      </div>`).join('') : '<div class="empty">Handlekurven er tom.</div>';
-    $('cartTotal').textContent = fmt(total);
-    $('cartItems').querySelectorAll('[data-dec]').forEach(btn => btn.addEventListener('click', () => changeQty(btn.getAttribute('data-dec'), -1)));
-    $('cartItems').querySelectorAll('[data-inc]').forEach(btn => btn.addEventListener('click', () => changeQty(btn.getAttribute('data-inc'), +1)));
+      `).join('');
+    }
+    $('cartTotal').textContent = fmtCurrency(cartSum());
+    const payload = { items: CART, currency: 'NOK', total: cartSum() };
+    if ($('checkoutPayload')) $('checkoutPayload').value = JSON.stringify(payload);
+    document.querySelectorAll('[data-dec]').forEach(b => b.onclick = ()=>changeQty(b.dataset.dec, -1));
+    document.querySelectorAll('[data-inc]').forEach(b => b.onclick = ()=>changeQty(b.dataset.inc, +1));
   }
 
-  async function checkout() {
-    const items = loadCart();
-    if (!items.length) {
-      alert('Handlekurven er tom.');
+  function openCart() {
+    $('cartDrawer').hidden = false;
+    renderCart();
+  }
+  function closeCart() {
+    $('cartDrawer').hidden = true;
+  }
+
+  function openQuote(product) {
+    if (!product) return;
+    $('quoteModal').hidden = false;
+    $('quoteSku').value = product.sku;
+    $('quoteProduct').value = product.name;
+    $('quoteSummary').textContent = `${product.name} · ${product.sku}`;
+  }
+  function closeQuote() {
+    $('quoteModal').hidden = true;
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
+  async function startCheckout() {
+    if (!CART.length) return;
+    const res = await fetch('/.netlify/functions/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: CART })
+    });
+    const data = await res.json();
+    if (data.url) {
+      location.href = data.url;
+    } else {
+      alert(data.error || 'Klarte ikke å starte betaling.');
+    }
+  }
+
+  async function loadData() {
+    const [productsRes, metaRes] = await Promise.all([fetch(PRODUCTS_URL), fetch(META_URL)]);
+    PRODUCTS = await productsRes.json();
+    META = await metaRes.json();
+  }
+
+  function initStorePage() {
+    const q = $('q');
+    const params = getParams();
+    if (q) q.value = params.q;
+
+    q?.addEventListener('input', () => {
+      setParams({ q: q.value, page: 1 });
+      renderProducts();
+    });
+
+    $('resetFilters')?.addEventListener('click', () => {
+      history.replaceState({}, '', 'butikk.html');
+      if (q) q.value = '';
+      renderProducts();
+    });
+
+    $('prevPage')?.addEventListener('click', () => {
+      setParams({ page: Math.max(1, PAGE - 1) });
+      renderProducts();
+    });
+
+    $('nextPage')?.addEventListener('click', () => {
+      setParams({ page: PAGE + 1 });
+      renderProducts();
+    });
+
+    $('openCart')?.addEventListener('click', openCart);
+    $('closeCart')?.addEventListener('click', closeCart);
+    $('cartDrawer')?.addEventListener('click', (e) => { if (e.target.id === 'cartDrawer') closeCart(); });
+    $('checkoutButton')?.addEventListener('click', startCheckout);
+    $('quoteClose')?.addEventListener('click', closeQuote);
+    $('quoteModal')?.addEventListener('click', (e) => { if (e.target.id === 'quoteModal') closeQuote(); });
+
+    renderProducts();
+    renderCart();
+  }
+
+  function initProductPage() {
+    const params = new URLSearchParams(location.search);
+    const sku = params.get('sku');
+    const product = PRODUCTS.find(p => p.sku === sku);
+    const wrap = $('productPage');
+    if (!wrap || !product) {
+      if (wrap) wrap.innerHTML = '<div class="container"><p>Fant ikke produktet.</p></div>';
       return;
     }
-    try {
-      const res = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items,
-          customer: {
-            name: $('customerName').value,
-            email: $('customerEmail').value,
-            phone: $('customerPhone').value,
-            note: $('customerNote').value,
-          },
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.url) throw new Error(data.error || 'Checkout kunne ikke startes');
-      location.href = data.url;
-    } catch (err) {
-      alert(err.message || 'Noe gikk galt ved opprettelse av betaling.');
-    }
+    const price = getPriceInclVat(product);
+    const quoteOnly = isQuoteOnly(product);
+    wrap.innerHTML = `
+      <div class="container product-layout">
+        <div class="product-detail-image">
+          <img src="${product.image || '/assets/images/no-image.jpg'}" alt="${escapeHtml(product.name)}" onerror="this.src='/assets/images/no-image.jpg'">
+        </div>
+        <div class="product-detail-copy">
+          <div class="breadcrumb"><a href="butikk.html">Butikk</a> / <a href="butikk.html?area=${encodeURIComponent(product.business_area)}">${product.business_area}</a> / <a href="butikk.html?group=${encodeURIComponent(product.group)}">${product.group}</a></div>
+          <div class="product-meta-top">${product.business_area} / ${product.group}</div>
+          <h1>${escapeHtml(product.name)}</h1>
+          <p class="lead-small">${escapeHtml(product.description_short)}</p>
+          <div class="detail-price">${fmtCurrency(price)}</div>
+          <div class="price-note">Pris beregnet fra bruttopris + mva${getDiscount(product) ? ` · Rabatt ${Math.round(getDiscount(product)*100)}%` : ''}</div>
+          <div class="detail-actions">
+            ${quoteOnly
+              ? `<button class="btn secondary" id="detailQuote">Be om tilbud</button>`
+              : `<button class="btn" id="detailAdd">Legg i kurv</button>`}
+            <button class="btn ghost" id="detailCart">Åpne handlekurv</button>
+          </div>
+          <div class="detail-specs">
+            <div><span>Varenr</span><strong>${product.sku}</strong></div>
+            <div><span>Enhet</span><strong>${product.unit}</strong></div>
+            <div><span>Varegruppe</span><strong>${product.group}</strong></div>
+            <div><span>Forretningsområde</span><strong>${product.business_area}</strong></div>
+            <div><span>Fra dato</span><strong>${product.from_date || '-'}</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="container detail-panels">
+        <section class="panel">
+          <h2>Produktbeskrivelse</h2>
+          ${product.description_long.split('\n\n').map(p => `<p>${escapeHtml(p)}</p>`).join('')}
+        </section>
+        <section class="panel">
+          <h2>Kjøp eller forespørsel</h2>
+          <p>Standardvarer kan legges direkte i handlekurven. Større tekniske produkter håndteres ofte via tilbud for å sikre riktig dimensjonering, levering og tilbehør.</p>
+        </section>
+      </div>
+    `;
+    $('detailAdd')?.addEventListener('click', () => addToCart(product));
+    $('detailCart')?.addEventListener('click', openCart);
+    $('detailQuote')?.addEventListener('click', () => openQuote(product));
   }
 
-  function initParams() {
-    const params = new URLSearchParams(location.search);
-    selectedArea = params.get('area') || '';
-    selectedCategory = params.get('category') || '';
-  }
-
-  async function init() {
-    initParams();
-    updateCartCount();
-    try {
-      const res = await fetch(PRODUCTS_URL, { cache: 'no-store' });
-      allProducts = await res.json();
-      search = $('searchInput').value || '';
-      applyFilters();
-    } catch (err) {
-      $('resultMeta').textContent = 'Kunne ikke laste produkter.';
-      console.error(err);
-    }
-
-    $('searchInput').addEventListener('input', (e) => {
-      search = e.target.value.trim();
-      page = 1;
-      applyFilters();
-    });
-    $('clearFilters').addEventListener('click', () => {
-      search = '';
-      selectedArea = '';
-      selectedCategory = '';
-      $('searchInput').value = '';
-      page = 1;
-      applyFilters();
-    });
-    $('prevPage').addEventListener('click', () => { page--; renderProducts(); });
-    $('nextPage').addEventListener('click', () => { page++; renderProducts(); });
-
-    const open = () => { $('cartDrawer').style.display = 'block'; renderCart(); };
-    const close = () => { $('cartDrawer').style.display = 'none'; };
-    $('openCart').addEventListener('click', open);
-    $('cartFab').addEventListener('click', open);
-    $('closeCart').addEventListener('click', close);
-    $('cartDrawer').addEventListener('click', (e) => { if (e.target.id === 'cartDrawer') close(); });
-    $('emptyCart').addEventListener('click', emptyCart);
-    $('stripeCheckout').addEventListener('click', checkout);
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', async () => {
+    updateCartBadge();
+    await loadData();
+    if ($('featuredAreas') || $('featuredGroups')) renderFeatured();
+    if ($('productGrid')) initStorePage();
+    if ($('productPage')) initProductPage();
+  });
 })();
