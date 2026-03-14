@@ -1,7 +1,8 @@
+
 document.addEventListener('DOMContentLoaded', () => {
-  const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   document.querySelectorAll('[data-page]').forEach(link => {
-    if ((link.getAttribute('data-page') || '').toLowerCase() === current) {
+    if ((link.getAttribute('data-page') || '').toLowerCase() === path) {
       link.classList.add('active');
     }
   });

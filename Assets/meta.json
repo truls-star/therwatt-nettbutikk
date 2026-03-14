@@ -1,0 +1,646 @@
+{
+  "areas": [
+    {
+      "name": "Industri",
+      "slug": "industri",
+      "groups": [
+        {
+          "name": "ALUMESS/CUNI INDUSTRI",
+          "slug": "alumess-cuni-industri"
+        },
+        {
+          "name": "DELER DUPLEX/STAINLESS/TITAN",
+          "slug": "deler-duplex-stainless-titan"
+        },
+        {
+          "name": "DEPOSITUM, PANT UTEN RABATT",
+          "slug": "depositum-pant-uten-rabatt"
+        },
+        {
+          "name": "FILTER - KUPLINGER INDUSTRI",
+          "slug": "filter-kuplinger-industri"
+        },
+        {
+          "name": "HYDRAULIKK RØR OG DELER",
+          "slug": "hydraulikk-ror-og-deler"
+        },
+        {
+          "name": "KJØLERØR OG DELER",
+          "slug": "kjoleror-og-deler"
+        },
+        {
+          "name": "KULDEAUTOMATIKK/-VENTILER/KOMPONENTER",
+          "slug": "kuldeautomatikk-ventiler-komponenter"
+        },
+        {
+          "name": "KULDEMEDIER/-BÆRERE/OLJER",
+          "slug": "kuldemedier-baerere-oljer"
+        },
+        {
+          "name": "LUFT- PEILERØRSARMATUR INDUSTRI",
+          "slug": "luft-peilerorsarmatur-industri"
+        },
+        {
+          "name": "RUSTFRIE/SYREF. DELER INDUSTRI",
+          "slug": "rustfrie-syref-deler-industri"
+        },
+        {
+          "name": "RUSTFRIE/SYREF. RØR INDUSTRI",
+          "slug": "rustfrie-syref-ror-industri"
+        },
+        {
+          "name": "RØR DUPLEX/STAINLESS STEEL/TITAN",
+          "slug": "ror-duplex-stainless-steel-titan"
+        },
+        {
+          "name": "RØR OG DELER AV PLAST INDUSTRI",
+          "slug": "ror-og-deler-av-plast-industri"
+        },
+        {
+          "name": "SERVICEUTSTYR",
+          "slug": "serviceutstyr"
+        },
+        {
+          "name": "SPJELDVENTILER INDUSTRI",
+          "slug": "spjeldventiler-industri"
+        },
+        {
+          "name": "SVEISE-/GJ.DELER KARBON INDUSTRI",
+          "slug": "sveise-gj-deler-karbon-industri"
+        },
+        {
+          "name": "SVEISTE RØR KARBON INDUSTRI",
+          "slug": "sveiste-ror-karbon-industri"
+        },
+        {
+          "name": "SVEISTE TYNNVEGGEDE RØR MED RILLE",
+          "slug": "sveiste-tynnveggede-ror-med-rille"
+        },
+        {
+          "name": "SØMLØSE RØR KARBON INDUSTRI",
+          "slug": "somlose-ror-karbon-industri"
+        },
+        {
+          "name": "VENTILER INDUSTRI",
+          "slug": "ventiler-industri"
+        }
+      ]
+    },
+    {
+      "name": "VVS",
+      "slug": "vvs",
+      "groups": [
+        {
+          "name": "ADUSERTE RØRDELER SORT OG GALVANISERT",
+          "slug": "aduserte-rordeler-sort-og-galvanisert"
+        },
+        {
+          "name": "ALTECH OB",
+          "slug": "altech-ob"
+        },
+        {
+          "name": "AVLØPSRØR / DELER DIV. PLAST",
+          "slug": "avlopsror-deler-div-plast"
+        },
+        {
+          "name": "AVLØPSRØR / DELER DIV. STÅL",
+          "slug": "avlopsror-deler-div-stal"
+        },
+        {
+          "name": "AVLØPSRØR / DELER MA",
+          "slug": "avlopsror-deler-ma"
+        },
+        {
+          "name": "AVLØPSRØR / DELER PP INNOMHUS",
+          "slug": "avlopsror-deler-pp-innomhus"
+        },
+        {
+          "name": "BADE-/VASKEROMSMØBLER ALTERNA",
+          "slug": "bade-vaskeromsmobler-alterna"
+        },
+        {
+          "name": "BADE-/VASKEROMSMØBLER DIV.",
+          "slug": "bade-vaskeromsmobler-div"
+        },
+        {
+          "name": "BADE-/VASKEROMSMØBLER ROCA",
+          "slug": "bade-vaskeromsmobler-roca"
+        },
+        {
+          "name": "BADEKAR ALTERNA",
+          "slug": "badekar-alterna"
+        },
+        {
+          "name": "BADEKAR OG TILBEHØR",
+          "slug": "badekar-og-tilbehor"
+        },
+        {
+          "name": "BADEROMSUTSTYR",
+          "slug": "baderomsutstyr"
+        },
+        {
+          "name": "BADEROMSUTSTYR ALTERNA",
+          "slug": "baderomsutstyr-alterna"
+        },
+        {
+          "name": "BD BLISTER",
+          "slug": "bd-blister"
+        },
+        {
+          "name": "BEREDERTILBEHØR OG DELER",
+          "slug": "beredertilbehor-og-deler"
+        },
+        {
+          "name": "BLANDE-, SIKKERHETS.-OG TILB.SL.VENTILER",
+          "slug": "blande-sikkerhets-og-tilb-sl-ventiler"
+        },
+        {
+          "name": "BOLIGBEREDERE",
+          "slug": "boligberedere"
+        },
+        {
+          "name": "BRANNSIKKERHET",
+          "slug": "brannsikkerhet"
+        },
+        {
+          "name": "BRANNSLUKKEMATERIELL",
+          "slug": "brannslukkemateriell"
+        },
+        {
+          "name": "DELER SANITÆRARMATUR",
+          "slug": "deler-sanitaerarmatur"
+        },
+        {
+          "name": "DELER SERVANTER/KLOSETTER",
+          "slug": "deler-servanter-klosetter"
+        },
+        {
+          "name": "DUSJ ALTERNA",
+          "slug": "dusj-alterna"
+        },
+        {
+          "name": "DUSJ DELER",
+          "slug": "dusj-deler"
+        },
+        {
+          "name": "DUSJ MACRO",
+          "slug": "dusj-macro"
+        },
+        {
+          "name": "DUSJ PALME/HUPPE",
+          "slug": "dusj-palme-huppe"
+        },
+        {
+          "name": "EKSP.KAR/SIKKERHETSVENT,LUFTUTSKILLERE",
+          "slug": "eksp-kar-sikkerhetsvent-luftutskillere"
+        },
+        {
+          "name": "EL.PRODUKTER/HVITEVARER",
+          "slug": "el-produkter-hvitevarer"
+        },
+        {
+          "name": "FUNKSJONSUTSTYR",
+          "slug": "funksjonsutstyr"
+        },
+        {
+          "name": "GULVVARME, SNØSMELTE OG KULVERTER",
+          "slug": "gulvvarme-snosmelte-og-kulverter"
+        },
+        {
+          "name": "INNBYGNINGSSISTERNER",
+          "slug": "innbygningssisterner"
+        },
+        {
+          "name": "ISOLASJON AV CELLEGUMMI",
+          "slug": "isolasjon-av-cellegummi"
+        },
+        {
+          "name": "ISOLASJON AV MINERALULL",
+          "slug": "isolasjon-av-mineralull"
+        },
+        {
+          "name": "ISOLASJONSTILBEHØR, BRANNTETTING ETC.",
+          "slug": "isolasjonstilbehor-branntetting-etc"
+        },
+        {
+          "name": "KAPILLARDELER",
+          "slug": "kapillardeler"
+        },
+        {
+          "name": "KJELER OG BRENNERE",
+          "slug": "kjeler-og-brennere"
+        },
+        {
+          "name": "KLEMRINGSDELER OG DIV. KOBLINGER",
+          "slug": "klemringsdeler-og-div-koblinger"
+        },
+        {
+          "name": "KLOSETTSETER PORSELENSLEVERANDØRER",
+          "slug": "klosettseter-porselensleverandorer"
+        },
+        {
+          "name": "KOBBERRØR",
+          "slug": "kobberror"
+        },
+        {
+          "name": "MESSINGDELER",
+          "slug": "messingdeler"
+        },
+        {
+          "name": "MINIKJØKKEN",
+          "slug": "minikjokken"
+        },
+        {
+          "name": "OLJETANKER, MÅLERE OG FITTINGS",
+          "slug": "oljetanker-malere-og-fittings"
+        },
+        {
+          "name": "PRESSFITTINGS GALVANISERT",
+          "slug": "pressfittings-galvanisert"
+        },
+        {
+          "name": "PRESSFITTINGS KOBBER",
+          "slug": "pressfittings-kobber"
+        },
+        {
+          "name": "PRESSFITTINGS SYREFAST",
+          "slug": "pressfittings-syrefast"
+        },
+        {
+          "name": "RADIATORER OG KONVEKTORER",
+          "slug": "radiatorer-og-konvektorer"
+        },
+        {
+          "name": "RADIATORVENTILER",
+          "slug": "radiatorventiler"
+        },
+        {
+          "name": "RILLEKUPLINGER",
+          "slug": "rillekuplinger"
+        },
+        {
+          "name": "RUSTFRITT SANITÆRUTSTYR",
+          "slug": "rustfritt-sanitaerutstyr"
+        },
+        {
+          "name": "RUSTFRITT SANITÆRUTSTYR ALTERNA",
+          "slug": "rustfritt-sanitaerutstyr-alterna"
+        },
+        {
+          "name": "RØR-I-RØR/ MULTILAYER ARMATURJONSSON",
+          "slug": "ror-i-ror-multilayer-armaturjonsson"
+        },
+        {
+          "name": "RØR-I-RØR/MULTILAYER ALTECH",
+          "slug": "ror-i-ror-multilayer-altech"
+        },
+        {
+          "name": "RØR-I-RØR/MULTILAYER DIVERSE",
+          "slug": "ror-i-ror-multilayer-diverse"
+        },
+        {
+          "name": "RØR-I-RØR/MULTILAYER LK",
+          "slug": "ror-i-ror-multilayer-lk"
+        },
+        {
+          "name": "RØR-I-RØR/MULTILAYER ROTH",
+          "slug": "ror-i-ror-multilayer-roth"
+        },
+        {
+          "name": "RØR-I-RØR/MULTILAYER UPONOR",
+          "slug": "ror-i-ror-multilayer-uponor"
+        },
+        {
+          "name": "SANITÆRARMATUR ALTERNA",
+          "slug": "sanitaerarmatur-alterna"
+        },
+        {
+          "name": "SANITÆRARMATUR DIV.",
+          "slug": "sanitaerarmatur-div"
+        },
+        {
+          "name": "SANITÆRARMATUR DLINE",
+          "slug": "sanitaerarmatur-dline"
+        },
+        {
+          "name": "SANITÆRARMATUR FIMA",
+          "slug": "sanitaerarmatur-fima"
+        },
+        {
+          "name": "SANITÆRARMATUR FMM",
+          "slug": "sanitaerarmatur-fmm"
+        },
+        {
+          "name": "SANITÆRARMATUR GUSTAVSBERG",
+          "slug": "sanitaerarmatur-gustavsberg"
+        },
+        {
+          "name": "SANITÆRARMATUR HANS GROHE",
+          "slug": "sanitaerarmatur-hans-grohe"
+        },
+        {
+          "name": "SANITÆRARMATUR ORAS",
+          "slug": "sanitaerarmatur-oras"
+        },
+        {
+          "name": "SERVANTER OG KLOSETTER ALTERNA",
+          "slug": "servanter-og-klosetter-alterna"
+        },
+        {
+          "name": "SERVANTER OG KLOSETTER DIV.LEVERANDØRER",
+          "slug": "servanter-og-klosetter-div-leverandorer"
+        },
+        {
+          "name": "SERVANTER OG KLOSETTER DURAVIT",
+          "slug": "servanter-og-klosetter-duravit"
+        },
+        {
+          "name": "SERVANTER OG KLOSETTER GB",
+          "slug": "servanter-og-klosetter-gb"
+        },
+        {
+          "name": "SERVANTER OG KLOSETTER PB",
+          "slug": "servanter-og-klosetter-pb"
+        },
+        {
+          "name": "SERVANTER OG KLOSETTER V&B",
+          "slug": "servanter-og-klosetter-v-b"
+        },
+        {
+          "name": "SERVANTER OG TOALETTER ROCA",
+          "slug": "servanter-og-toaletter-roca"
+        },
+        {
+          "name": "SHUNTVENTILER, AUTOMATIKK OG MÅLERE",
+          "slug": "shuntventiler-automatikk-og-malere"
+        },
+        {
+          "name": "SILER, FILTERE OG REDUKSJONSVENTILER",
+          "slug": "siler-filtere-og-reduksjonsventiler"
+        },
+        {
+          "name": "SIRKULASJONSPUMPER OG TILBEHØR",
+          "slug": "sirkulasjonspumper-og-tilbehor"
+        },
+        {
+          "name": "SLUK, INSPEKSJONSLUKER OG JORDINGSRØR",
+          "slug": "sluk-inspeksjonsluker-og-jordingsror"
+        },
+        {
+          "name": "SMARTHUS",
+          "slug": "smarthus"
+        },
+        {
+          "name": "STENGEVENTILER,TAPPEKRANER OG MAGNETVENT",
+          "slug": "stengeventiler-tappekraner-og-magnetvent"
+        },
+        {
+          "name": "STORBEREDERE OG VILLAVARMERE",
+          "slug": "storberedere-og-villavarmere"
+        },
+        {
+          "name": "STRUPE- OG INNREGULERINGSVENTILER",
+          "slug": "strupe-og-innreguleringsventiler"
+        },
+        {
+          "name": "VANNFORS.-,AVLØP-,HÅNDPUMPER OG TILBEHØR",
+          "slug": "vannfors-avlop-handpumper-og-tilbehor"
+        },
+        {
+          "name": "VANNLÅS OG DIVERSE AVLØPSDELER",
+          "slug": "vannlas-og-diverse-avlopsdeler"
+        },
+        {
+          "name": "VANNMÅLERE, LEKKASJESIKRING OG NØDDUSJ",
+          "slug": "vannmalere-lekkasjesikring-og-noddusj"
+        },
+        {
+          "name": "VANNTÅKE",
+          "slug": "vanntake"
+        },
+        {
+          "name": "VARMEPUMPER",
+          "slug": "varmepumper"
+        },
+        {
+          "name": "VARMEVEKSLERE",
+          "slug": "varmevekslere"
+        }
+      ]
+    },
+    {
+      "name": "Vann- og miljøteknikk",
+      "slug": "vann-og-miljoteknikk",
+      "groups": [
+        {
+          "name": "BETONGVARER",
+          "slug": "betongvarer"
+        },
+        {
+          "name": "DELER FOR DRENS-/ANLEGGS-/OVERVANNSRØR",
+          "slug": "deler-for-drens-anleggs-overvannsror"
+        },
+        {
+          "name": "DELER FOR KABELVERN",
+          "slug": "deler-for-kabelvern"
+        },
+        {
+          "name": "DELER FOR STØPEJERNSRØR VMT",
+          "slug": "deler-for-stopejernsror-vmt"
+        },
+        {
+          "name": "DELER FOR TRYKKRØR PVC",
+          "slug": "deler-for-trykkror-pvc"
+        },
+        {
+          "name": "DELER GRUNNAVLØPSRØR PLAST VMT",
+          "slug": "deler-grunnavlopsror-plast-vmt"
+        },
+        {
+          "name": "DIVERSE TRAFIKKSIKRING",
+          "slug": "diverse-trafikksikring"
+        },
+        {
+          "name": "DIVERSE VMT",
+          "slug": "diverse-vmt"
+        },
+        {
+          "name": "DRENS-/ANLEGGS-/OVERVANNSRØR",
+          "slug": "drens-anleggs-overvannsror"
+        },
+        {
+          "name": "EL.SVEISEMUFFER FOR PE RØR/PE-DELER",
+          "slug": "el-sveisemuffer-for-pe-ror-pe-deler"
+        },
+        {
+          "name": "ELEKTRO SAMFERDSEL",
+          "slug": "elektro-samferdsel"
+        },
+        {
+          "name": "GATEGODS",
+          "slug": "gategods"
+        },
+        {
+          "name": "GEOMEMBRAN",
+          "slug": "geomembran"
+        },
+        {
+          "name": "GEONETT",
+          "slug": "geonett"
+        },
+        {
+          "name": "GRUNNAVLØPSRØR PLAST VMT",
+          "slug": "grunnavlopsror-plast-vmt"
+        },
+        {
+          "name": "ISOLASJON",
+          "slug": "isolasjon"
+        },
+        {
+          "name": "ISOLERTE- OG HURTIGKOBLINGSRØR OG DELER",
+          "slug": "isolerte-og-hurtigkoblingsror-og-deler"
+        },
+        {
+          "name": "KABELVERN",
+          "slug": "kabelvern"
+        },
+        {
+          "name": "OPPSETTINGSUTSTYR",
+          "slug": "oppsettingsutstyr"
+        },
+        {
+          "name": "PE-RØR HAVBRUK",
+          "slug": "pe-ror-havbruk"
+        },
+        {
+          "name": "PE-RØR KVEIL",
+          "slug": "pe-ror-kveil"
+        },
+        {
+          "name": "PE-RØR RETTE",
+          "slug": "pe-ror-rette"
+        },
+        {
+          "name": "PE-RØRDELER HAVBRUK",
+          "slug": "pe-rordeler-havbruk"
+        },
+        {
+          "name": "PLASTKUMMER OG FORDRØYNINGSSYSTEMER",
+          "slug": "plastkummer-og-fordroyningssystemer"
+        },
+        {
+          "name": "PLASTVENTILER HAVBRUK",
+          "slug": "plastventiler-havbruk"
+        },
+        {
+          "name": "REP.MUFFER/KUPLINGER/ANBORINGSKLAMMER",
+          "slug": "rep-muffer-kuplinger-anboringsklammer"
+        },
+        {
+          "name": "RØRDELER FOR PE-RØR",
+          "slug": "rordeler-for-pe-ror"
+        },
+        {
+          "name": "SLAMAVSKILLERE/TANKER/PUMPER",
+          "slug": "slamavskillere-tanker-pumper"
+        },
+        {
+          "name": "STØPEJERNSRØR VMT",
+          "slug": "stopejernsror-vmt"
+        },
+        {
+          "name": "SYNLIG GEOTEKNIKK",
+          "slug": "synlig-geoteknikk"
+        },
+        {
+          "name": "TRAFIKKSKILT",
+          "slug": "trafikkskilt"
+        },
+        {
+          "name": "TRYKKRØR PVC",
+          "slug": "trykkror-pvc"
+        },
+        {
+          "name": "UTEMILJØ",
+          "slug": "utemiljo"
+        },
+        {
+          "name": "VARSLINGS- OG SIKRINGSUTSTYR",
+          "slug": "varslings-og-sikringsutstyr"
+        },
+        {
+          "name": "VEGSIKRING",
+          "slug": "vegsikring"
+        },
+        {
+          "name": "VENTILER VMT/VANNMÅLERE/BAKKEKRANER",
+          "slug": "ventiler-vmt-vannmalere-bakkekraner"
+        },
+        {
+          "name": "VOTEC NGS FIBERDUK",
+          "slug": "votec-ngs-fiberduk"
+        },
+        {
+          "name": "ØVRIG FIBERDUK",
+          "slug": "ovrig-fiberduk"
+        }
+      ]
+    },
+    {
+      "name": "Verktøy",
+      "slug": "verktoy",
+      "groups": [
+        {
+          "name": "ARBEIDSKLÆR",
+          "slug": "arbeidsklaer"
+        },
+        {
+          "name": "ARBEIDSKLÆR OG TILBEHØR",
+          "slug": "arbeidsklaer-og-tilbehor"
+        },
+        {
+          "name": "ARBEIDSUTSTYR",
+          "slug": "arbeidsutstyr"
+        },
+        {
+          "name": "ELEKTROVERKTØY",
+          "slug": "elektroverktoy"
+        },
+        {
+          "name": "HÅNDVERKTØY OG TILBEHØR",
+          "slug": "handverktoy-og-tilbehor"
+        },
+        {
+          "name": "KJEMI",
+          "slug": "kjemi"
+        },
+        {
+          "name": "MONTASJEMATERIELL",
+          "slug": "montasjemateriell"
+        },
+        {
+          "name": "PERSONLIG VERNEUTSTYR",
+          "slug": "personlig-verneutstyr"
+        },
+        {
+          "name": "RØROPPHENG",
+          "slug": "roroppheng"
+        },
+        {
+          "name": "RØRVERKTØY",
+          "slug": "rorverktoy"
+        },
+        {
+          "name": "SKRUER, BOLTER O.L.",
+          "slug": "skruer-bolter-o-l"
+        },
+        {
+          "name": "VERKTØY NETTOPRIS",
+          "slug": "verktoy-nettopris"
+        }
+      ]
+    }
+  ],
+  "product_count": 26626,
+  "generated_from": "BDExcel_30036116_d6f5d64d-92a1-46f5-92bb-895bc02b3f77.xlsx"
+}
