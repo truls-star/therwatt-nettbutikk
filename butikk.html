@@ -1,128 +1,16 @@
-<!doctype html>
-<html lang="no">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nettbutikk – Therwatt</title>
-  <meta name="description" content="Therwatt nettbutikk med produkter gruppert etter forretningsområde og varegruppe. Prisene er basert på bruttopris + mva.">
-  <link rel="stylesheet" href="assets/styles.css">
-</head>
-<body>
-  <header class="topbar">
-    <div class="container nav">
-      <a class="brand" href="index.html"><span class="brand-mark"></span> Therwatt</a>
-      <nav class="menu" aria-label="Hovedmeny">
-        <a href="index.html" data-page="index.html">Forside</a>
-        <a href="butikk.html" data-page="butikk.html">Nettbutikk</a>
-        <a href="om-oss.html" data-page="om-oss.html">Om oss</a>
-        <a href="kontakt.html" data-page="kontakt.html">Kontakt</a>
-      </nav>
-      <button class="btn secondary" id="openCart">Handlekurv (<span id="cartCount">0</span>)</button>
-    </div>
-  </header>
-
-  <main class="container shop-layout">
-    <aside class="sidebar">
-      <h3>Søk</h3>
-      <input id="q" class="search" type="search" placeholder="Søk på varenummer, navn eller gruppe">
-      <div class="section-head" style="margin:16px 0 10px"><div><h3>Forretningsområder</h3></div></div>
-      <div id="areaNav" class="filter-chip-wrap"></div>
-      <div class="section-head" style="margin:10px 0 10px"><div><h3>Varegrupper</h3></div></div>
-      <div id="groupNav" class="sidebar-list"></div>
-      <div style="margin-top:16px">
-        <button class="btn ghost" id="resetFilters" type="button">Nullstill filtre</button>
-      </div>
-    </aside>
-
-    <section class="shop-main">
-      <div class="shop-toolbar">
-        <div>
-          <div class="kicker">Nettbutikk</div>
-          <h1 style="font-size:2.1rem;margin:0">Produkter</h1>
-          <div id="resultCount" class="muted">0 produkter</div>
-        </div>
-        <div class="muted">Prisvisning: bruttopris + mva</div>
-      </div>
-
+<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nettbutikk – Therwatt</title><meta name="description" content="Nettbutikk med produkter gruppert etter forretningsområde og varegruppe. Pris inkl. mva, rabattstyring og Stripe-klargjort checkout."><link rel="stylesheet" href="assets/styles.css"></head><body>
+<header class="topbar"><div class="wrap nav"><a class="brand" href="index.html"><span class="logo"></span><span>Therwatt</span></a><nav class="menu"><a data-page="index.html" href="index.html">Hjem</a><a data-page="butikk.html" href="butikk.html">Nettbutikk</a><a data-page="kontakt.html" href="kontakt.html">Kontakt</a><a class="btn secondary" id="openCart" href="#">Handlekurv (<span id="cartCount">0</span>)</a></nav></div></header>
+<main class="wrap">
+  <section class="section" style="padding-bottom:14px"><div class="kicker">Therwatt Store v8</div><h1 style="font-size:44px;margin-bottom:10px">Nettbutikk</h1><p class="subtitle">Produktene er gruppert etter forretningsområde og varegruppe fra gjeldende prisfil. Prisene vises inkl. mva. Mindre varer kan kjøpes direkte, større varer kan sendes som forespørsel.</p><div class="pill-nav" id="areaNav"></div></section>
+  <section class="shop-layout">
+    <aside class="sidebar"><div class="card"><h3>Finn produkter</h3><input id="searchInput" class="input" placeholder="Søk på varenummer, navn eller gruppe"><div class="actions" style="margin-top:10px"><button id="clearFilters" class="btn secondary" type="button">Nullstill</button></div></div><div class="card" style="margin-top:14px"><h3>Varegrupper</h3><div id="groupList" class="filter-list"></div></div><div class="card" style="margin-top:14px"><div class="notice">Prislogikk: bruttopris + mva. Rabatter kan styres per varegruppe og per produkt i <strong>assets/config.js</strong>.</div></div></aside>
+    <section>
+      <div class="shop-top"><div><h2 style="margin:0;font-size:28px">Produkter</h2><div class="muted" id="resultsText">Laster produkter...</div></div><div class="actions"><a class="btn secondary" href="kontakt.html">Kontakt oss</a></div></div>
       <div id="productGrid" class="product-grid"></div>
-      <div id="emptyState" class="empty-state" hidden>
-        <h3>Ingen produkter funnet</h3>
-        <p class="muted">Prøv et annet søk eller fjern filtrene.</p>
-      </div>
-
-      <div class="pagination">
-        <button class="btn secondary" id="prevPage" type="button">Forrige</button>
-        <div id="pageInfo" class="muted">Side 1 av 1</div>
-        <button class="btn secondary" id="nextPage" type="button">Neste</button>
-      </div>
+      <div class="pagination"><button class="btn ghost" id="prevPage" type="button">Forrige</button><span id="pageInfo" class="small">Side 1 av 1</span><button class="btn ghost" id="nextPage" type="button">Neste</button></div>
     </section>
-  </main>
-
-  <div id="cartDrawer" hidden>
-    <div class="drawer">
-      <div class="drawer-head">
-        <h2>Handlekurv</h2>
-        <button class="btn ghost" id="closeCart" type="button">Lukk</button>
-      </div>
-      <div id="cartItems"></div>
-      <div class="cart-total">
-        <span>Sum</span>
-        <span id="cartTotal">0 kr</span>
-      </div>
-      <p class="muted">Checkout er klargjort for Stripe. Legg inn STRIPE_SECRET_KEY i Netlify når du vil aktivere betaling.</p>
-      <input type="hidden" id="checkoutPayload">
-      <button class="btn" id="checkoutButton" type="button">Gå til betaling</button>
-    </div>
-  </div>
-
-  <div id="quoteModal" hidden>
-    <div class="modal-card">
-      <div class="modal-head">
-        <h2>Be om tilbud</h2>
-        <button class="btn ghost" id="quoteClose" type="button">Lukk</button>
-      </div>
-      <p class="muted">Bruk dette skjemaet for større varer eller produkter som bør avklares før bestilling.</p>
-      <div id="quoteSummary" style="font-weight:800;margin-bottom:14px"></div>
-      <form name="quote" method="POST" data-netlify="true" action="tilbud-send.html">
-        <input type="hidden" name="form-name" value="quote">
-        <input type="hidden" id="quoteSku" name="quoteSku">
-        <input type="hidden" id="quoteProduct" name="quoteProduct">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="quoteName">Navn</label>
-            <input class="input" id="quoteName" name="quoteName" required>
-          </div>
-          <div class="form-group">
-            <label for="quoteEmail">E-post</label>
-            <input class="input" id="quoteEmail" name="quoteEmail" type="email" required>
-          </div>
-          <div class="form-group">
-            <label for="quotePhone">Telefon</label>
-            <input class="input" id="quotePhone" name="quotePhone">
-          </div>
-          <div class="form-group">
-            <label for="quoteCompany">Firma</label>
-            <input class="input" id="quoteCompany" name="quoteCompany">
-          </div>
-          <div class="form-group full">
-            <label for="quoteMessage">Melding</label>
-            <textarea class="input" id="quoteMessage" name="quoteMessage" placeholder="Beskriv prosjekt, ønsket levering eller andre avklaringer."></textarea>
-          </div>
-        </div>
-        <button class="btn" type="submit">Send forespørsel</button>
-      </form>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container footer-grid">
-      <div>© <span id="year"></span> Therwatt AS</div>
-      <div>Butikken er bygget fra prisfil og er klar for videre berikelse med NOBB-data.</div>
-    </div>
-  </footer>
-
-  <script src="assets/config.js"></script>
-  <script src="assets/main.js"></script>
-  <script src="assets/store.js"></script>
-</body>
-</html>
+  </section>
+</main>
+<div class="drawer" id="cartDrawer"><div class="drawer-panel"><div class="cart-row"><h2 style="margin:0">Handlekurv</h2><button class="btn ghost" id="closeCart" type="button">Lukk</button></div><div id="cartItems" style="margin-top:18px"></div><div class="hero-card" style="padding:16px;margin-top:18px"><div class="cart-row"><strong>Sum</strong><strong id="cartTotal">0 kr</strong></div><p class="small" style="margin:8px 0 0">Prisene i handlekurven er inkl. mva. Frakt og eventuelle spesialvilkår avklares ved behov.</p><div class="actions" style="margin-top:14px"><button class="btn" id="checkoutBtn" type="button">Gå til betaling</button></div></div><div class="hero-card" style="padding:16px;margin-top:14px"><h3 style="margin-top:0">Be om tilbud</h3><form name="tilbud-kurv" method="POST" data-netlify="true" action="takke.html"><input type="hidden" name="form-name" value="tilbud-kurv"><input type="hidden" id="orderPayload" name="orderPayload"><label>Navn</label><input class="input" name="name" required><label>E-post</label><input class="input" name="email" type="email" required><label>Telefon</label><input class="input" name="phone"><label>Melding</label><textarea name="message" placeholder="Skriv hva du ønsker tilbud på"></textarea><div class="actions" style="margin-top:12px"><button class="btn secondary" type="submit">Send forespørsel</button></div></form></div></div></div>
+<footer><div class="wrap footer-grid"><div><strong>Therwatt</strong><p class="muted">Nettbutikk for VVS, vann og miljøteknikk, industri og verktøy.</p></div><div><strong>Sider</strong><p><a href="index.html">Forside</a><br><a href="kontakt.html">Kontakt</a></p></div><div><strong>Info</strong><p>Produkter: 26 626<br>Pris: bruttopris + mva</p></div><div><strong>År</strong><p>© <span id="year"></span></p></div></div></footer>
+<script src="assets/config.js"></script><script src="assets/main.js"></script><script src="assets/store.js"></script></body></html>
