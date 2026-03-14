@@ -1,21 +1,22 @@
-// Netlify Function to calculate discounted price
 exports.handler = async (event) => {
-  const DISCOUNT = 0.20; // 20% rabatt
+  const DISCOUNTS = {
+    'VVS': 0.10,
+    'Verktøy': 0.10,
+    'Vann- og miljøteknikk': 0.10,
+    'Industri': 0.10,
+    standard: 0.10,
+  };
   try {
-    const data = JSON.parse(event.body || '{}');
-    const bruttopris = parseFloat(data.bruttopris);
-    if (isNaN(bruttopris)) {
-      throw new Error('Ugyldig bruttopris');
+    const body = JSON.parse(event.body || '{}');
+    const gross = parseFloat(body.bruttopris);
+    const area = body.business_area || 'standard';
+    if (!Number.isFinite(gross)) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Ugyldig bruttopris' }) };
     }
-    const price = bruttopris * (1 - DISCOUNT);
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ price: Number(price.toFixed(2)) }),
-    };
+    const discount = DISCOUNTS[area] ?? DISCOUNTS.standard;
+    const price = gross * (1 - discount) * 1.25;
+    return { statusCode: 200, body: JSON.stringify({ price, discount, vatIncluded: true }) };
   } catch (err) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: err.message }),
-    };
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };

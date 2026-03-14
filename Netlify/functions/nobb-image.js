@@ -1,16 +1,12 @@
-// Netlify Function to return product image URL
-// If API access is not available, returns a fallback image.
 exports.handler = async (event) => {
-  const sku = event.queryStringParameters && event.queryStringParameters.sku;
-  let imageUrl;
-  if (sku) {
-    // Attempt to construct NOBB image URL (may not work without API)
-    imageUrl = `https://images.nobb.no/products/${sku}.jpg`;
-  }
-  // Provide fallback image path relative to site root
+  const sku = event.queryStringParameters?.sku;
   const fallback = '/assets/images/no-image.jpg';
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ image: imageUrl || fallback, fallback }),
-  };
+  if (!sku) {
+    return { statusCode: 302, headers: { Location: fallback } };
+  }
+  // Placeholder NOBB mapping strategy:
+  // if your product file later includes an explicit NOBB number, swap sku for that value.
+  // This version attempts a predictable image path and falls back if the image is not available.
+  const candidate = `https://images.nobb.no/products/${encodeURIComponent(sku)}.jpg`;
+  return { statusCode: 302, headers: { Location: candidate } };
 };
