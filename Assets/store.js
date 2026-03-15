@@ -10,10 +10,8 @@
   let catalog = [];
 
   const $ = (id) => document.getElementById(id);
-  const fmt = (n) => new Intl.NumberFormat("no-NO", {
-    style: "currency", currency: "NOK",
-    minimumFractionDigits: 0, maximumFractionDigits: 0
-  }).format(n || 0);
+  const C = window.TherwattCart;
+  const fmt = C.fmt;
 
   function escapeHtml(str) {
     const div = document.createElement("div");
@@ -45,41 +43,6 @@
     renderGroupList();
     applyFilters();
   }
-
-  function cartLoad() {
-    try { return JSON.parse(localStorage.getItem("therwatt_cart_v8") || "[]"); } catch { return []; }
-  }
-  function cartSave(cart) {
-    localStorage.setItem("therwatt_cart_v8", JSON.stringify(cart));
-    updateCartBadge();
-  }
-  function updateCartBadge() {
-    const count = cartLoad().reduce((s, i) => s + (i.qty || 0), 0);
-    const el = $("cartCount");
-    if (el) el.textContent = String(count);
-  }
-  function addToCart(product) {
-    const cart = cartLoad();
-    const idx = cart.findIndex(i => i.sku === product.sku);
-    const price = window.TherwattPricing.priceInclVat(product);
-    if (idx >= 0) cart[idx].qty += 1;
-    else cart.push({ sku: product.sku, name: product.name, unit: product.unit, price, qty: 1, brand: product.brand || "" });
-    cartSave(cart);
-    renderCart();
-    var drawer = $("cartDrawer");
-    if (drawer) drawer.classList.add("open");
-  }
-  function changeQty(sku, delta) {
-    const cart = cartLoad();
-    const idx = cart.findIndex(i => i.sku === sku);
-    if (idx >= 0) {
-      cart[idx].qty += delta;
-      if (cart[idx].qty <= 0) cart.splice(idx, 1);
-      cartSave(cart);
-      renderCart();
-    }
-  }
-  function cartTotal(cart) { return cart.reduce((s, i) => s + i.price * i.qty, 0); }
 
   function areas() {
     return [...new Set(allProducts.map(p => p.dahl_main_category || p.area_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
@@ -184,7 +147,13 @@
 
     grid.querySelectorAll("[data-add]").forEach(btn => btn.addEventListener("click", () => {
       const p = allProducts.find(x => x.sku === btn.dataset.add);
-      if (p) addToCart(p);
+      if (p) {
+        C.add(p);
+        // Brief visual feedback on button
+        btn.textContent = "Lagt til!";
+        btn.style.background = "var(--success)";
+        setTimeout(() => { btn.textContent = "Legg i kurv"; btn.style.background = ""; }, 1200);
+      }
     }));
     renderPager(totalPages);
   }
@@ -195,66 +164,11 @@
     $("nextPage").disabled = currentPage >= totalPages;
   }
 
-  function renderCart() {
-    const drawer = $("cartDrawer");
-    if (!drawer) return;
-    const cart = cartLoad();
-    const itemsEl = $("cartItems");
-    if (!cart.length) {
-      itemsEl.innerHTML = '<p class="muted" style="text-align:center;padding:20px 0">Handlekurven er tom.</p>';
-    } else {
-      itemsEl.innerHTML = cart.map(item =>
-        '<div class="cart-item">' +
-          '<div class="cart-row"><strong style="font-size:14px">' + escapeHtml(item.name) + "</strong><strong>" + fmt(item.price * item.qty) + "</strong></div>" +
-          '<div class="small" style="margin-top:4px">Varenr: ' + escapeHtml(item.sku) + " &middot; " + escapeHtml(item.unit || "-") + "</div>" +
-          '<div class="cart-row" style="margin-top:8px">' +
-            '<div style="display:flex;gap:8px;align-items:center">' +
-              '<button class="btn ghost" type="button" data-dec="' + escapeHtml(item.sku) + '" style="padding:4px 10px">&minus;</button>' +
-              '<span style="font-weight:600">' + item.qty + "</span>" +
-              '<button class="btn ghost" type="button" data-inc="' + escapeHtml(item.sku) + '" style="padding:4px 10px">+</button>' +
-            "</div>" +
-            '<span class="small">' + fmt(item.price) + " per stk</span>" +
-          "</div>" +
-        "</div>"
-      ).join("");
-    }
-    $("cartTotal").textContent = fmt(cartTotal(cart));
-    var payload = $("orderPayload");
-    if (payload) payload.value = JSON.stringify({ items: cart, total: cartTotal(cart), currency: "NOK" });
-    itemsEl.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.dec, -1)));
-    itemsEl.querySelectorAll("[data-inc]").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.inc, 1)));
-  }
-
-  async function startCheckout() {
-    const cart = cartLoad();
-    if (!cart.length) return;
-    var btn = $("checkoutBtn");
-    if (btn) { btn.disabled = true; btn.textContent = "Behandler..."; }
-    try {
-      const res = await fetch("/.netlify/functions/create-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: cart })
-      });
-      const data = await res.json();
-      if (data.url) location.href = data.url;
-      else alert(data.error || "Kunne ikke starte betaling.");
-    } catch (err) {
-      alert("Feil ved betaling: " + err.message);
-    }
-    if (btn) { btn.disabled = false; btn.textContent = "Gå til betaling"; }
-  }
-
   document.addEventListener("DOMContentLoaded", async () => {
-    updateCartBadge();
     $("searchInput").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); currentPage = 1; applyFilters(); });
     $("clearFilters").addEventListener("click", () => { areaFilter = ""; groupFilter = ""; query = ""; $("searchInput").value = ""; renderAreaNav(); renderGroupList(); applyFilters(); });
     $("prevPage").addEventListener("click", () => { currentPage -= 1; renderProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
     $("nextPage").addEventListener("click", () => { currentPage += 1; renderProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
-    $("openCart").addEventListener("click", (e) => { e.preventDefault(); $("cartDrawer").classList.add("open"); renderCart(); });
-    $("closeCart").addEventListener("click", () => { $("cartDrawer").classList.remove("open"); });
-    $("cartDrawer").addEventListener("click", (e) => { if (e.target.id === "cartDrawer") $("cartDrawer").classList.remove("open"); });
-    $("checkoutBtn").addEventListener("click", startCheckout);
     await loadProducts();
   });
 })();

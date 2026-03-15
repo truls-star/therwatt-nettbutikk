@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Handlekurv – Therwatt</title>
+  <meta name="description" content="Din handlekurv hos Therwatt. Se over bestillingen din og gå videre til betaling.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Assets/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="logo"><img src="Assets/Images/therwatt-logo.png" alt="Therwatt logo"></span>
+      <span>Therwatt</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Meny">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <nav class="menu" id="mainMenu">
+      <a data-page="index.html" href="index.html">Forside</a>
+      <div class="nav-dropdown">
+        <a href="tjenester.html">Tjenester</a>
+        <div class="dropdown-menu">
+          <a href="tjenester-prosjektering.html">Prosjektering og installasjon<small>Vannbåren varme og varmepumper</small></a>
+          <a href="tjenester-konsulent.html">Konsulentbistand<small>Energi og varmetekniske installasjoner</small></a>
+          <a href="tjenester-sourcing.html">Sourcing<small>Produktsøk og leverandørvalg</small></a>
+        </div>
+      </div>
+      <a data-page="butikk.html" href="butikk.html">Nettbutikk</a>
+      <a data-page="om-oss.html" href="om-oss.html">Om oss</a>
+      <a data-page="kontakt.html" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap cart-page">
+  <nav class="product-breadcrumb">
+    <a href="index.html">Hjem</a> <span class="muted">/</span>
+    <a href="butikk.html">Nettbutikk</a> <span class="muted">/</span>
+    <span class="muted">Handlekurv</span>
+  </nav>
+
+  <h1>Handlekurv</h1>
+  <div id="cartPageContent"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <strong>Therwatt AS</strong>
+        <p>Faghandel og rådgivning innen geoenergi, varmepumper, vannbårne varmeanlegg og VVS-produkter.</p>
+      </div>
+      <div>
+        <strong>Navigasjon</strong>
+        <p><a href="index.html">Forside</a><br><a href="tjenester.html">Tjenester</a><br><a href="butikk.html">Nettbutikk</a><br><a href="om-oss.html">Om oss</a></p>
+      </div>
+      <div>
+        <strong>Tjenester</strong>
+        <p><a href="tjenester-prosjektering.html">Prosjektering</a><br><a href="tjenester-konsulent.html">Konsulentbistand</a><br><a href="tjenester-sourcing.html">Sourcing</a></p>
+      </div>
+      <div>
+        <strong>Kontakt</strong>
+        <p>Telefon: <a href="tel:+4790280156">902 80 156</a><br>E-post: <a href="mailto:post@therwatt.no">post@therwatt.no</a><br>Org.nr: 937 099 789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Therwatt AS</span>
+      <span>Geoenergi, varmepumper og vannbåren varme</span>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Til toppen">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script src="Assets/config.js"></script>
+<script src="Assets/main.js"></script>
+<script src="Assets/cart.js"></script>
+<script>
+(function () {
+  var C = window.TherwattCart;
+  var fmt = C.fmt;
+  var esc = C.escapeHtml;
+
+  function render() {
+    var el = document.getElementById("cartPageContent");
+    var cart = C.load();
+
+    if (!cart.length) {
+      el.innerHTML =
+        '<div class="cart-empty">' +
+          '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>' +
+          '<h2>Handlekurven er tom</h2>' +
+          '<p>Du har ingen varer i handlekurven enn\u00e5.</p>' +
+          '<a class="btn" href="butikk.html">G\u00e5 til nettbutikk</a>' +
+        '</div>';
+      return;
+    }
+
+    var tableRows = cart.map(function (item) {
+      return '<tr>' +
+        '<td data-label="Produkt"><div class="product-name">' + esc(item.name) + '</div><div class="product-sku">Varenr: ' + esc(item.sku) + (item.unit ? ' &middot; ' + esc(item.unit) : '') + '</div></td>' +
+        '<td data-label="Pris">' + fmt(item.price) + '</td>' +
+        '<td data-label="Antall">' +
+          '<div class="cart-qty-controls">' +
+            '<button type="button" data-qty-dec="' + esc(item.sku) + '">&minus;</button>' +
+            '<input type="number" min="1" value="' + item.qty + '" data-qty-input="' + esc(item.sku) + '" />' +
+            '<button type="button" data-qty-inc="' + esc(item.sku) + '">+</button>' +
+          '</div>' +
+        '</td>' +
+        '<td data-label="Sum" class="cart-line-total">' + fmt(item.price * item.qty) + '</td>' +
+        '<td>' +
+          '<button class="cart-remove-btn" data-cart-remove="' + esc(item.sku) + '" aria-label="Fjern" title="Fjern">' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    var total = C.total(cart);
+    var itemCount = cart.reduce(function (s, i) { return s + i.qty; }, 0);
+
+    el.innerHTML =
+      '<table class="cart-table"><thead><tr>' +
+        '<th>Produkt</th><th>Pris</th><th>Antall</th><th>Sum</th><th></th>' +
+      '</tr></thead><tbody>' + tableRows + '</tbody></table>' +
+      '<div class="cart-summary">' +
+        '<div><a class="btn secondary" href="butikk.html">&larr; Fortsett \u00e5 handle</a></div>' +
+        '<div class="cart-summary-box">' +
+          '<div class="cart-summary-row"><span>' + itemCount + ' vare' + (itemCount > 1 ? 'r' : '') + '</span></div>' +
+          '<div class="cart-summary-row"><span>Delsum inkl. mva</span><span>' + fmt(total) + '</span></div>' +
+          '<div class="cart-summary-row"><span class="small muted">Frakt avtales ved behov</span></div>' +
+          '<div class="cart-summary-row total"><span>Totalt</span><span>' + fmt(total) + '</span></div>' +
+          '<a class="btn success" href="kasse.html" style="width:100%;margin-top:16px;padding:14px;font-size:16px">' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>' +
+            'G\u00e5 til kassen' +
+          '</a>' +
+        '</div>' +
+      '</div>';
+
+    // Bind events
+    el.querySelectorAll("[data-qty-dec]").forEach(function (b) {
+      b.addEventListener("click", function () { C.changeQty(b.dataset.qtyDec, -1); render(); });
+    });
+    el.querySelectorAll("[data-qty-inc]").forEach(function (b) {
+      b.addEventListener("click", function () { C.changeQty(b.dataset.qtyInc, 1); render(); });
+    });
+    el.querySelectorAll("[data-qty-input]").forEach(function (inp) {
+      inp.addEventListener("change", function () {
+        var v = parseInt(inp.value, 10);
+        if (v > 0) C.setQty(inp.dataset.qtyInput, v);
+        else C.removeItem(inp.dataset.qtyInput);
+        render();
+      });
+    });
+    el.querySelectorAll("[data-cart-remove]").forEach(function (b) {
+      b.addEventListener("click", function () { C.removeItem(b.dataset.cartRemove); render(); });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", render);
+})();
+</script>
+</body>
+</html>
