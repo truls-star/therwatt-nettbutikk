@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pakkeløsninger – Energiberegning og Gulvvarmekalkulator – Therwatt</title>
+  <meta name="description" content="Beregn energibehov for varmepumpe og materialforbruk for gulvvarme. Få en komplett oversikt over anbefalt utstyr og mulig energibesparelse.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Assets/styles.css">
+  <link rel="stylesheet" href="Assets/kalkulator.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="logo"><img src="Assets/Images/therwatt-logo.png" alt="Therwatt logo"></span>
+      <span>Therwatt</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Meny">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <nav class="menu" id="mainMenu">
+      <a data-page="index.html" href="index.html">Forside</a>
+      <div class="nav-dropdown">
+        <a href="tjenester.html">Tjenester</a>
+        <div class="dropdown-menu">
+          <a href="tjenester-prosjektering.html">Prosjektering og installasjon<small>Vannbåren varme og varmepumper</small></a>
+          <a href="tjenester-konsulent.html">Konsulentbistand<small>Energi og varmetekniske installasjoner</small></a>
+          <a href="tjenester-sourcing.html">Sourcing<small>Produktsøk og leverandørvalg</small></a>
+          <a href="kalkulator.html">Kalkulator<small>Energiberegning og gulvvarme</small></a>
+        </div>
+      </div>
+      <a data-page="butikk.html" href="butikk.html">Nettbutikk</a>
+      <a data-page="om-oss.html" href="om-oss.html">Om oss</a>
+      <a data-page="kontakt.html" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="wrap">
+      <div class="kicker">Verktøy og beregning</div>
+      <h1>Pakkeløsninger – Energiberegning og Gulvvarmekalkulator</h1>
+      <p class="lead">Få en komplett beregning av energibehov, varmepumpeanbefaling og materialbehov for gulvvarme. Fyll ut skjemaet, og vi sender deg en detaljert oversikt.</p>
+    </div>
+  </section>
+
+  <!-- Wizard Container -->
+  <section class="section">
+    <div class="wrap">
+      <div id="calcApp">
+
+        <!-- Progress Steps -->
+        <div class="calc-progress">
+          <div class="calc-step active" data-step="1">
+            <span class="step-num">1</span>
+            <span class="step-label">Velg tjeneste</span>
+          </div>
+          <div class="calc-step" data-step="2">
+            <span class="step-num">2</span>
+            <span class="step-label">Beregning</span>
+          </div>
+          <div class="calc-step" data-step="3">
+            <span class="step-num">3</span>
+            <span class="step-label">Kontaktinfo</span>
+          </div>
+          <div class="calc-step" data-step="4">
+            <span class="step-num">4</span>
+            <span class="step-label">Resultat</span>
+          </div>
+        </div>
+
+        <!-- STEP 1: Velg tjeneste -->
+        <div class="calc-panel active" id="step1">
+          <div class="calc-card">
+            <h2>Hva ønsker du beregning av?</h2>
+            <p class="muted">Velg én eller flere tjenester nedenfor. Du kan kombinere energiberegning og gulvvarmekalkulator.</p>
+            <div class="calc-choices">
+              <label class="calc-choice-card">
+                <input type="checkbox" name="tjeneste" value="energi">
+                <div class="choice-inner">
+                  <div class="choice-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                  </div>
+                  <h3>Energiberegning varmepumpe</h3>
+                  <p>Beregn boligens effektbehov og få anbefaling av varmepumpe dimensjonert til ditt behov.</p>
+                </div>
+              </label>
+              <label class="calc-choice-card">
+                <input type="checkbox" name="tjeneste" value="gulvvarme">
+                <div class="choice-inner">
+                  <div class="choice-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M3 7l9-4 9 4"/><rect x="7" y="10" width="3" height="11"/><rect x="14" y="10" width="3" height="11"/></svg>
+                  </div>
+                  <h3>Materialberegning gulvvarme</h3>
+                  <p>Få en komplett materialliste for gulvvarmeanlegg basert på romstørrelser og konstruksjonstype.</p>
+                </div>
+              </label>
+              <label class="calc-choice-card">
+                <input type="checkbox" name="tjeneste" value="begge">
+                <div class="choice-inner">
+                  <div class="choice-icon combo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </div>
+                  <h3>Energiberegning og gulvvarmekalkulator</h3>
+                  <p>Komplett pakke med effektberegning, varmepumpeanbefaling og detaljert materialliste.</p>
+                </div>
+              </label>
+            </div>
+            <div class="calc-actions">
+              <button class="btn warm large" id="step1Next" disabled>Gå videre</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Beregning -->
+        <div class="calc-panel" id="step2">
+          <!-- Energiberegning -->
+          <div class="calc-card" id="energiSection" style="display:none">
+            <h2>Energiberegning</h2>
+            <p class="muted">Fyll inn opplysninger om boligen for å beregne effektbehov og anbefalt varmepumpe.</p>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="byggeaar">Byggeår bolig</label>
+                <select class="input" id="byggeaar" required>
+                  <option value="">Velg byggeår…</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="boligtype">Boligtype</label>
+                <select class="input" id="boligtype" required>
+                  <option value="">Velg boligtype…</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="etterisolert">Er bygget etterisolert?</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="etterisolert" value="nei" checked> Nei</label>
+                <label class="radio-label"><input type="radio" name="etterisolert" value="ja"> Ja</label>
+              </div>
+            </div>
+
+            <div class="form-group" id="etterisoleringGruppe" style="display:none">
+              <label for="etterisoleringCm">Antall cm etterisolering</label>
+              <select class="input" id="etterisoleringCm">
+                <option value="">Velg…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="areal">Oppvarmet areal (m²)</label>
+              <input class="input" type="number" id="areal" min="10" max="1000" placeholder="f.eks. 150" required>
+            </div>
+          </div>
+
+          <!-- Gulvvarmekalkulator -->
+          <div class="calc-card" id="gulvvarmeSection" style="display:none">
+            <h2>Gulvvarmekalkulator</h2>
+            <p class="muted">Registrer areal for gulvvarmeanlegget. Du kan enten oppgi totalareal eller legge inn rom for rom.</p>
+
+            <div class="form-group">
+              <label>Registreringsmåte</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="gvMetode" value="total" checked> Totalt areal</label>
+                <label class="radio-label"><input type="radio" name="gvMetode" value="romForRom"> Rom for rom</label>
+              </div>
+            </div>
+
+            <!-- Alternativ A: Totalt areal -->
+            <div id="gvTotal">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="gvTotalKvm">Total antall m²</label>
+                  <input class="input" type="number" id="gvTotalKvm" min="1" max="500" placeholder="f.eks. 80">
+                </div>
+                <div class="form-group">
+                  <label for="gvTotalKonstruksjon">Konstruksjonstype</label>
+                  <select class="input" id="gvTotalKonstruksjon">
+                    <option value="">Velg…</option>
+                    <option value="stoop">Støp</option>
+                    <option value="treverk">Treverk</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" id="gvTotalUndertypeGruppe" style="display:none">
+                <label for="gvTotalUndertype">Oppbygning</label>
+                <select class="input" id="gvTotalUndertype"></select>
+              </div>
+            </div>
+
+            <!-- Alternativ B: Rom for rom -->
+            <div id="gvRomForRom" style="display:none">
+              <div id="romListe"></div>
+              <button class="btn secondary" id="leggTilRom" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                Legg til rom
+              </button>
+            </div>
+          </div>
+
+          <div class="calc-actions">
+            <button class="btn secondary" id="step2Back">Tilbake</button>
+            <button class="btn warm large" id="step2Next">Gå videre</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Kontaktinfo -->
+        <div class="calc-panel" id="step3">
+          <div class="calc-card">
+            <h2>Dine kontaktopplysninger</h2>
+            <p class="muted" id="step3Beskrivelse">Vi trenger noen opplysninger for å sende deg resultatet og eventuelt kontakte deg med et tilbud.</p>
+
+            <div class="kun-epost-gruppe">
+              <label class="checkbox-label kun-epost-label">
+                <input type="checkbox" id="kunEpost">
+                <span>Jeg ønsker kun å dele e-postadresse – send meg beregningen på e-post</span>
+              </label>
+            </div>
+
+            <div id="fullKontaktFelter">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="kontaktNavn">Navn *</label>
+                  <input class="input" type="text" id="kontaktNavn" required placeholder="Fullt navn">
+                </div>
+                <div class="form-group">
+                  <label for="kontaktTelefon">Telefon *</label>
+                  <input class="input" type="tel" id="kontaktTelefon" required placeholder="Mobilnummer">
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="kontaktEpost">E-post *</label>
+                  <input class="input" type="email" id="kontaktEpost" required placeholder="din@epost.no">
+                </div>
+                <div class="form-group">
+                  <label for="kontaktAdresse">Adresse</label>
+                  <input class="input" type="text" id="kontaktAdresse" placeholder="Gate og husnummer">
+                </div>
+              </div>
+            </div>
+
+            <div id="kunEpostFelter" class="hidden">
+              <div class="form-group">
+                <label for="kontaktEpostKun">E-post *</label>
+                <input class="input" type="email" id="kontaktEpostKun" placeholder="din@epost.no">
+              </div>
+            </div>
+
+            <div class="consent-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="samtykke" required>
+                <span id="samtykkeTekst">Jeg samtykker til at Therwatt lagrer mine opplysninger og kan kontakte meg med resultat og eventuelt tilbud. Opplysningene deles ikke med tredjepart.</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="calc-actions">
+            <button class="btn secondary" id="step3Back">Tilbake</button>
+            <button class="btn warm large" id="step3Next" disabled>Se resultat</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Resultat -->
+        <div class="calc-panel" id="step4">
+          <div id="resultatInnhold"></div>
+          <div class="calc-actions no-print">
+            <button class="btn secondary" id="startPaaNytt">Start på nytt</button>
+            <button class="btn" id="skrivUt">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Skriv ut resultat
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section no-print">
+    <div class="wrap">
+      <h2>Trenger du hjelp med varmeanlegget?</h2>
+      <p>Vi tilbyr prosjektering, installasjon og rådgivning for alle typer varmesystemer.</p>
+      <div class="actions" style="justify-content:center">
+        <a class="btn" href="kontakt.html">Kontakt oss</a>
+        <a class="btn secondary" href="tjenester.html">Se våre tjenester</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <strong>Therwatt AS</strong>
+        <p>Faghandel og rådgivning innen geoenergi, varmepumper, vannbårne varmeanlegg og VVS-produkter.</p>
+      </div>
+      <div>
+        <strong>Navigasjon</strong>
+        <p><a href="index.html">Forside</a><br><a href="tjenester.html">Tjenester</a><br><a href="butikk.html">Nettbutikk</a><br><a href="om-oss.html">Om oss</a></p>
+      </div>
+      <div>
+        <strong>Tjenester</strong>
+        <p><a href="tjenester-prosjektering.html">Prosjektering</a><br><a href="tjenester-konsulent.html">Konsulentbistand</a><br><a href="tjenester-sourcing.html">Sourcing</a><br><a href="kalkulator.html">Kalkulator</a></p>
+      </div>
+      <div>
+        <strong>Kontakt</strong>
+        <p>Telefon: <a href="tel:+4790280156">902 80 156</a><br>E-post: <a href="mailto:post@therwatt.no">post@therwatt.no</a><br>Org.nr: 937 099 789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Therwatt AS</span>
+      <span><a href="salgsbetingelser.html">Salgsbetingelser</a></span>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Til toppen">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- Hidden Netlify Form for form detection -->
+<form name="kalkulator-lead" data-netlify="true" hidden>
+  <input type="hidden" name="form-name" value="kalkulator-lead">
+  <input name="navn"><input name="epost"><input name="telefon">
+  <input name="adresse"><input name="tjenester"><textarea name="data"></textarea>
+</form>
+
+<script src="Assets/config.js"></script>
+<script src="Assets/main.js"></script>
+<script src="Assets/cart.js"></script>
+<script src="Assets/kalkulator-config.js"></script>
+<script src="Assets/kalkulator.js"></script>
+</body>
+</html>
