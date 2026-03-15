@@ -1,5 +1,96 @@
-<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kontakt – Therwatt</title><link rel="stylesheet" href="assets/styles.css"></head><body>
-<header class="topbar"><div class="wrap nav"><a class="brand" href="index.html"><span class="logo"></span><span>Therwatt</span></a><nav class="menu"><a data-page="index.html" href="index.html">Hjem</a><a data-page="butikk.html" href="butikk.html">Nettbutikk</a><a data-page="kontakt.html" href="kontakt.html">Kontakt</a></nav></div></header>
-<main class="wrap"><section class="section"><div class="kicker">Kontakt</div><h1 style="font-size:44px">Ta kontakt</h1><p class="subtitle">Bruk skjemaet for prosjektforespørsel, spørsmål om varer eller hjelp til riktig løsning.</p><div class="grid cols-2"><div class="hero-card" style="padding:24px"><h2>Kontaktinformasjon</h2><p class="muted">Oppdater disse feltene med riktig informasjon før publisering.</p><div class="kv"><div class="muted">Telefon</div><div>+47 00 00 00 00</div></div><div class="kv"><div class="muted">E-post</div><div>post@therwatt.no</div></div><div class="kv"><div class="muted">Organisasjonsnummer</div><div>999 999 999</div></div></div><div class="hero-card" style="padding:24px"><h2>Send melding</h2><form name="kontakt" method="POST" data-netlify="true" action="takke.html"><input type="hidden" name="form-name" value="kontakt"><label>Navn</label><input class="input" name="name" required><label>E-post</label><input class="input" name="email" type="email" required><label>Telefon</label><input class="input" name="phone"><label>Melding</label><textarea name="message"></textarea><div class="actions" style="margin-top:14px"><button class="btn" type="submit">Send melding</button></div></form></div></div></section></main>
-<footer><div class="wrap footer-grid"><div><strong>Therwatt</strong><p class="muted">Geoenergi, varmepumper og vannbåren varme.</p></div><div><strong>Navigasjon</strong><p><a href="butikk.html">Nettbutikk</a></p></div><div><strong>År</strong><p>© <span id="year"></span></p></div><div></div></div></footer>
-<script src="assets/main.js"></script></body></html>
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kontakt – Therwatt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Assets/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="logo">T</span>
+      <span>Therwatt</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Meny">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <nav class="menu" id="mainMenu">
+      <a data-page="index.html" href="index.html">Hjem</a>
+      <a data-page="butikk.html" href="butikk.html">Nettbutikk</a>
+      <a data-page="kontakt.html" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="section">
+    <div class="kicker">Kontakt</div>
+    <h1 style="font-size:36px">Ta kontakt med oss</h1>
+    <p class="subtitle">Vi hjelper deg med prosjektforespørsler, teknisk rådgivning eller spørsmål om produkter.</p>
+    <div class="grid cols-2" style="margin-top:8px">
+      <div class="hero-card" style="padding:28px">
+        <h2 style="margin-top:0;font-size:20px">Kontaktinformasjon</h2>
+        <div class="kv"><div class="muted">Telefon</div><div>+47 00 00 00 00</div></div>
+        <div class="kv"><div class="muted">E-post</div><div><a href="mailto:post@therwatt.no" style="color:var(--accent)">post@therwatt.no</a></div></div>
+        <div class="kv"><div class="muted">Organisasjonsnummer</div><div>999 999 999</div></div>
+        <div class="notice" style="margin-top:20px">
+          <strong>Åpningstider:</strong> Mandag–fredag 08:00–16:00
+        </div>
+        <div style="margin-top:20px">
+          <h3 style="font-size:16px;margin-bottom:8px">Tjenester</h3>
+          <ul style="margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:2">
+            <li>Prosjektering og rådgivning</li>
+            <li>Priser på prosjektleveranser</li>
+            <li>Teknisk support</li>
+            <li>Bestilling og levering</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hero-card" style="padding:28px">
+        <h2 style="margin-top:0;font-size:20px">Send melding</h2>
+        <form name="kontakt" method="POST" data-netlify="true" action="takke.html">
+          <input type="hidden" name="form-name" value="kontakt">
+          <label>Navn</label><input class="input" name="name" required>
+          <label>E-post</label><input class="input" name="email" type="email" required>
+          <label>Telefon</label><input class="input" name="phone">
+          <label>Firma (valgfritt)</label><input class="input" name="company">
+          <label>Melding</label><textarea name="message" rows="5" placeholder="Beskriv hva du trenger hjelp med..."></textarea>
+          <div class="actions" style="margin-top:16px">
+            <button class="btn" type="submit" style="width:100%">Send melding</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <strong>Therwatt</strong>
+      <p>Faghandel for geoenergi, varmepumper og vannbåren varme.</p>
+    </div>
+    <div>
+      <strong>Navigasjon</strong>
+      <p><a href="butikk.html">Nettbutikk</a></p>
+    </div>
+    <div>
+      <strong>Kundeservice</strong>
+      <p>post@therwatt.no</p>
+    </div>
+    <div>
+      <strong>Info</strong>
+      <p>&copy; <span id="year"></span> Therwatt AS</p>
+    </div>
+  </div>
+</footer>
+
+<script src="Assets/main.js"></script>
+</body>
+</html>
