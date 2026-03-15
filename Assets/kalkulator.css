@@ -1,0 +1,392 @@
+/* ===== Kalkulator – Therwatt Pakkeløsninger ===== */
+
+/* Utility */
+.hidden { display: none !important; }
+
+/* Progress bar */
+.calc-progress {
+  display: flex; justify-content: center; gap: 0;
+  margin-bottom: 32px;
+  position: relative;
+}
+.calc-progress::before {
+  content: '';
+  position: absolute; top: 20px; left: 15%; right: 15%;
+  height: 2px; background: var(--line);
+  z-index: 0;
+}
+.calc-step {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  flex: 1; max-width: 160px;
+  position: relative; z-index: 1;
+}
+.step-num {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 16px;
+  background: var(--bg2); border: 2px solid var(--line);
+  color: var(--muted);
+  transition: all 0.3s ease;
+}
+.step-label {
+  font-size: 12px; font-weight: 600; color: var(--muted);
+  text-align: center;
+  transition: color 0.3s ease;
+}
+.calc-step.active .step-num {
+  background: var(--accent); border-color: var(--accent); color: #fff;
+}
+.calc-step.active .step-label { color: var(--accent); }
+.calc-step.done .step-num {
+  background: var(--success); border-color: var(--success); color: #fff;
+}
+.calc-step.done .step-label { color: var(--success); }
+
+/* Panels */
+.calc-panel { display: none; }
+.calc-panel.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Card */
+.calc-card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 32px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+}
+.calc-card h2 {
+  font-size: 22px; margin: 0 0 8px; font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.calc-card > .muted:first-of-type { margin-bottom: 24px; }
+
+/* Choice cards (step 1) */
+.calc-choices {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin-bottom: 24px;
+}
+.calc-choice-card {
+  cursor: pointer; position: relative;
+}
+.calc-choice-card input { position: absolute; opacity: 0; pointer-events: none; }
+.choice-inner {
+  background: var(--card2); border: 2px solid var(--line);
+  border-radius: var(--radius); padding: 24px;
+  transition: all 0.2s ease; height: 100%;
+  display: flex; flex-direction: column;
+}
+.calc-choice-card:hover .choice-inner {
+  border-color: var(--accent); box-shadow: var(--shadow);
+}
+.calc-choice-card input:checked ~ .choice-inner {
+  border-color: var(--accent); background: var(--accent-light);
+  box-shadow: 0 0 0 3px rgba(26, 122, 181, 0.15);
+}
+.choice-icon {
+  width: 48px; height: 48px; border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+  background: var(--accent-light); color: var(--accent);
+}
+.choice-icon svg { width: 24px; height: 24px; }
+.choice-icon.combo { background: var(--warm-light); color: var(--warm); }
+.calc-choice-card input:checked ~ .choice-inner .choice-icon {
+  background: var(--accent); color: #fff;
+}
+.calc-choice-card input:checked ~ .choice-inner .choice-icon.combo {
+  background: var(--warm); color: #fff;
+}
+.choice-inner h3 {
+  font-size: 16px; margin: 0 0 6px; font-weight: 700;
+}
+.choice-inner p {
+  font-size: 13px; color: var(--muted); margin: 0; line-height: 1.6;
+}
+
+/* Actions bar */
+.calc-actions {
+  display: flex; justify-content: flex-end; gap: 12px;
+  margin-top: 8px;
+}
+
+/* Form grid */
+.form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block; font-size: 14px; font-weight: 600;
+  color: var(--text); margin-bottom: 6px;
+}
+
+/* Radio and checkbox groups */
+.radio-group {
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+.radio-label, .checkbox-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--text); cursor: pointer;
+  font-weight: 500;
+}
+.radio-label input, .checkbox-label input {
+  accent-color: var(--accent);
+  width: 18px; height: 18px; cursor: pointer;
+}
+.consent-group {
+  margin-top: 24px; padding: 20px;
+  background: var(--card2); border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.consent-group .checkbox-label {
+  align-items: flex-start;
+}
+.consent-group .checkbox-label span {
+  font-size: 13px; color: var(--muted); line-height: 1.6;
+}
+
+/* Rom-for-rom */
+.rom-entry {
+  background: var(--card2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 20px;
+  margin-bottom: 12px; position: relative;
+}
+.rom-entry-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.rom-entry-header h4 {
+  margin: 0; font-size: 15px; font-weight: 700;
+  color: var(--accent);
+}
+.rom-remove {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 20px; padding: 4px 8px;
+  border-radius: var(--radius-sm); transition: var(--transition);
+}
+.rom-remove:hover { color: var(--danger); background: rgba(220,38,38,0.06); }
+.rom-fields {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+}
+.rom-undertype-gruppe {
+  margin-top: 12px;
+}
+
+/* Result page */
+.resultat-header {
+  text-align: center; padding: 32px; margin-bottom: 24px;
+  background: var(--success-light); border: 1px solid rgba(22,163,74,0.2);
+  border-radius: var(--radius-lg);
+}
+.resultat-header .success-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: #fff; color: var(--success);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.resultat-header h2 { font-size: 26px; margin: 0 0 8px; }
+.resultat-header p { color: var(--text-secondary); margin: 0; }
+
+.resultat-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.resultat-card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+.resultat-card.full { grid-column: 1 / -1; }
+.resultat-card h3 {
+  font-size: 18px; margin: 0 0 16px; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+}
+.resultat-card h3 .card-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.card-icon.blue { background: var(--accent-light); color: var(--accent); }
+.card-icon.orange { background: var(--warm-light); color: var(--warm); }
+.card-icon.green { background: var(--success-light); color: var(--success); }
+.card-icon svg { width: 20px; height: 20px; }
+
+.resultat-big-number {
+  font-size: 36px; font-weight: 800; color: var(--accent);
+  letter-spacing: -0.02em; margin: 8px 0 4px;
+}
+.resultat-big-number small {
+  font-size: 16px; font-weight: 600; color: var(--muted);
+}
+
+.anbefaling-kort {
+  background: var(--card2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 20px;
+  margin-top: 16px;
+}
+.anbefaling-kort h4 {
+  font-size: 15px; margin: 0 0 6px; font-weight: 700; color: var(--text);
+}
+.anbefaling-kort .anbefaling-verdi {
+  font-size: 22px; font-weight: 800; color: var(--warm);
+  margin: 4px 0;
+}
+.anbefaling-kort p {
+  font-size: 13px; color: var(--muted); margin: 4px 0 0; line-height: 1.5;
+}
+
+/* Material table */
+.material-tabell {
+  width: 100%; border-collapse: collapse; margin-top: 12px;
+}
+.material-tabell th {
+  text-align: left; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--muted); padding: 10px 12px;
+  border-bottom: 2px solid var(--line); background: var(--card2);
+}
+.material-tabell td {
+  padding: 10px 12px; border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.material-tabell tr:last-child td { border-bottom: none; }
+.material-tabell .mat-antall {
+  font-weight: 700; color: var(--accent); white-space: nowrap;
+}
+
+/* Savings card */
+.besparelse-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-top: 16px;
+}
+.besparelse-boks {
+  background: var(--card2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 20px; text-align: center;
+}
+.besparelse-boks .spar-tall {
+  font-size: 28px; font-weight: 800; color: var(--success);
+  margin: 4px 0;
+}
+.besparelse-boks .spar-label {
+  font-size: 13px; color: var(--muted);
+}
+.besparelse-boks h4 {
+  font-size: 14px; margin: 0 0 4px; font-weight: 700;
+}
+
+.estimat-disclaimer {
+  margin-top: 16px; padding: 14px 18px;
+  background: var(--warm-light); border: 1px solid rgba(232,88,28,0.15);
+  border-radius: var(--radius);
+  font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+}
+
+/* Fordeler-liste */
+.fordeler-liste {
+  display: grid; gap: 12px; margin-top: 12px;
+}
+.fordel-item {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.fordel-item svg {
+  width: 20px; height: 20px; color: var(--success);
+  flex-shrink: 0; margin-top: 2px;
+}
+.fordel-item span {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.5;
+}
+
+/* Oppbygning-info */
+.oppbygning-info {
+  margin-top: 16px; padding: 20px;
+  background: var(--accent-light); border: 1px solid rgba(26,122,181,0.15);
+  border-radius: var(--radius);
+}
+.oppbygning-info h4 {
+  font-size: 15px; margin: 0 0 8px; font-weight: 700; color: var(--accent);
+}
+.oppbygning-info p {
+  font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.7;
+}
+.oppbygning-info ol {
+  margin: 8px 0 0; padding-left: 18px;
+  font-size: 13px; color: var(--text-secondary); line-height: 1.8;
+}
+
+/* Kun e-post checkbox */
+.kun-epost-gruppe {
+  margin-bottom: 20px; padding: 16px 20px;
+  background: var(--accent-light); border: 1px solid rgba(26,122,181,0.15);
+  border-radius: var(--radius);
+}
+.kun-epost-label span {
+  font-size: 14px; color: var(--accent); font-weight: 600;
+}
+
+/* Info line in result */
+.kv-info {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--accent); margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Validation */
+.form-error {
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 3px rgba(220,38,38,0.1) !important;
+}
+.error-msg {
+  font-size: 12px; color: var(--danger); margin-top: 4px;
+}
+
+/* Print header (only shown when printing) */
+.print-header {
+  display: none;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .calc-choices { grid-template-columns: 1fr; }
+  .calc-card { padding: 20px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .rom-fields { grid-template-columns: 1fr; }
+  .resultat-grid { grid-template-columns: 1fr; }
+  .besparelse-grid { grid-template-columns: 1fr; }
+  .calc-progress { gap: 4px; }
+  .step-label { font-size: 11px; }
+  .step-num { width: 32px; height: 32px; font-size: 14px; }
+  .calc-progress::before { left: 10%; right: 10%; top: 16px; }
+  .calc-actions { flex-direction: column-reverse; }
+  .calc-actions .btn { width: 100%; }
+  .resultat-card { padding: 20px; }
+  .resultat-big-number { font-size: 28px; }
+}
+
+@media (max-width: 480px) {
+  .choice-inner { padding: 16px; }
+  .choice-inner h3 { font-size: 14px; }
+  .resultat-header { padding: 24px 16px; }
+  .resultat-header h2 { font-size: 22px; }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+  body { background: #fff !important; font-size: 12px; }
+  .topbar, .trust-bar, .scroll-top, .cta-section,
+  footer, .calc-progress, .no-print { display: none !important; }
+  .print-header { display: block !important; margin-bottom: 24px; border-bottom: 2px solid #1a7ab5; padding-bottom: 16px; }
+  .print-header h1 { font-size: 20px; margin: 0; }
+  .print-header p { font-size: 12px; color: #666; margin: 4px 0 0; }
+  .calc-panel { display: none !important; }
+  #step4.calc-panel { display: block !important; }
+  .calc-card, .resultat-card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    break-inside: avoid;
+  }
+  .resultat-grid { gap: 12px; }
+  .anbefaling-kort, .besparelse-boks { break-inside: avoid; }
+  .section { padding: 16px 0; }
+  a { color: inherit !important; }
+  .hero-banner { display: none !important; }
+}
