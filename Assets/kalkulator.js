@@ -438,6 +438,12 @@
 
     var estRomCount = metode === 'total' ? Math.max(1, Math.ceil(totalKvm / 15)) : totalRomCount;
 
+    // Validation: ensure pipe per circuit does not exceed max allowed length
+    var maksRoerPerKurs = CFG.gulvvarme.maksRoerPerKurs;
+    if (totalKurser > 0 && totalRoer / totalKurser > maksRoerPerKurs) {
+      totalKurser = Math.ceil(totalRoer / maksRoerPerKurs);
+    }
+
     return {
       totalKvm: Math.round(totalKvm),
       totalRoer: Math.ceil(totalRoer),
@@ -451,7 +457,11 @@
   }
 
   function beregnKurser(kvm) {
-    return Math.ceil(kvm / 16.5);
+    var grenser = CFG.gulvvarme.kursGrenser;
+    for (var i = 0; i < grenser.length; i++) {
+      if (kvm <= grenser[i].maxKvm) return grenser[i].kurser;
+    }
+    return grenser[grenser.length - 1].kurser;
   }
 
   function velgSystemAnbefaling(energi, building) {
