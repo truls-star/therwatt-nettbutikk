@@ -66,13 +66,18 @@
       </div>
       <div class="hero-card" style="padding:28px">
         <h2 style="margin-top:0;font-size:20px">Send melding</h2>
-        <form name="kontakt" method="POST" data-netlify="true" action="takke.html">
+        <form name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-email-form="true" data-email-type="contact" action="takke.html">
           <input type="hidden" name="form-name" value="kontakt">
+          <p style="display:none">
+            <label>Ikke fyll ut dette feltet: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+          </p>
           <label>Navn</label><input class="input" name="name" required>
           <label>E-post</label><input class="input" name="email" type="email" required>
           <label>Telefon</label><input class="input" name="phone">
+          <label>Adresse</label><input class="input" name="address" autocomplete="street-address">
           <label>Firma (valgfritt)</label><input class="input" name="company">
-          <label>Melding</label><textarea name="message" rows="5" placeholder="Beskriv hva du trenger hjelp med..."></textarea>
+          <label>Melding</label><textarea name="message" rows="5" placeholder="Beskriv hva du trenger hjelp med..." required></textarea>
+          <div class="notice" data-form-status style="display:none;margin-top:12px"></div>
           <div class="actions" style="margin-top:16px">
             <button class="btn warm" type="submit" style="width:100%">Send melding</button>
           </div>

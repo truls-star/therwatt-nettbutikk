@@ -1,5 +1,10 @@
 
 document.addEventListener("DOMContentLoaded", () => {
+  const SUCCESS_MESSAGE =
+    "Takk for forespørselen. Vi har mottatt informasjonen din og tar kontakt så snart som mulig.";
+  const ERROR_MESSAGE =
+    "Det oppstod en feil ved sending. Prøv igjen, eller kontakt oss på post@therwatt.no.";
+
   const languageOptions = [
     { code: "no", label: "Norsk" },
     { code: "en", label: "English" },
@@ -92,4 +97,94 @@ document.addEventListener("DOMContentLoaded", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
+
+  const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value || "");
+
+  const setFormStatus = (form, message, isSuccess) => {
+    const box = form.querySelector("[data-form-status]");
+    if (!box) return;
+    if (!message) {
+      box.textContent = "";
+      box.style.display = "none";
+      return;
+    }
+    box.textContent = message;
+    box.className = isSuccess ? "notice success" : "notice";
+    box.style.display = "";
+  };
+
+  const postNetlifyForm = async (formName, formData) => {
+    const fallbackPayload = new URLSearchParams();
+    fallbackPayload.set("form-name", formName);
+    formData.forEach((value, key) => {
+      fallbackPayload.append(key, value);
+    });
+
+    await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: fallbackPayload.toString(),
+    });
+  };
+
+  document.addEventListener("submit", async (event) => {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement)) return;
+    if (form.dataset.emailForm !== "true") return;
+
+    event.preventDefault();
+    setFormStatus(form, "", true);
+
+    const submitButton = form.querySelector("button[type='submit']");
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+      const formData = new FormData(form);
+      const sourceForm = form.getAttribute("name") || formData.get("form-name") || "ukjent";
+      const botField = String(formData.get("bot-field") || "").trim();
+      const email = String(formData.get("email") || "").trim();
+
+      if (!email || !isValidEmail(email)) {
+        throw new Error("invalid-email");
+      }
+
+      const message = String(formData.get("message") || "").trim();
+      if (!message) {
+        throw new Error("missing-message");
+      }
+
+      await postNetlifyForm(sourceForm, formData).catch(() => {});
+
+      const payload = {
+        type: form.dataset.emailType || "contact",
+        sourceForm,
+        botField,
+        name: String(formData.get("name") || "").trim(),
+        email,
+        phone: String(formData.get("phone") || "").trim(),
+        address: String(formData.get("address") || "").trim(),
+        company: String(formData.get("company") || "").trim(),
+        inquiry_type: String(formData.get("inquiry_type") || "").trim(),
+        product: String(formData.get("product") || "").trim(),
+        message,
+      };
+
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("delivery-failed");
+      }
+
+      form.reset();
+      setFormStatus(form, SUCCESS_MESSAGE, true);
+    } catch (error) {
+      setFormStatus(form, ERROR_MESSAGE, false);
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
 });
