@@ -13,11 +13,26 @@
 
 <header class="topbar">
   <div class="nav">
-    <a class="brand" href="index.html"><span class="logo"><img src="Assets/Images/therwatt-logo.png" alt="Therwatt logo"></span><span>Therwatt</span></a>
-    <nav class="menu">
-      <a href="index.html">Hjem</a>
-      <a href="butikk.html">Nettbutikk</a>
-      <a href="kontakt.html">Kontakt</a>
+    <a class="brand" href="index.html">
+      <span class="logo"><img src="Assets/Images/therwatt-logo.png" alt="Therwatt logo"></span>
+      <span>Therwatt</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Meny">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <nav class="menu" id="mainMenu">
+      <a data-page="index.html" href="index.html">Forside</a>
+      <div class="nav-dropdown">
+        <a href="tjenester.html">Tjenester</a>
+        <div class="dropdown-menu">
+          <a href="tjenester-prosjektering.html">Prosjektering og installasjon<small>Vannbåren varme og varmepumper</small></a>
+          <a href="tjenester-konsulent.html">Konsulentbistand<small>Energi og varmetekniske installasjoner</small></a>
+          <a href="tjenester-sourcing.html">Sourcing<small>Produktsøk og leverandørvalg</small></a>
+        </div>
+      </div>
+      <a data-page="butikk.html" href="butikk.html">Nettbutikk</a>
+      <a data-page="om-oss.html" href="om-oss.html">Om oss</a>
+      <a data-page="kontakt.html" href="kontakt.html">Kontakt</a>
     </nav>
   </div>
 </header>

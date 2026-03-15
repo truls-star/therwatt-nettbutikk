@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Kontakt – Therwatt</title>
+  <meta name="description" content="Ta kontakt med Therwatt for prosjektforespørsler, teknisk rådgivning eller spørsmål om produkter. Telefon: 902 80 156.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,8 +22,17 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
     <nav class="menu" id="mainMenu">
-      <a data-page="index.html" href="index.html">Hjem</a>
+      <a data-page="index.html" href="index.html">Forside</a>
+      <div class="nav-dropdown">
+        <a href="tjenester.html">Tjenester</a>
+        <div class="dropdown-menu">
+          <a href="tjenester-prosjektering.html">Prosjektering og installasjon<small>Vannbåren varme og varmepumper</small></a>
+          <a href="tjenester-konsulent.html">Konsulentbistand<small>Energi og varmetekniske installasjoner</small></a>
+          <a href="tjenester-sourcing.html">Sourcing<small>Produktsøk og leverandørvalg</small></a>
+        </div>
+      </div>
       <a data-page="butikk.html" href="butikk.html">Nettbutikk</a>
+      <a data-page="om-oss.html" href="om-oss.html">Om oss</a>
       <a data-page="kontakt.html" href="kontakt.html">Kontakt</a>
     </nav>
   </div>
@@ -32,23 +42,24 @@
   <section class="section">
     <div class="kicker">Kontakt</div>
     <h1 style="font-size:36px">Ta kontakt med oss</h1>
-    <p class="subtitle">Vi hjelper deg med prosjektforespørsler, teknisk rådgivning eller spørsmål om produkter.</p>
+    <p class="subtitle">Vi hjelper deg med prosjektforespørsler, teknisk rådgivning eller spørsmål om produkter og tjenester.</p>
     <div class="grid cols-2" style="margin-top:8px">
       <div class="hero-card" style="padding:28px">
         <h2 style="margin-top:0;font-size:20px">Kontaktinformasjon</h2>
-        <div class="kv"><div class="muted">Telefon</div><div>+47 00 00 00 00</div></div>
+        <div class="kv"><div class="muted">Selskap</div><div>Therwatt AS</div></div>
+        <div class="kv"><div class="muted">Telefon</div><div><a href="tel:+4790280156" style="color:var(--accent);font-weight:600">902 80 156</a></div></div>
         <div class="kv"><div class="muted">E-post</div><div><a href="mailto:post@therwatt.no" style="color:var(--accent)">post@therwatt.no</a></div></div>
-        <div class="kv"><div class="muted">Organisasjonsnummer</div><div>999 999 999</div></div>
+        <div class="kv"><div class="muted">Organisasjonsnummer</div><div>937 099 789</div></div>
         <div class="notice" style="margin-top:20px">
           <strong>Åpningstider:</strong> Mandag–fredag 08:00–16:00
         </div>
         <div style="margin-top:20px">
-          <h3 style="font-size:16px;margin-bottom:8px">Tjenester</h3>
+          <h3 style="font-size:16px;margin-bottom:8px">Tjenester vi tilbyr</h3>
           <ul style="margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:2">
-            <li>Prosjektering og rådgivning</li>
-            <li>Priser på prosjektleveranser</li>
-            <li>Teknisk support</li>
-            <li>Bestilling og levering</li>
+            <li><a href="tjenester-prosjektering.html" style="color:var(--accent)">Prosjektering og installasjon</a></li>
+            <li><a href="tjenester-konsulent.html" style="color:var(--accent)">Konsulentbistand og rådgivning</a></li>
+            <li><a href="tjenester-sourcing.html" style="color:var(--accent)">Sourcing og produktsøk</a></li>
+            <li><a href="butikk.html" style="color:var(--accent)">Nettbutikk med over 26 000 produkter</a></li>
           </ul>
         </div>
       </div>
@@ -62,7 +73,7 @@
           <label>Firma (valgfritt)</label><input class="input" name="company">
           <label>Melding</label><textarea name="message" rows="5" placeholder="Beskriv hva du trenger hjelp med..."></textarea>
           <div class="actions" style="margin-top:16px">
-            <button class="btn" type="submit" style="width:100%">Send melding</button>
+            <button class="btn warm" type="submit" style="width:100%">Send melding</button>
           </div>
         </form>
       </div>
@@ -71,22 +82,28 @@
 </main>
 
 <footer>
-  <div class="wrap footer-grid">
-    <div>
-      <strong>Therwatt</strong>
-      <p>Faghandel for geoenergi, varmepumper og vannbåren varme.</p>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <strong>Therwatt AS</strong>
+        <p>Faghandel og rådgivning innen geoenergi, varmepumper, vannbårne varmeanlegg og VVS-produkter.</p>
+      </div>
+      <div>
+        <strong>Navigasjon</strong>
+        <p><a href="index.html">Forside</a><br><a href="tjenester.html">Tjenester</a><br><a href="butikk.html">Nettbutikk</a><br><a href="om-oss.html">Om oss</a></p>
+      </div>
+      <div>
+        <strong>Tjenester</strong>
+        <p><a href="tjenester-prosjektering.html">Prosjektering</a><br><a href="tjenester-konsulent.html">Konsulentbistand</a><br><a href="tjenester-sourcing.html">Sourcing</a></p>
+      </div>
+      <div>
+        <strong>Kontakt</strong>
+        <p>Telefon: <a href="tel:+4790280156">902 80 156</a><br>E-post: <a href="mailto:post@therwatt.no">post@therwatt.no</a><br>Org.nr: 937 099 789</p>
+      </div>
     </div>
-    <div>
-      <strong>Navigasjon</strong>
-      <p><a href="butikk.html">Nettbutikk</a></p>
-    </div>
-    <div>
-      <strong>Kundeservice</strong>
-      <p>post@therwatt.no</p>
-    </div>
-    <div>
-      <strong>Info</strong>
-      <p>&copy; <span id="year"></span> Therwatt AS</p>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Therwatt AS</span>
+      <span>Geoenergi, varmepumper og vannbåren varme</span>
     </div>
   </div>
 </footer>

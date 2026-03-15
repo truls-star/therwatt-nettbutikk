@@ -29,6 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Mobile dropdown toggle
+  document.querySelectorAll(".nav-dropdown > a").forEach((trigger) => {
+    trigger.addEventListener("click", (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        trigger.parentElement.classList.toggle("open");
+      }
+    });
+  });
+
   // Scroll to top button
   const scrollBtn = document.getElementById("scrollTop");
   if (scrollBtn) {
