@@ -1,10 +1,8 @@
 
 (async () => {
   const $ = (id) => document.getElementById(id);
-  const fmt = (n) => new Intl.NumberFormat("no-NO", {
-    style: "currency", currency: "NOK",
-    minimumFractionDigits: 0, maximumFractionDigits: 0
-  }).format(n || 0);
+  const C = window.TherwattCart;
+  const fmt = C.fmt;
 
   function escapeHtml(str) {
     const div = document.createElement("div");
@@ -178,15 +176,10 @@
       });
     });
 
-    // Buy button
+    // Buy button — uses shared TherwattCart
     var buy = $("buyBtn");
     if (buy) buy.addEventListener("click", function() {
-      var cart = [];
-      try { cart = JSON.parse(localStorage.getItem("therwatt_cart_v8") || "[]"); } catch(e) {}
-      var idx = cart.findIndex(function(i) { return i.sku === product.sku; });
-      if (idx >= 0) cart[idx].qty += 1;
-      else cart.push({ sku: product.sku, name: product.name, unit: product.unit, price: price, qty: 1, brand: brand });
-      localStorage.setItem("therwatt_cart_v8", JSON.stringify(cart));
+      C.add(product);
       buy.textContent = "Lagt til!";
       buy.style.background = "var(--success)";
       setTimeout(function() { buy.textContent = "Legg i handlekurv"; buy.style.background = ""; }, 1500);
