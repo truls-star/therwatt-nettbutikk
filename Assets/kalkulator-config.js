@@ -51,12 +51,15 @@ window.KALKULATOR_CONFIG = {
     boeyefikturerPerKurs: 2,
     romPerStyringsenhet: 8,
 
-    // Kursregler
+    // Kursregler (per rom)
     kursGrenser: [
-      { maxKvm: 15,   kurser: 1 },
+      { maxKvm: 16.5, kurser: 1 },
       { maxKvm: 33,   kurser: 2 },
       { maxKvm: Infinity, kurser: 3 }
     ],
+
+    // Maks tillatt rørlengde per kurs (m)
+    maksRoerPerKurs: 120,
 
     // Konstruksjonstyper
     konstruksjon: {
