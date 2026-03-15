@@ -48,7 +48,7 @@
     html += '<h3>Status innsending</h3>';
     html += '<div class="notice ' + (data.submitted ? 'success' : '') + '">';
     html += data.submitted
-      ? 'Skjema er sendt og lagret i Netlify Forms.'
+      ? 'Forespørsel er sendt på e-post til Therwatt.'
       : 'Innsending ble ikke bekreftet. Bruk kontaktknappen under for manuell oppfølging.';
     html += '</div>';
     html += row('Valgte tjenester', (data.selectedServices || []).join(', ') || '-');
@@ -82,6 +82,19 @@
       html += row('Totalt gulvareal', fmt(floor.totalKvm) + ' m²');
       html += row('Totalt rørbehov', fmt(floor.totalRoer) + ' m');
       html += row('Totalt antall kurser', fmt(floor.totalKurser));
+      html += row('Romtermostater', fmt(floor.totalThermostats) + ' stk');
+      html += row('Aktuatorer', fmt(floor.totalActuators) + ' stk');
+      html += row('Bøyefiksturer', fmt(floor.totalBendGuides) + ' stk');
+      html += row('Styringsenheter', fmt(floor.totalControlUnits) + ' stk');
+      
+      if (floor.materialSummary && Object.keys(floor.materialSummary).length > 0) {
+        html += '<h4 style="margin-top: 16px; margin-bottom: 8px;">Systemmaterialer</h4>';
+        for (var matId in floor.materialSummary) {
+          var mat = floor.materialSummary[matId];
+          html += row(mat.label, fmt(mat.antall) + ' ' + mat.enhet);
+        }
+      }
+      
       html += '</div>';
     }
 

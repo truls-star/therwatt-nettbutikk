@@ -410,6 +410,7 @@
     var totalKvm = 0;
     var totalRoer = 0;
     var totalKurser = 0;
+    var totalRomCount = 0;
     var materialSummary = {};
 
     romData.forEach(function(rom) {
@@ -418,6 +419,7 @@
       totalRoer += roer;
       var kurser = beregnKurser(rom.kvm);
       totalKurser += kurser;
+      totalRomCount += 1;
 
       if (rom.konstruksjon && rom.undertype) {
         var konstrCfg = CFG.gulvvarme.konstruksjon[rom.konstruksjon];
@@ -434,20 +436,22 @@
       }
     });
 
+    var estRomCount = metode === 'total' ? Math.max(1, Math.ceil(totalKvm / 15)) : totalRomCount;
+
     return {
       totalKvm: Math.round(totalKvm),
       totalRoer: Math.ceil(totalRoer),
       totalKurser: totalKurser,
+      totalThermostats: estRomCount * CFG.gulvvarme.termostatPerRom,
+      totalActuators: totalKurser * CFG.gulvvarme.aktuatorPerKurs,
+      totalBendGuides: totalKurser * CFG.gulvvarme.boeyefikturerPerKurs,
+      totalControlUnits: Math.ceil(estRomCount / CFG.gulvvarme.romPerStyringsenhet),
       materialSummary: materialSummary
     };
   }
 
   function beregnKurser(kvm) {
-    var grenser = CFG.gulvvarme.kursGrenser;
-    for (var i = 0; i < grenser.length; i++) {
-      if (kvm <= grenser[i].maxKvm) return grenser[i].kurser;
-    }
-    return grenser[grenser.length - 1].kurser;
+    return Math.ceil(kvm / 16.5);
   }
 
   function velgSystemAnbefaling(energi, building) {
@@ -457,24 +461,30 @@
     var floors = building.number_of_floors;
 
     var systemType = 'Luft-vann varmepumpe';
+    var spf = 2.8;
+    var recFactor = 1.0;
+
     if (ønsket === 'bergvarme' || (energi.annualHeatingDemandKwh > 30000 && waterborne)) {
       systemType = 'Bergvarme (væske-vann)';
+      spf = 3.5;
+      recFactor = 0.8;
     } else if (ønsket === 'avtrekk' || (!waterborne && area <= 220 && (floors === '1' || floors === '2') && energi.annualHeatingDemandKwh < 20000)) {
       systemType = 'Avtrekksvarmepumpe';
+      spf = 2.8;
+      recFactor = 1.0;
     }
 
-    var minKw = Math.max(4, Math.floor((energi.effektbehovKw * 0.8) / 2) * 2);
-    var maxKw = Math.max(minKw + 2, Math.ceil((energi.effektbehovKw * 1.1) / 2) * 2);
+    var recKw = energi.effektbehovKw * recFactor;
+    var minKw = Math.max(4, Math.floor(recKw / 2) * 2);
+    var maxKw = Math.max(minKw + 2, Math.ceil(recKw / 2) * 2);
     var range = minKw + '–' + maxKw + ' kW';
 
     var nibeOption = '';
     var igluOption = '';
     var reasonNibe = '';
     var reasonIglu = '';
-    var cop = 3.1;
 
     if (systemType === 'Bergvarme (væske-vann)') {
-      cop = 3.8;
       nibeOption = energi.effektbehovKw <= 8
         ? 'NIBE S1255-6 (bergvarme, inverter)'
         : 'NIBE S1255-12 eller NIBE S1156 i korrekt borehullsdesign';
@@ -482,13 +492,11 @@
       reasonNibe = 'Passer retrofit-prosjekter med middels til høyt varmebehov, stabil drift og høy årsvirkningsgrad.';
       reasonIglu = 'Passer boliger med vannbåren distribusjon hvor det ønskes robust bergvarmeløsning i riktig effektklasse.';
     } else if (systemType === 'Avtrekksvarmepumpe') {
-      cop = 2.9;
       nibeOption = 'NIBE S735 (avtrekksvarmepumpe)';
       igluOption = 'IGLU kompakt hydronisk avtrekks-/luft-vann løsning i ' + range;
       reasonNibe = 'Passer boliger uten eksisterende vannbåren varme der ventilasjon og oppvarming kan løses i samme system.';
       reasonIglu = 'Passer moderniseringsprosjekter med moderat varmebehov og ønske om kompakt hydronisk løsning.';
     } else {
-      cop = 3.2;
       nibeOption = energi.effektbehovKw <= 9
         ? 'NIBE S2125-8 med VVM S320 innemodul'
         : energi.effektbehovKw <= 13
@@ -499,17 +507,9 @@
       reasonIglu = 'Passer der kunden ønsker moderne luft-vann løsning med riktig kapasitet for helårsdrift i norsk klima.';
     }
 
-    var baselineFactor = {
-      panelovner: 1.0,
-      oljefyr: 0.82,
-      vedovn: 0.75,
-      luftluft: 2.2,
-      'eldre-varmepumpe': 2.4
-    }[building.existing_heating_system] || 1.0;
-
-    var baselineConsumptionKwh = energi.annualHeatingDemandKwh / baselineFactor;
-    var heatPumpConsumptionKwh = energi.annualHeatingDemandKwh / cop;
-    var savedKwh = Math.max(0, baselineConsumptionKwh - heatPumpConsumptionKwh);
+    var annualHeatingDemandKwh = energi.annualHeatingDemandKwh;
+    var heatPumpConsumptionKwh = annualHeatingDemandKwh / spf;
+    var savedKwh = Math.max(0, annualHeatingDemandKwh - heatPumpConsumptionKwh);
 
     return {
       systemType: systemType,
@@ -518,7 +518,7 @@
       igluOption: igluOption,
       reasonNibe: reasonNibe,
       reasonIglu: reasonIglu,
-      annualHeatingDemandKwh: Math.round(energi.annualHeatingDemandKwh),
+      annualHeatingDemandKwh: Math.round(annualHeatingDemandKwh),
       heatPumpConsumptionKwh: Math.round(heatPumpConsumptionKwh),
       savedKwh: Math.round(savedKwh)
     };
@@ -549,6 +549,17 @@
 
       var priority = followUpPriority(recommendation, building);
       var submissions = [];
+      
+      var emailData = {
+        'Valgte tjenester': state.tjenester.join(', '),
+        'Prioritet': priority,
+        'Byggeår': building.construction_year,
+        'Areal (m2)': building.property_size_m2,
+        'Antall etasjer': building.number_of_floors,
+        'Eksisterende varme': building.existing_heating_system,
+        'Vannbåren varme i dag': building.waterborne_heating,
+        'Ønsket løsning': building.desired_solution
+      };
 
       if (energi && recommendation) {
         submissions.push(sendNetlifyForm('energy-calculation', {
@@ -581,6 +592,14 @@
           follow_up_priority: priority,
           message: kontakt.message
         }));
+        
+        emailData['Anbefalt system'] = recommendation.systemType;
+        emailData['Effektbehov (kW)'] = recommendation.recommendedRange;
+        emailData['Årlig varmebehov (kWh)'] = recommendation.annualHeatingDemandKwh;
+        emailData['Estimert strømforbruk (kWh)'] = recommendation.heatPumpConsumptionKwh;
+        emailData['Estimert spart (kWh)'] = recommendation.savedKwh;
+        emailData['NIBE anbefaling'] = recommendation.nibeOption;
+        emailData['IGLU anbefaling'] = recommendation.igluOption;
       }
 
       if (gulvvarme) {
@@ -609,14 +628,43 @@
           follow_up_priority: priority,
           message: kontakt.message
         }));
+        
+        emailData['Gulvareal (m2)'] = gulvvarme.totalKvm;
+        emailData['Totalt rørbehov (m)'] = gulvvarme.totalRoer;
+        emailData['Totalt antall kurser'] = gulvvarme.totalKurser;
+        emailData['Romtermostater (stk)'] = gulvvarme.totalThermostats;
+        emailData['Aktuatorer (stk)'] = gulvvarme.totalActuators;
+        emailData['Styringsenheter (stk)'] = gulvvarme.totalControlUnits;
       }
 
-      var results = await Promise.allSettled(submissions);
-      var ok = results.length > 0 && results.every(function(r) { return r.status === 'fulfilled'; });
+      var formsResult = await Promise.allSettled(submissions);
+      
+      var formName = state.showEnergi && state.showGulvvarme ? 'Energi og Gulvvarme' : (state.showEnergi ? 'Energiberegning' : 'Gulvvarme');
+      var emailPayload = {
+        formName: formName,
+        contact: kontakt,
+        data: emailData
+      };
+      
+      var emailSent = false;
+      try {
+        var emailRes = await fetch('/.netlify/functions/send-email', {
+          method: 'POST',
+          body: JSON.stringify(emailPayload),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (emailRes.ok) {
+          emailSent = true;
+        } else {
+          console.error('Email API failed with status:', emailRes.status);
+        }
+      } catch (err) {
+        console.error('Email sending error:', err);
+      }
 
       var payload = {
         generatedAt: new Date().toISOString(),
-        submitted: ok,
+        submitted: emailSent,
         selectedServices: state.tjenester.slice(),
         contact: kontakt,
         building: building,
