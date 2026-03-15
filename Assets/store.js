@@ -37,7 +37,7 @@
     // Handle hash-based area filter
     const hash = decodeURIComponent(location.hash.replace("#", ""));
     if (hash && hash !== "alle") {
-      const match = allProducts.find(p => p.area_name === hash);
+      const match = allProducts.find(p => (p.dahl_main_category || p.area_name) === hash);
       if (match) areaFilter = hash;
     }
 
@@ -82,10 +82,10 @@
   function cartTotal(cart) { return cart.reduce((s, i) => s + i.price * i.qty, 0); }
 
   function areas() {
-    return [...new Set(allProducts.map(p => p.area_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
+    return [...new Set(allProducts.map(p => p.dahl_main_category || p.area_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
   }
   function groupsForArea(area) {
-    return [...new Set(allProducts.filter(p => !area || p.area_name === area).map(p => p.group_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
+    return [...new Set(allProducts.filter(p => !area || (p.dahl_main_category || p.area_name) === area).map(p => p.dahl_sub_category || p.group_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
   }
 
   function renderAreaNav() {
@@ -113,7 +113,7 @@
     if (!el) return;
     const groups = groupsForArea(areaFilter);
     el.innerHTML = groups.map(g => {
-      const count = allProducts.filter(p => (!areaFilter || p.area_name === areaFilter) && p.group_name === g).length;
+      const count = allProducts.filter(p => (!areaFilter || (p.dahl_main_category || p.area_name) === areaFilter) && (p.dahl_sub_category || p.group_name) === g).length;
       const active = groupFilter === g ? "active" : "";
       return '<div class="filter-item ' + active + '" data-group="' + escapeHtml(g) + '"><span>' + escapeHtml(g) + "</span><span class='small'>" + count + "</span></div>";
     }).join("");
@@ -127,10 +127,10 @@
 
   function applyFilters() {
     filtered = allProducts.filter(p => {
-      if (areaFilter && p.area_name !== areaFilter) return false;
-      if (groupFilter && p.group_name !== groupFilter) return false;
+      if (areaFilter && (p.dahl_main_category || p.area_name) !== areaFilter) return false;
+      if (groupFilter && (p.dahl_sub_category || p.group_name) !== groupFilter) return false;
       if (query) {
-        const hay = (p.sku + " " + p.name + " " + p.group_name + " " + p.area_name + " " + (p.brand || "")).toLowerCase();
+        const hay = (p.sku + " " + p.name + " " + (p.dahl_main_category || p.area_name) + " " + (p.dahl_sub_category || p.group_name) + " " + (p.dahl_sub_sub_category || "") + " " + (p.brand || "")).toLowerCase();
         if (!hay.includes(query)) return false;
       }
       return true;
@@ -151,7 +151,7 @@
     currentPage = Math.min(Math.max(currentPage, 1), totalPages);
     const start = (currentPage - 1) * PAGE_SIZE;
     const items = filtered.slice(start, start + PAGE_SIZE);
-    $("resultsText").textContent = filtered.length.toLocaleString("no-NO") + " produkter" + (areaFilter ? " i " + areaFilter : "") + (groupFilter ? " / " + groupFilter : "");
+    $("resultsText").textContent = filtered.length.toLocaleString("no-NO") + " produkter" + (areaFilter ? " i " + areaFilter : "") + (groupFilter ? " \u203A " + groupFilter : "");
 
     grid.innerHTML = items.map(p => {
       const price = window.TherwattPricing.priceInclVat(p);

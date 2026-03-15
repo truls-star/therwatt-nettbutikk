@@ -46,7 +46,9 @@
     const requestOnly = window.TherwattPricing.isRequestOnly(product);
     const brand = product.brand || "";
     const imgSrc = getProductImage(product);
-    const category = product.category || product.group_name;
+    const category = product.dahl_sub_sub_category || product.category || product.group_name;
+    const mainCat = product.dahl_main_category || product.area_name;
+    const subCat = product.dahl_sub_category || '';
 
     document.title = product.name + " \u2013 Therwatt";
 
@@ -55,7 +57,8 @@
       '<nav class="product-breadcrumb">' +
         '<a href="index.html">Hjem</a> <span class="muted">/</span> ' +
         '<a href="butikk.html">Nettbutikk</a> <span class="muted">/</span> ' +
-        '<a href="butikk.html#' + encodeURIComponent(product.area_name) + '">' + escapeHtml(product.area_name) + '</a> <span class="muted">/</span> ' +
+        '<a href="butikk.html#' + encodeURIComponent(mainCat) + '">' + escapeHtml(mainCat) + '</a> <span class="muted">/</span> ' +
+        (subCat ? '<span class="muted">' + escapeHtml(subCat) + '</span> <span class="muted">/</span> ' : '') +
         '<span class="muted">' + escapeHtml(category) + '</span>' +
       '</nav>' +
 
@@ -67,7 +70,7 @@
           '</div>' +
         '</div>' +
         '<div class="product-detail">' +
-          (brand ? '<div class="badge">' + escapeHtml(brand) + '</div>' : '<div class="badge">' + escapeHtml(product.area_name) + '</div>') +
+          (brand ? '<div class="badge">' + escapeHtml(brand) + '</div>' : '<div class="badge">' + escapeHtml(mainCat) + '</div>') +
           '<h1>' + escapeHtml(product.name) + '</h1>' +
           '<p class="muted" style="font-size:15px;margin:0;line-height:1.7">' + escapeHtml(product.description) + '</p>' +
           '<div style="display:flex;align-items:baseline;gap:12px">' +
@@ -96,8 +99,9 @@
             '<h3 style="margin-top:0;font-size:18px">Beskrivelse</h3>' +
             '<p style="color:var(--text-secondary);line-height:1.8">' + escapeHtml(product.description) + '</p>' +
             (brand ? '<div class="kv"><div class="muted">Merke</div><div>' + escapeHtml(brand) + '</div></div>' : '') +
-            '<div class="kv"><div class="muted">Kategori</div><div>' + escapeHtml(category) + '</div></div>' +
-            '<div class="kv"><div class="muted">Forretningsomr\u00e5de</div><div>' + escapeHtml(product.area_name) + '</div></div>' +
+            '<div class="kv"><div class="muted">Hovedkategori</div><div>' + escapeHtml(mainCat) + '</div></div>' +
+            (subCat ? '<div class="kv"><div class="muted">Underkategori</div><div>' + escapeHtml(subCat) + '</div></div>' : '') +
+            '<div class="kv"><div class="muted">Produktgruppe</div><div>' + escapeHtml(category) + '</div></div>' +
             '<div class="kv"><div class="muted">Enhet</div><div>' + escapeHtml(product.unit || "-") + '</div></div>' +
           '</div>' +
         '</div>' +
@@ -106,8 +110,8 @@
           '<div class="hero-card" style="padding:24px">' +
             '<h3 style="margin-top:0;font-size:18px">Tekniske spesifikasjoner</h3>' +
             (brand ? '<div class="kv"><div class="muted">Produsent</div><div>' + escapeHtml(brand) + '</div></div>' : '') +
-            '<div class="kv"><div class="muted">Varegruppe</div><div>' + escapeHtml(product.group_name) + '</div></div>' +
-            '<div class="kv"><div class="muted">Gruppekode</div><div>' + escapeHtml(product.group_code) + '</div></div>' +
+            '<div class="kv"><div class="muted">Varegruppe (Dahl)</div><div>' + escapeHtml(mainCat + ' \u203A ' + (subCat || '') + ' \u203A ' + category) + '</div></div>' +
+            '<div class="kv"><div class="muted">Opprinnelig gruppe</div><div>' + escapeHtml(product.group_name) + '</div></div>' +
             '<div class="kv"><div class="muted">Enhet</div><div>' + escapeHtml(product.unit || "-") + '</div></div>' +
             '<div class="kv"><div class="muted">Pris eks. mva</div><div>' + fmt(product.gross_price) + '</div></div>' +
           '</div>' +
