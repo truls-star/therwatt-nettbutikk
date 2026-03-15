@@ -22,10 +22,11 @@
     return res.json();
   }
 
-  function getProductImage(p) {
-    if (p.image_url) return p.image_url;
-    if (p.images && p.images.length > 0) return p.images[0];
-    return "Assets/Images/no-image.jpg";
+  function getProductImage(p, width) {
+    var url = p.image_url || (p.images && p.images.length > 0 ? p.images[0] : null);
+    if (!url) return "Assets/Images/no-image.jpg";
+    if (width && url.includes("bluestonepim.com")) return url + "?w=" + width;
+    return url;
   }
 
   try {
@@ -45,7 +46,7 @@
     const price = window.TherwattPricing.priceInclVat(product);
     const requestOnly = window.TherwattPricing.isRequestOnly(product);
     const brand = product.brand || "";
-    const imgSrc = getProductImage(product);
+    const imgSrc = getProductImage(product, 800);
     const category = product.dahl_sub_sub_category || product.category || product.group_name;
     const mainCat = product.dahl_main_category || product.area_name;
     const subCat = product.dahl_sub_category || '';
@@ -66,8 +67,16 @@
       '<div class="product-wrap">' +
         '<div class="product-gallery">' +
           '<div class="product-media" style="aspect-ratio:1/1;border:none;padding:24px">' +
-            '<img src="' + escapeHtml(imgSrc) + '" alt="' + escapeHtml(product.name) + '" onerror="this.src=\'Assets/Images/no-image.jpg\'" />' +
+            '<img id="mainProductImg" src="' + escapeHtml(imgSrc) + '" alt="' + escapeHtml(product.name) + '" onerror="this.src=\'Assets/Images/no-image.jpg\'" />' +
           '</div>' +
+          (product.images && product.images.length > 1
+            ? '<div class="product-thumbs" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">' +
+                product.images.map(function(img, i) {
+                  var thumbUrl = img.includes('bluestonepim.com') ? img + '?w=120' : img;
+                  return '<img src="' + escapeHtml(thumbUrl) + '" alt="Bilde ' + (i+1) + '" data-full="' + escapeHtml(img.includes('bluestonepim.com') ? img + '?w=800' : img) + '" style="width:72px;height:72px;object-fit:contain;border:2px solid ' + (i === 0 ? 'var(--accent)' : 'var(--border)') + ';border-radius:8px;cursor:pointer;padding:4px;background:var(--bg)" onerror="this.style.display=\'none\'" />';
+                }).join('') +
+              '</div>'
+            : '') +
         '</div>' +
         '<div class="product-detail">' +
           (brand ? '<div class="badge">' + escapeHtml(brand) + '</div>' : '<div class="badge">' + escapeHtml(mainCat) + '</div>') +
@@ -154,6 +163,18 @@
         btn.classList.add("active");
         var tabEl = document.getElementById("tab-" + btn.dataset.tab);
         if (tabEl) tabEl.classList.add("active");
+      });
+    });
+
+    // Thumbnail image switching
+    document.querySelectorAll(".product-thumbs img").forEach(function(thumb) {
+      thumb.addEventListener("click", function() {
+        var mainImg = $("mainProductImg");
+        if (mainImg && thumb.dataset.full) {
+          mainImg.src = thumb.dataset.full;
+          document.querySelectorAll(".product-thumbs img").forEach(function(t) { t.style.borderColor = "var(--border)"; });
+          thumb.style.borderColor = "var(--accent)";
+        }
       });
     });
 
