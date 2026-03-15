@@ -138,10 +138,11 @@
     renderProducts();
   }
 
-  function getProductImage(p) {
-    if (p.image_url) return p.image_url;
-    if (p.images && p.images.length > 0) return p.images[0];
-    return "Assets/Images/no-image.jpg";
+  function getProductImage(p, width) {
+    var url = p.image_url || (p.images && p.images.length > 0 ? p.images[0] : null);
+    if (!url) return "Assets/Images/no-image.jpg";
+    if (width && url.includes("bluestonepim.com")) return url + "?w=" + width;
+    return url;
   }
 
   function renderProducts() {
@@ -157,7 +158,7 @@
       const price = window.TherwattPricing.priceInclVat(p);
       const requestOnly = window.TherwattPricing.isRequestOnly(p);
       const brand = p.brand || "";
-      const imgSrc = getProductImage(p);
+      const imgSrc = getProductImage(p, 400);
 
       return '<article class="product-card">' +
         '<a class="product-media" href="produkt.html?sku=' + encodeURIComponent(p.sku) + '">' +
