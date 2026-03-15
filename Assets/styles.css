@@ -1,23 +1,23 @@
 /* ===== Therwatt.no — Modern Professional Design ===== */
 
 :root {
-  --bg: #f5f7fa;
+  --bg: #f4f6f8;
   --bg2: #ffffff;
   --card: #ffffff;
-  --card2: #f8fafc;
-  --text: #1a2332;
-  --text-secondary: #475569;
-  --muted: #64748b;
-  --line: #e2e8f0;
-  --accent: #0066cc;
-  --accent-hover: #0052a3;
-  --accent-light: #e8f2ff;
-  --accent-bg: rgba(0, 102, 204, 0.06);
+  --card2: #f7f9fb;
+  --text: #1e2a36;
+  --text-secondary: #3d5060;
+  --muted: #5a6f80;
+  --line: #dde4ea;
+  --accent: #1a7ab5;
+  --accent-hover: #155f8e;
+  --accent-light: #e6f1f8;
+  --accent-bg: rgba(26, 122, 181, 0.06);
   --success: #16a34a;
   --success-light: #dcfce7;
   --danger: #dc2626;
-  --warm: #f97316;
-  --warm-light: #fff7ed;
+  --warm: #e8581c;
+  --warm-light: #fef3ec;
   --max: 1320px;
   --radius: 12px;
   --radius-sm: 8px;
@@ -67,10 +67,11 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text); m
   letter-spacing: -0.02em;
 }
 .logo {
-  width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), #0088ff);
-  display: flex; align-items: center; justify-content: center;
-  color: white; font-weight: 900; font-size: 16px;
+  width: 40px; height: 40px; border-radius: 8px;
+  overflow: hidden; flex-shrink: 0;
+}
+.logo img {
+  width: 100%; height: 100%; object-fit: cover;
 }
 .menu { display: flex; gap: 4px; align-items: center; }
 .menu a {
@@ -213,7 +214,7 @@ footer a:hover { text-decoration: underline; }
 }
 .input:focus, select:focus, textarea:focus {
   outline: none; border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  box-shadow: 0 0 0 3px rgba(26, 122, 181, 0.12);
 }
 .input::placeholder, textarea::placeholder { color: #94a3b8; }
 
@@ -356,7 +357,7 @@ footer a:hover { text-decoration: underline; }
 /* ===== Notices & Alerts ===== */
 .notice {
   padding: 14px 18px; border-radius: var(--radius);
-  background: var(--accent-light); border: 1px solid rgba(0, 102, 204, 0.15);
+  background: var(--accent-light); border: 1px solid rgba(26, 122, 181, 0.15);
   color: var(--accent); font-size: 14px;
 }
 .success {
