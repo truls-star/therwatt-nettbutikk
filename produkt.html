@@ -1,5 +1,70 @@
-<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Produkt – Therwatt</title><link rel="stylesheet" href="assets/styles.css"></head><body>
-<header class="topbar"><div class="wrap nav"><a class="brand" href="index.html"><span class="logo"></span><span>Therwatt</span></a><nav class="menu"><a data-page="index.html" href="index.html">Hjem</a><a data-page="butikk.html" href="butikk.html">Nettbutikk</a><a data-page="kontakt.html" href="kontakt.html">Kontakt</a></nav></div></header>
-<main class="wrap product-page"><div id="productRoot"></div></main>
-<footer><div class="wrap footer-grid"><div><strong>Therwatt</strong><p class="muted">Produktvisning med pris inkl. mva og mulighet for både kjøp og forespørsel.</p></div><div><strong>Navigasjon</strong><p><a href="butikk.html">Tilbake til butikk</a></p></div><div><strong>Kundeservice</strong><p>post@therwatt.no</p></div><div><strong>År</strong><p>© <span id="year"></span></p></div></div></footer>
-<script src="assets/config.js"></script><script src="assets/main.js"></script><script src="assets/product.js"></script></body></html>
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Produkt – Therwatt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Assets/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="logo">T</span>
+      <span>Therwatt</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Meny">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <nav class="menu" id="mainMenu">
+      <a data-page="index.html" href="index.html">Hjem</a>
+      <a data-page="butikk.html" href="butikk.html">Nettbutikk</a>
+      <a data-page="kontakt.html" href="kontakt.html">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap product-page">
+  <div id="productRoot">
+    <div style="text-align:center;padding:60px 0">
+      <div class="skeleton" style="width:100%;max-width:600px;height:300px;margin:0 auto 20px"></div>
+      <div class="skeleton" style="width:200px;height:24px;margin:0 auto 12px"></div>
+      <div class="skeleton" style="width:300px;height:16px;margin:0 auto"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <strong>Therwatt</strong>
+      <p>Faghandel for VVS, varmepumper og vannbåren varme.</p>
+    </div>
+    <div>
+      <strong>Navigasjon</strong>
+      <p><a href="butikk.html">Tilbake til butikk</a></p>
+    </div>
+    <div>
+      <strong>Kundeservice</strong>
+      <p>post@therwatt.no</p>
+    </div>
+    <div>
+      <strong>Info</strong>
+      <p>&copy; <span id="year"></span> Therwatt AS</p>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Til toppen">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script src="Assets/config.js"></script>
+<script src="Assets/main.js"></script>
+<script src="Assets/product.js"></script>
+</body>
+</html>
