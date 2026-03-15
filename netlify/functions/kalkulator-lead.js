@@ -24,11 +24,12 @@ exports.handler = async function(event) {
     });
 
     // Send emails if SMTP is configured
-    const smtpHost = process.env.SMTP_HOST;
-    const smtpPort = parseInt(process.env.SMTP_PORT || "587", 10);
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
-    const emailFrom = process.env.EMAIL_FROM || "noreply@therwatt.no";
+    const env = typeof Netlify !== "undefined" && Netlify.env ? Netlify.env : null;
+    const smtpHost = env ? env.get("SMTP_HOST") : process.env.SMTP_HOST;
+    const smtpPort = parseInt((env ? env.get("SMTP_PORT") : process.env.SMTP_PORT) || "587", 10);
+    const smtpUser = env ? env.get("SMTP_USER") : process.env.SMTP_USER;
+    const smtpPass = env ? env.get("SMTP_PASS") : process.env.SMTP_PASS;
+    const emailFrom = (env ? env.get("EMAIL_FROM") : process.env.EMAIL_FROM) || "noreply@therwatt.no";
 
     if (smtpHost && smtpUser && smtpPass) {
       const transporter = nodemailer.createTransport({
