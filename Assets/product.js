@@ -139,20 +139,25 @@
       '<div class="hero-card request-box" id="request" style="padding:28px">' +
         '<h2 style="margin-top:0;font-size:22px">Be om tilbud</h2>' +
         '<p class="subtitle" style="font-size:14px">For prosjektpriser, mengderabatter eller teknisk r\u00e5dgivning.</p>' +
-        '<form name="tilbud" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-email-form="true" data-email-type="contact" action="takke.html">' +
-          '<input type="hidden" name="form-name" value="tilbud" />' +
+        '<form name="quote-request" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" data-netlify-ajax="true" action="/takke">' +
+          '<input type="hidden" name="form-name" value="quote-request" />' +
+          '<input type="hidden" name="lead_type" value="quote-request" />' +
           '<p style="display:none"><label>Ikke fyll ut dette feltet: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>' +
           '<input type="hidden" name="product" value="' + escapeHtml(product.sku) + ' \u2013 ' + escapeHtml(product.name) + '" />' +
           '<div class="grid cols-2">' +
-            '<div><label>Navn</label><input class="input" name="name" required></div>' +
-            '<div><label>E-post</label><input class="input" name="email" type="email" required></div>' +
-            '<div><label>Telefon</label><input class="input" name="phone"></div>' +
+            '<div><label>Fullt navn *</label><input class="input" name="name" required></div>' +
+            '<div><label>E-post *</label><input class="input" name="email" type="email" required></div>' +
+            '<div><label>Telefon *</label><input class="input" name="phone" required></div>' +
             '<div><label>Adresse</label><input class="input" name="address" autocomplete="street-address"></div>' +
+            '<div><label>Postnummer</label><input class="input" name="postal_code" inputmode="numeric"></div>' +
+            '<div><label>Poststed</label><input class="input" name="city"></div>' +
             '<div><label>Firma</label><input class="input" name="company"></div>' +
           '</div>' +
-          '<div style="margin-top:12px"><label>Melding</label><textarea name="message" rows="4" placeholder="Beskriv prosjektet eller \u00f8nsket ditt..." required></textarea></div>' +
+          '<div style="margin-top:12px"><label>Valgt tjeneste *</label><select class="input" name="selected_service" required><option value=\"\">Velg</option><option value=\"Produkttilbud\">Produkttilbud</option><option value=\"Varmepumpe\">Varmepumpe</option><option value=\"Vannbåren varme\">Vannbåren varme</option><option value=\"Gulvvarme\">Gulvvarme</option></select></div>' +
+          '<div style="margin-top:12px"><label>Ønsket løsning</label><input class="input" name="desired_solution" placeholder=\"F.eks. komplett varmepumpesystem\"></div>' +
+          '<div style="margin-top:12px"><label>Melding *</label><textarea name="message" rows="4" placeholder="Beskriv prosjektet eller \u00f8nsket ditt..." required></textarea></div>' +
           '<div class="notice" data-form-status style="display:none;margin-top:12px"></div>' +
-          '<div class="actions" style="margin-top:16px"><button class="btn" type="submit">Send foresp\u00f8rsel</button></div>' +
+          '<div class="actions" style="margin-top:16px"><button class="btn" type="submit" data-submit-label="Send foresp\u00f8rsel">Send foresp\u00f8rsel</button></div>' +
         '</form>' +
       '</div>';
 

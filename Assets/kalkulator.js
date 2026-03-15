@@ -1,37 +1,28 @@
 /**
- * Therwatt Kalkulator – Hovedlogikk
- * Wizard-flyt, beregninger og resultatgenerering.
+ * Therwatt Kalkulator – Netlify Forms lead workflow
  */
 (function() {
   'use strict';
 
-  var SUCCESS_MESSAGE = 'Takk for forespørselen. Vi har mottatt informasjonen din og tar kontakt så snart som mulig.';
   var ERROR_MESSAGE = 'Det oppstod en feil ved sending. Prøv igjen, eller kontakt oss på post@therwatt.no.';
-
   var CFG = window.KALKULATOR_CONFIG;
+
   var state = {
-    tjenester: [],      // 'energi', 'gulvvarme', or 'begge'
+    tjenester: [],
     showEnergi: false,
     showGulvvarme: false,
     rom: [],
     romIdCounter: 0
   };
 
-  // ============================================================
-  // Initialization
-  // ============================================================
   function init() {
     populateSelects();
     bindStepNavigation();
     bindEnergiToggle();
     bindGulvvarmeToggle();
     bindContactForm();
-    bindResult();
   }
 
-  // ============================================================
-  // Populate select fields from config
-  // ============================================================
   function populateSelects() {
     var byggeaarSel = document.getElementById('byggeaar');
     CFG.byggeaar.forEach(function(b) {
@@ -49,14 +40,10 @@
     });
   }
 
-  // ============================================================
-  // Step Navigation
-  // ============================================================
   function bindStepNavigation() {
     var checkboxes = document.querySelectorAll('input[name="tjeneste"]');
     var step1Next = document.getElementById('step1Next');
 
-    // Step 1 checkboxes – mutual exclusion for "begge"
     checkboxes.forEach(function(cb) {
       cb.addEventListener('change', function() {
         if (this.value === 'begge' && this.checked) {
@@ -80,11 +67,10 @@
       if (validateStep2()) showStep(3);
     });
     document.getElementById('step3Back').addEventListener('click', function() { showStep(2); });
+
     document.getElementById('step3Next').addEventListener('click', function() {
-      if (validateStep3()) {
-        this.disabled = true;
-        generateResult();
-      }
+      if (!validateStep3()) return;
+      submitCalculatorLead();
     });
   }
 
@@ -105,7 +91,7 @@
     document.getElementById('step' + n).classList.add('active');
 
     document.querySelectorAll('.calc-step').forEach(function(s) {
-      var stepN = parseInt(s.getAttribute('data-step'));
+      var stepN = parseInt(s.getAttribute('data-step'), 10);
       s.classList.remove('active', 'done');
       if (stepN < n) s.classList.add('done');
       else if (stepN === n) s.classList.add('active');
@@ -114,22 +100,15 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ============================================================
-  // Energi section toggle
-  // ============================================================
   function bindEnergiToggle() {
     var radios = document.querySelectorAll('input[name="etterisolert"]');
     radios.forEach(function(r) {
       r.addEventListener('change', function() {
-        document.getElementById('etterisoleringGruppe').style.display =
-          this.value === 'ja' ? '' : 'none';
+        document.getElementById('etterisoleringGruppe').style.display = this.value === 'ja' ? '' : 'none';
       });
     });
   }
 
-  // ============================================================
-  // Gulvvarme section toggles
-  // ============================================================
   function bindGulvvarmeToggle() {
     var metodeRadios = document.querySelectorAll('input[name="gvMetode"]');
     metodeRadios.forEach(function(r) {
@@ -141,13 +120,11 @@
       });
     });
 
-    // Total area construction type
     var konstrSel = document.getElementById('gvTotalKonstruksjon');
     konstrSel.addEventListener('change', function() {
       updateUndertypeSelect('gvTotalUndertypeGruppe', 'gvTotalUndertype', this.value);
     });
 
-    // Rom for rom
     document.getElementById('leggTilRom').addEventListener('click', function() { addRom(); });
   }
 
@@ -170,9 +147,7 @@
 
   function addRom() {
     state.romIdCounter++;
-    var id = state.romIdCounter;
-    var rom = { id: id };
-    state.rom.push(rom);
+    state.rom.push({ id: state.romIdCounter });
     renderRomListe();
   }
 
@@ -188,7 +163,6 @@
     state.rom.forEach(function(rom, idx) {
       var div = document.createElement('div');
       div.className = 'rom-entry';
-      div.setAttribute('data-rom-id', rom.id);
 
       var romtyperOptions = '<option value="">Velg romtype…</option>';
       CFG.gulvvarme.romtyper.forEach(function(rt) {
@@ -211,7 +185,6 @@
 
       container.appendChild(div);
 
-      // Bind construction change
       var konstrSel = div.querySelector('.rom-konstruksjon');
       var undertypeGruppe = div.querySelector('.rom-undertype-gruppe');
       var undertypeSel = div.querySelector('.rom-undertype');
@@ -230,71 +203,48 @@
         }
       });
 
-      // Bind remove
       var removeBtn = div.querySelector('.rom-remove');
       if (removeBtn) {
         removeBtn.addEventListener('click', function() {
-          removeRom(parseInt(this.getAttribute('data-remove')));
+          removeRom(parseInt(this.getAttribute('data-remove'), 10));
         });
       }
     });
   }
 
-  // ============================================================
-  // Contact form
-  // ============================================================
   function bindContactForm() {
     var samtykke = document.getElementById('samtykke');
     var nextBtn = document.getElementById('step3Next');
-    var kunEpost = document.getElementById('kunEpost');
-    var fullFelter = document.getElementById('fullKontaktFelter');
-    var kunFelter = document.getElementById('kunEpostFelter');
-    var samtykkeTekst = document.getElementById('samtykkeTekst');
-    var step3Beskrivelse = document.getElementById('step3Beskrivelse');
-    var fullRequiredFields = fullFelter ? fullFelter.querySelectorAll('[required]') : [];
 
     samtykke.addEventListener('change', function() {
       nextBtn.disabled = !this.checked;
     });
-
-    kunEpost.addEventListener('change', function() {
-      var checked = this.checked;
-      if (checked) {
-        fullFelter.classList.add('hidden');
-        kunFelter.classList.remove('hidden');
-        kunFelter.style.display = '';
-        fullRequiredFields.forEach(function(f) { f.removeAttribute('required'); });
-        var epostKun = document.getElementById('kontaktEpostKun');
-        if (epostKun) epostKun.setAttribute('required', '');
-        samtykkeTekst.textContent = 'Jeg samtykker til at Therwatt lagrer min e-postadresse og sender meg beregningsresultatet. Opplysningene deles ikke med tredjepart.';
-        if (step3Beskrivelse) step3Beskrivelse.textContent = 'Oppgi e-postadressen din, så sender vi beregningen dit.';
-      } else {
-        fullFelter.classList.remove('hidden');
-        kunFelter.classList.add('hidden');
-        fullRequiredFields.forEach(function(f) { f.setAttribute('required', ''); });
-        var epostKun = document.getElementById('kontaktEpostKun');
-        if (epostKun) epostKun.removeAttribute('required');
-        samtykkeTekst.textContent = 'Jeg samtykker til at Therwatt lagrer mine opplysninger og kan kontakte meg med resultat og eventuelt tilbud. Opplysningene deles ikke med tredjepart.';
-        if (step3Beskrivelse) step3Beskrivelse.textContent = 'Vi trenger noen opplysninger for å sende deg resultatet og eventuelt kontakte deg med et tilbud.';
-      }
-    });
   }
 
-  // ============================================================
-  // Validation
-  // ============================================================
   function validateStep2() {
     clearErrors();
     var valid = true;
 
     if (state.showEnergi) {
-      if (!document.getElementById('byggeaar').value) { markError('byggeaar'); valid = false; }
-      if (!document.getElementById('boligtype').value) { markError('boligtype'); valid = false; }
+      var requiredIds = ['byggeaar', 'boligtype', 'areal', 'antallEtasjer', 'eksisterendeVarme', 'vannbarenVarme', 'onsketLosning'];
+      requiredIds.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (!el || !String(el.value || '').trim()) {
+          markError(id);
+          valid = false;
+        }
+      });
+
       var areal = document.getElementById('areal');
-      if (!areal.value || parseFloat(areal.value) <= 0) { markError('areal'); valid = false; }
+      if (areal && (!areal.value || parseFloat(areal.value) <= 0)) {
+        markError('areal');
+        valid = false;
+      }
+
       var etterisolertJa = document.querySelector('input[name="etterisolert"][value="ja"]').checked;
       if (etterisolertJa && !document.getElementById('etterisoleringCm').value) {
-        markError('etterisoleringCm'); valid = false;
+        markError('etterisoleringCm');
+        valid = false;
       }
     }
 
@@ -302,14 +252,17 @@
       var metode = document.querySelector('input[name="gvMetode"]:checked').value;
       if (metode === 'total') {
         if (!document.getElementById('gvTotalKvm').value || parseFloat(document.getElementById('gvTotalKvm').value) <= 0) {
-          markError('gvTotalKvm'); valid = false;
+          markError('gvTotalKvm');
+          valid = false;
         }
         if (!document.getElementById('gvTotalKonstruksjon').value) {
-          markError('gvTotalKonstruksjon'); valid = false;
+          markError('gvTotalKonstruksjon');
+          valid = false;
         }
       } else {
         var romEntries = document.querySelectorAll('.rom-entry');
-        if (romEntries.length === 0) { valid = false; }
+        if (romEntries.length === 0) valid = false;
+
         romEntries.forEach(function(entry) {
           var kvm = entry.querySelector('.rom-kvm');
           var type = entry.querySelector('.rom-type');
@@ -326,26 +279,31 @@
 
   function validateStep3() {
     clearErrors();
-    var valid = true;
-    var kunEpost = document.getElementById('kunEpost').checked;
 
-    if (kunEpost) {
-      var epostKun = document.getElementById('kontaktEpostKun');
-      if (!epostKun.value.trim()) { epostKun.classList.add('form-error'); valid = false; }
-      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(epostKun.value)) { epostKun.classList.add('form-error'); valid = false; }
-    } else {
-      var fields = ['kontaktNavn', 'kontaktTelefon', 'kontaktEpost'];
-      fields.forEach(function(id) {
-        var el = document.getElementById(id);
-        if (!el.value.trim()) { markError(id); valid = false; }
-      });
-      var epost = document.getElementById('kontaktEpost');
-      if (epost.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(epost.value)) {
-        markError('kontaktEpost'); valid = false;
+    var requiredFields = ['kontaktNavn', 'kontaktTelefon', 'kontaktEpost'];
+    var valid = true;
+
+    requiredFields.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el.value.trim()) {
+        markError(id);
+        valid = false;
       }
+    });
+
+    var epost = document.getElementById('kontaktEpost');
+    if (epost.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(epost.value)) {
+      markError('kontaktEpost');
+      valid = false;
     }
 
-    if (!document.getElementById('samtykke').checked) { valid = false; }
+    if (!document.getElementById('samtykke').checked) {
+      valid = false;
+      setStatus('Du må samtykke før innsending.', false);
+    } else {
+      setStatus('', true);
+    }
+
     return valid;
   }
 
@@ -360,64 +318,72 @@
     });
   }
 
-  // ============================================================
-  // Calculations
-  // ============================================================
+  function setStatus(message, ok) {
+    var el = document.getElementById('kalkulatorStatus');
+    if (!el) return;
+    if (!message) {
+      el.style.display = 'none';
+      el.textContent = '';
+      return;
+    }
+    el.style.display = '';
+    el.className = ok ? 'notice success' : 'notice';
+    el.textContent = message;
+  }
+
+  function collectKontakt() {
+    return {
+      name: document.getElementById('kontaktNavn').value.trim(),
+      phone: document.getElementById('kontaktTelefon').value.trim(),
+      email: document.getElementById('kontaktEpost').value.trim(),
+      address: document.getElementById('kontaktAdresse').value.trim(),
+      postal_code: document.getElementById('kontaktPostnummer').value.trim(),
+      city: document.getElementById('kontaktBy').value.trim(),
+      message: document.getElementById('kontaktMelding').value.trim(),
+      botField: (document.getElementById('kontaktBotField').value || '').trim()
+    };
+  }
+
+  function collectBuilding() {
+    return {
+      construction_year: document.getElementById('byggeaar').value,
+      property_size_m2: document.getElementById('areal').value,
+      number_of_floors: document.getElementById('antallEtasjer').value,
+      existing_heating_system: document.getElementById('eksisterendeVarme').value,
+      waterborne_heating: document.getElementById('vannbarenVarme').value,
+      wants_floor_heating: state.showGulvvarme ? 'ja' : 'nei',
+      desired_solution: document.getElementById('onsketLosning').value
+    };
+  }
+
   function beregnEnergi() {
     var byggeaarVal = document.getElementById('byggeaar').value;
     var boligtypeVal = document.getElementById('boligtype').value;
     var arealVal = parseFloat(document.getElementById('areal').value);
     var etterisolertJa = document.querySelector('input[name="etterisolert"][value="ja"]').checked;
-    var etterisoleringCm = etterisolertJa ? parseInt(document.getElementById('etterisoleringCm').value) || 0 : 0;
+    var etterisoleringCm = etterisolertJa ? parseInt(document.getElementById('etterisoleringCm').value, 10) || 0 : 0;
 
-    // Find byggeår config
     var byggeaarCfg = CFG.byggeaar.find(function(b) { return b.value === byggeaarVal; });
     var boligtypeCfg = CFG.boligtyper.find(function(b) { return b.value === boligtypeVal; });
-
     if (!byggeaarCfg || !boligtypeCfg) return null;
 
-    // Etterisolering: move up categories
     var steg = Math.floor(etterisoleringCm / 5) * CFG.etterisoleringStegPer5cm;
     var effektivIndex = Math.min(byggeaarCfg.index + steg, CFG.byggeaar.length - 1);
     var effektivByggeaar = CFG.byggeaar[effektivIndex];
 
     var wattPerKvm = effektivByggeaar.watt;
-    var effektbehovWatt = arealVal * wattPerKvm * boligtypeCfg.faktor;
-    var effektbehovKw = effektbehovWatt / 1000;
-
-    var bergvarmeKw = effektbehovKw * CFG.varmepumpe.bergvarme.dimensjoneringsFaktor;
-    var luftVannKw = effektbehovKw * CFG.varmepumpe.luftVann.dimensjoneringsFaktor;
-
-    // Energibesparelse
-    var aarligVarmebehovKwh = effektbehovKw * CFG.driftstimerPerAar;
-
-    var bergBesparelsesgrad = 1 - (1 / CFG.varmepumpe.bergvarme.aarsVarmefaktor);
-    var luftBesparelsesgrad = 1 - (1 / CFG.varmepumpe.luftVann.aarsVarmefaktor);
-
-    var bergSpartKwh = aarligVarmebehovKwh * bergBesparelsesgrad;
-    var luftSpartKwh = aarligVarmebehovKwh * luftBesparelsesgrad;
-
-    var bergSpartKr = bergSpartKwh * CFG.stromPrisKrPerKwh;
-    var luftSpartKr = luftSpartKwh * CFG.stromPrisKrPerKwh;
+    var effektbehovKw = (arealVal * wattPerKvm * boligtypeCfg.faktor) / 1000;
+    var annualHeatingDemandKwh = effektbehovKw * CFG.driftstimerPerAar;
 
     return {
       byggeaarLabel: byggeaarCfg.label,
-      effektivByggeaarLabel: effektivByggeaar.label,
       boligtypeLabel: boligtypeCfg.label,
       areal: arealVal,
-      wattPerKvm: wattPerKvm,
-      etterisolert: etterisolertJa,
-      etterisoleringCm: etterisoleringCm,
+      effektivByggeaarLabel: effektivByggeaar.label,
       effektbehovKw: effektbehovKw,
-      bergvarmeKw: bergvarmeKw,
-      luftVannKw: luftVannKw,
-      aarligVarmebehovKwh: aarligVarmebehovKwh,
-      bergSpartKwh: bergSpartKwh,
-      luftSpartKwh: luftSpartKwh,
-      bergSpartKr: bergSpartKr,
-      luftSpartKr: luftSpartKr,
-      bergAarsVarmefaktor: CFG.varmepumpe.bergvarme.aarsVarmefaktor,
-      luftAarsVarmefaktor: CFG.varmepumpe.luftVann.aarsVarmefaktor
+      annualHeatingDemandKwh: annualHeatingDemandKwh,
+      etterisolert: etterisolertJa,
+      etterisoleringCm: etterisoleringCm
     };
   }
 
@@ -426,7 +392,7 @@
     var romData = [];
 
     if (metode === 'total') {
-      var kvm = parseFloat(document.getElementById('gvTotalKvm').value);
+      var kvm = parseFloat(document.getElementById('gvTotalKvm').value) || 0;
       var konstr = document.getElementById('gvTotalKonstruksjon').value;
       var undertype = document.getElementById('gvTotalUndertype').value;
       romData.push({ romtype: 'Hele boligen', kvm: kvm, konstruksjon: konstr, undertype: undertype });
@@ -444,27 +410,19 @@
     var totalKvm = 0;
     var totalRoer = 0;
     var totalKurser = 0;
-    var antallRom = romData.length;
     var materialSummary = {};
 
     romData.forEach(function(rom) {
       totalKvm += rom.kvm;
       var roer = rom.kvm * CFG.gulvvarme.roerPerKvm;
       totalRoer += roer;
-
-      // Kurser
       var kurser = beregnKurser(rom.kvm);
       totalKurser += kurser;
-      rom.kurser = kurser;
-      rom.roer = roer;
 
-      // Material per rom based on construction
       if (rom.konstruksjon && rom.undertype) {
         var konstrCfg = CFG.gulvvarme.konstruksjon[rom.konstruksjon];
         if (konstrCfg && konstrCfg.undertyper[rom.undertype]) {
           var materialer = konstrCfg.undertyper[rom.undertype].materialer;
-          rom.undertypeLabel = konstrCfg.undertyper[rom.undertype].label;
-          rom.konstruksjonLabel = konstrCfg.label;
           materialer.forEach(function(mat) {
             var antall = Math.ceil(rom.kvm * mat.perKvm);
             if (!materialSummary[mat.id]) {
@@ -476,24 +434,11 @@
       }
     });
 
-    var totalAktuatorer = totalKurser * CFG.gulvvarme.aktuatorPerKurs;
-    var totalTermostater = antallRom * CFG.gulvvarme.termostatPerRom;
-    var totalBoeyefiksturer = totalKurser * CFG.gulvvarme.boeyefikturerPerKurs;
-    var totalStyringsenheter = Math.ceil(antallRom / CFG.gulvvarme.romPerStyringsenhet);
-    if (totalStyringsenheter < 1) totalStyringsenheter = 1;
-
     return {
-      rom: romData,
-      totalKvm: totalKvm,
+      totalKvm: Math.round(totalKvm),
       totalRoer: Math.ceil(totalRoer),
       totalKurser: totalKurser,
-      antallRom: antallRom,
-      aktuatorer: totalAktuatorer,
-      termostater: totalTermostater,
-      boeyefiksturer: totalBoeyefiksturer,
-      styringsenheter: totalStyringsenheter,
-      materialSummary: materialSummary,
-      metode: metode
+      materialSummary: materialSummary
     };
   }
 
@@ -505,402 +450,212 @@
     return grenser[grenser.length - 1].kurser;
   }
 
-  // ============================================================
-  // Result Generation
-  // ============================================================
-  function generateResult() {
-    var energi = state.showEnergi ? beregnEnergi() : null;
-    var gulvvarme = state.showGulvvarme ? beregnGulvvarme() : null;
-    var kunEpost = document.getElementById('kunEpost').checked;
+  function velgSystemAnbefaling(energi, building) {
+    var waterborne = building.waterborne_heating === 'ja';
+    var ønsket = building.desired_solution;
+    var area = parseFloat(building.property_size_m2) || 0;
+    var floors = building.number_of_floors;
 
-    var kontakt;
-    if (kunEpost) {
-      kontakt = {
-        navn: '',
-        telefon: '',
-        epost: document.getElementById('kontaktEpostKun').value.trim(),
-        adresse: '',
-        kunEpost: true
-      };
+    var systemType = 'Luft-vann varmepumpe';
+    if (ønsket === 'bergvarme' || (energi.annualHeatingDemandKwh > 30000 && waterborne)) {
+      systemType = 'Bergvarme (væske-vann)';
+    } else if (ønsket === 'avtrekk' || (!waterborne && area <= 220 && (floors === '1' || floors === '2') && energi.annualHeatingDemandKwh < 20000)) {
+      systemType = 'Avtrekksvarmepumpe';
+    }
+
+    var minKw = Math.max(4, Math.floor((energi.effektbehovKw * 0.8) / 2) * 2);
+    var maxKw = Math.max(minKw + 2, Math.ceil((energi.effektbehovKw * 1.1) / 2) * 2);
+    var range = minKw + '–' + maxKw + ' kW';
+
+    var nibeOption = '';
+    var igluOption = '';
+    var reasonNibe = '';
+    var reasonIglu = '';
+    var cop = 3.1;
+
+    if (systemType === 'Bergvarme (væske-vann)') {
+      cop = 3.8;
+      nibeOption = energi.effektbehovKw <= 8
+        ? 'NIBE S1255-6 (bergvarme, inverter)'
+        : 'NIBE S1255-12 eller NIBE S1156 i korrekt borehullsdesign';
+      igluOption = 'IGLU væske-vann serie i ' + range + ' med hydronisk innedel';
+      reasonNibe = 'Passer retrofit-prosjekter med middels til høyt varmebehov, stabil drift og høy årsvirkningsgrad.';
+      reasonIglu = 'Passer boliger med vannbåren distribusjon hvor det ønskes robust bergvarmeløsning i riktig effektklasse.';
+    } else if (systemType === 'Avtrekksvarmepumpe') {
+      cop = 2.9;
+      nibeOption = 'NIBE S735 (avtrekksvarmepumpe)';
+      igluOption = 'IGLU kompakt hydronisk avtrekks-/luft-vann løsning i ' + range;
+      reasonNibe = 'Passer boliger uten eksisterende vannbåren varme der ventilasjon og oppvarming kan løses i samme system.';
+      reasonIglu = 'Passer moderniseringsprosjekter med moderat varmebehov og ønske om kompakt hydronisk løsning.';
     } else {
-      kontakt = {
-        navn: document.getElementById('kontaktNavn').value.trim(),
-        telefon: document.getElementById('kontaktTelefon').value.trim(),
-        epost: document.getElementById('kontaktEpost').value.trim(),
-        adresse: document.getElementById('kontaktAdresse').value.trim(),
-        kunEpost: false
-      };
+      cop = 3.2;
+      nibeOption = energi.effektbehovKw <= 9
+        ? 'NIBE S2125-8 med VVM S320 innemodul'
+        : energi.effektbehovKw <= 13
+          ? 'NIBE S2125-12 med SMO S40 styring'
+          : 'NIBE S2125-16 med tilpasset innedel/akkumulering';
+      igluOption = 'IGLU luft-vann modellserie i ' + range + ' med hydronisk innedel';
+      reasonNibe = 'Passer boliger med medium til høyt varmebehov og planlagt eller eksisterende vannbåren distribusjon.';
+      reasonIglu = 'Passer der kunden ønsker moderne luft-vann løsning med riktig kapasitet for helårsdrift i norsk klima.';
     }
 
-    // Build result HTML
-    var html = buildResultHTML(energi, gulvvarme, kontakt);
-    document.getElementById('resultatInnhold').innerHTML = html;
-    showStep(4);
+    var baselineFactor = {
+      panelovner: 1.0,
+      oljefyr: 0.82,
+      vedovn: 0.75,
+      luftluft: 2.2,
+      'eldre-varmepumpe': 2.4
+    }[building.existing_heating_system] || 1.0;
 
-    // Submit lead and update delivery state in result view
-    submitLead(kontakt, energi, gulvvarme).then(function(ok) {
-      var statusEl = document.getElementById('kalkulatorLeadStatus');
-      if (!statusEl) return;
-      statusEl.className = ok ? 'notice success' : 'notice';
-      statusEl.textContent = ok ? SUCCESS_MESSAGE : ERROR_MESSAGE;
-    });
-  }
+    var baselineConsumptionKwh = energi.annualHeatingDemandKwh / baselineFactor;
+    var heatPumpConsumptionKwh = energi.annualHeatingDemandKwh / cop;
+    var savedKwh = Math.max(0, baselineConsumptionKwh - heatPumpConsumptionKwh);
 
-  function buildResultHTML(energi, gulvvarme, kontakt) {
-    var h = '';
-
-    // Print header
-    h += '<div class="print-header">';
-    h += '<h1>Therwatt – Beregningsresultat</h1>';
-    h += '<p>Utarbeidet for ' + esc(kontakt.navn || kontakt.epost) + ' &middot; ' + new Date().toLocaleDateString('nb-NO') + '</p>';
-    h += '</div>';
-
-    // Success header
-    h += '<div class="resultat-header">';
-    h += '<div class="success-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>';
-    h += '<h2>Takk for din forespørsel</h2>';
-    if (kontakt.kunEpost) {
-      h += '<p>Vi har mottatt beregningen din og sender resultatet til ' + esc(kontakt.epost) + '.</p>';
-    } else {
-      h += '<p>Vi har mottatt dine opplysninger og beregninger. En rådgiver fra Therwatt kan kontakte deg for å gå gjennom resultatet og gi et tilpasset tilbud.</p>';
-    }
-    h += '<div id="kalkulatorLeadStatus" class="notice" style="margin-top:14px">Sender forespørsel ...</div>';
-    h += '</div>';
-
-    h += '<div class="resultat-grid">';
-
-    // Contact summary
-    h += '<div class="resultat-card">';
-    h += '<h3><span class="card-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Kontaktopplysninger</h3>';
-    if (kontakt.navn) h += '<div class="kv"><div class="muted">Navn</div><div>' + esc(kontakt.navn) + '</div></div>';
-    if (kontakt.adresse) h += '<div class="kv"><div class="muted">Adresse</div><div>' + esc(kontakt.adresse) + '</div></div>';
-    if (kontakt.telefon) h += '<div class="kv"><div class="muted">Telefon</div><div>' + esc(kontakt.telefon) + '</div></div>';
-    h += '<div class="kv"><div class="muted">E-post</div><div>' + esc(kontakt.epost) + '</div></div>';
-    if (kontakt.kunEpost) {
-      h += '<div class="kv-info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> Beregningen sendes til din e-postadresse.</div>';
-    }
-    h += '</div>';
-
-    // Tjeneste summary
-    h += '<div class="resultat-card">';
-    h += '<h3><span class="card-icon orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></span>Valgt tjeneste</h3>';
-    var tjenesteLabels = [];
-    if (state.showEnergi) tjenesteLabels.push('Energiberegning varmepumpe');
-    if (state.showGulvvarme) tjenesteLabels.push('Materialberegning gulvvarme');
-    tjenesteLabels.forEach(function(t) {
-      h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="' + 'var(--success)' + '" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg><span style="font-size:14px;font-weight:600">' + t + '</span></div>';
-    });
-    h += '</div>';
-
-    // ---- ENERGI RESULTS ----
-    if (energi) {
-      // Effektbehov
-      h += '<div class="resultat-card">';
-      h += '<h3><span class="card-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>Beregnet effektbehov</h3>';
-      h += '<div class="kv"><div class="muted">Byggeår</div><div>' + esc(energi.byggeaarLabel) + '</div></div>';
-      h += '<div class="kv"><div class="muted">Boligtype</div><div>' + esc(energi.boligtypeLabel) + '</div></div>';
-      h += '<div class="kv"><div class="muted">Oppvarmet areal</div><div>' + formatNum(energi.areal) + ' m²</div></div>';
-      if (energi.etterisolert) {
-        h += '<div class="kv"><div class="muted">Etterisolering</div><div>' + energi.etterisoleringCm + ' cm (effektiv standard: ' + esc(energi.effektivByggeaarLabel) + ')</div></div>';
-      }
-      h += '<div class="resultat-big-number">' + formatKw(energi.effektbehovKw) + ' <small>kW</small></div>';
-      h += '<p class="muted" style="font-size:13px">Boligens beregnede totale effektbehov for oppvarming</p>';
-      h += '</div>';
-
-      // Anbefalinger
-      h += '<div class="resultat-card">';
-      h += '<h3><span class="card-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>Anbefalte varmepumper</h3>';
-      h += '<div class="anbefaling-kort">';
-      h += '<h4>Bergvarmepumpe</h4>';
-      h += '<div class="anbefaling-verdi">' + formatKw(energi.bergvarmeKw) + ' kW</div>';
-      h += '<p>Dimensjonert til 80 % av effektbehovet. Bergvarme dekker grunnlasten effektivt med høy virkningsgrad hele året, supplert av spisslast ved svært lave temperaturer.</p>';
-      h += '</div>';
-      h += '<div class="anbefaling-kort">';
-      h += '<h4>Luft-vann varmepumpe</h4>';
-      h += '<div class="anbefaling-verdi">' + formatKw(energi.luftVannKw) + ' kW</div>';
-      h += '<p>Dimensjonert til 100 % av effektbehovet. Luft-vann er et rimelig alternativ som henter energi fra uteluften, men har lavere virkningsgrad ved lave utetemperaturer.</p>';
-      h += '</div>';
-      h += '</div>';
-
-      // Fordeler med varmepumpe
-      h += '<div class="resultat-card full">';
-      h += '<h3><span class="card-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>Fordeler med varmepumpe</h3>';
-      h += '<div class="fordeler-liste">';
-      h += fordel('Reduserer energiforbruket med opptil 60–75 % sammenlignet med direkte elektrisk oppvarming');
-      h += fordel('Leverer jevn og behagelig varme gjennom vannbårent system med lav turtemperatur');
-      h += fordel('Gir bedre inneklima og kan også brukes til kjøling om sommeren (bergvarme)');
-      h += fordel('Øker boligens verdi og gjør den mer attraktiv i markedet');
-      h += fordel('Bidrar til lavere klimaavtrykk ved å utnytte fornybar energi fra grunnen eller luften');
-      h += '</div>';
-      h += '</div>';
-
-      // Energibesparelse
-      h += '<div class="resultat-card full">';
-      h += '<h3><span class="card-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span>Mulig energibesparelse med varmepumpe</h3>';
-      h += '<p class="muted" style="font-size:14px;margin-bottom:4px">Estimert årlig varmebehov: ' + formatNum(Math.round(energi.aarligVarmebehovKwh)) + ' kWh</p>';
-      h += '<div class="besparelse-grid">';
-      h += besparelseBoks('Bergvarme', 'Årsvarmefaktor ' + formatNum(energi.bergAarsVarmefaktor, 1), energi.bergSpartKwh, energi.bergSpartKr);
-      h += besparelseBoks('Luft-vann', 'Årsvarmefaktor ' + formatNum(energi.luftAarsVarmefaktor, 1), energi.luftSpartKwh, energi.luftSpartKr);
-      h += '</div>';
-      h += '<div class="estimat-disclaimer">';
-      h += '<strong>Merk:</strong> Dette er et forenklet estimat. Faktisk besparelse vil variere med lokalt klima, faktisk strømpris, turtemperatur, boligens reelle standard, styringssystem og bruksmønster. Beregningen forutsetter en strømpris på ' + formatNum(CFG.stromPrisKrPerKwh, 2) + ' kr/kWh og ca. ' + formatNum(CFG.driftstimerPerAar) + ' driftstimer per år.';
-      h += '</div>';
-      h += '</div>';
-    }
-
-    // ---- GULVVARME RESULTS ----
-    if (gulvvarme) {
-      // Fordeler med gulvvarme
-      h += '<div class="resultat-card full">';
-      h += '<h3><span class="card-icon orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M3 7l9-4 9 4"/><rect x="7" y="10" width="3" height="11"/><rect x="14" y="10" width="3" height="11"/></svg></span>Fordeler med vannbåren gulvvarme</h3>';
-      h += '<div class="fordeler-liste">';
-      h += fordel('Jevn og behagelig varmefordeling over hele gulvflaten – ingen kalde soner');
-      h += fordel('Lavere energiforbruk enn radiatorer fordi gulvvarme opererer med lavere turtemperatur');
-      h += fordel('Frigjør veggplass – ingen synlige radiatorer eller konvektorer');
-      h += fordel('Ideelt i kombinasjon med varmepumpe for maksimal energieffektivitet');
-      h += fordel('Skaper et bedre inneklima med mindre luftsirkulasjon og støvoppvirvling');
-      h += '</div>';
-      h += '</div>';
-
-      // Materialoversikt
-      h += '<div class="resultat-card full">';
-      h += '<h3><span class="card-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>Komplett materialliste – Gulvvarme</h3>';
-
-      // Summary stats
-      h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px">';
-      h += statBox('Totalt areal', formatNum(gulvvarme.totalKvm) + ' m²');
-      h += statBox('Rør totalt', formatNum(gulvvarme.totalRoer) + ' m');
-      h += statBox('Kurser', gulvvarme.totalKurser);
-      h += statBox('Rom', gulvvarme.antallRom);
-      h += '</div>';
-
-      // Material table
-      h += '<table class="material-tabell">';
-      h += '<thead><tr><th>Produkt</th><th>Antall</th><th>Enhet</th></tr></thead>';
-      h += '<tbody>';
-      h += matRow(CFG.productMapping.roer.navn, formatNum(gulvvarme.totalRoer), 'm');
-      h += matRow(CFG.productMapping.termostat.navn, gulvvarme.termostater, 'stk');
-      h += matRow(CFG.productMapping.aktuator.navn, gulvvarme.aktuatorer, 'stk');
-      h += matRow(CFG.productMapping.boeyefiktur.navn, gulvvarme.boeyefiksturer, 'stk');
-      h += matRow(CFG.productMapping.styringsenhet.navn, gulvvarme.styringsenheter, 'stk');
-
-      // Additional materials based on construction
-      for (var matId in gulvvarme.materialSummary) {
-        var mat = gulvvarme.materialSummary[matId];
-        h += matRow(mat.label, mat.antall, mat.enhet);
-      }
-      h += '</tbody></table>';
-
-      // Rom breakdown if rom-for-rom
-      if (gulvvarme.metode !== 'total' && gulvvarme.rom.length > 0) {
-        h += '<h4 style="margin:24px 0 12px;font-size:15px;font-weight:700">Romoversikt</h4>';
-        h += '<table class="material-tabell">';
-        h += '<thead><tr><th>Rom</th><th>Areal</th><th>Kurser</th><th>Rør</th><th>Oppbygning</th></tr></thead>';
-        h += '<tbody>';
-        gulvvarme.rom.forEach(function(rom) {
-          h += '<tr>';
-          h += '<td style="font-weight:600">' + esc(rom.romtype) + '</td>';
-          h += '<td>' + formatNum(rom.kvm) + ' m²</td>';
-          h += '<td>' + rom.kurser + '</td>';
-          h += '<td>' + formatNum(Math.ceil(rom.roer)) + ' m</td>';
-          h += '<td>' + esc((rom.konstruksjonLabel || '') + (rom.undertypeLabel ? ' / ' + rom.undertypeLabel : '')) + '</td>';
-          h += '</tr>';
-        });
-        h += '</tbody></table>';
-      }
-
-      // Oppbygning info
-      h += '<div class="oppbygning-info">';
-      h += '<h4>Slik legges gulvvarme normalt opp</h4>';
-      h += '<p>Vannbåren gulvvarme monteres som et rørsystem i gulvet, koblet til en fordeler og varmekilde (varmepumpe eller kjel). Her er en forenklet oversikt over fremgangsmåten:</p>';
-      h += '<ol>';
-      h += '<li>Underlaget klargjøres med isolasjon og eventuell dampsperre</li>';
-      h += '<li>Rør legges i slynger med jevn senteravstand (typisk ca. 20 cm), enten i støp med armering/knasteplater eller i treverk med alu-/EPS-plater</li>';
-      h += '<li>Hvert rom kobles som egne kurser til en fordeler med aktuatorer</li>';
-      h += '<li>Romtermostater installeres for individuell temperaturstyring</li>';
-      h += '<li>Systemet trykktestes før gulvbelegg legges</li>';
-      h += '<li>Anlegget kobles til varmekilde og styringsenhet, og tempereres gradvis</li>';
-      h += '</ol>';
-      h += '</div>';
-
-      h += '</div>'; // end material card
-    }
-
-    h += '</div>'; // end resultat-grid
-
-    return h;
-  }
-
-  // ============================================================
-  // Helper functions for result HTML
-  // ============================================================
-  function fordel(text) {
-    return '<div class="fordel-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg><span>' + text + '</span></div>';
-  }
-
-  function besparelseBoks(title, subtitle, spartKwh, spartKr) {
-    var h = '<div class="besparelse-boks">';
-    h += '<h4>' + title + '</h4>';
-    h += '<p class="spar-label">' + subtitle + '</p>';
-    h += '<div class="spar-tall">' + formatNum(Math.round(spartKwh)) + ' kWh</div>';
-    h += '<p class="spar-label">estimert spart per år</p>';
-    h += '<div class="spar-tall" style="font-size:22px;color:var(--accent)">' + formatNum(Math.round(spartKr)) + ' kr</div>';
-    h += '<p class="spar-label">estimert spart beløp per år</p>';
-    h += '</div>';
-    return h;
-  }
-
-  function statBox(label, value) {
-    return '<div style="background:var(--card2);border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-align:center">' +
-      '<div style="font-size:22px;font-weight:800;color:var(--accent)">' + value + '</div>' +
-      '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + label + '</div></div>';
-  }
-
-  function matRow(product, antall, enhet) {
-    return '<tr><td>' + esc(product) + '</td><td class="mat-antall">' + antall + '</td><td>' + enhet + '</td></tr>';
-  }
-
-  function formatKw(val) {
-    return val.toFixed(2).replace('.', ',');
-  }
-
-  function formatNum(val, decimals) {
-    if (typeof decimals === 'number') {
-      return Number(val).toFixed(decimals).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    }
-    return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  }
-
-  function esc(str) {
-    if (!str) return '';
-    var div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  // ============================================================
-  // Lead submission
-  // ============================================================
-  function submitLead(kontakt, energi, gulvvarme) {
-    var payload = {
-      type: 'calculator',
-      sourceForm: 'kalkulator-lead',
-      botField: (document.getElementById('kontaktBotField') && document.getElementById('kontaktBotField').value.trim()) || '',
-      timestamp: new Date().toISOString(),
-      kontakt: kontakt,
-      tjenester: state.tjenester,
-      energi: energi ? {
-        byggeaar: energi.byggeaarLabel,
-        boligtype: energi.boligtypeLabel,
-        areal: energi.areal,
-        etterisolert: energi.etterisolert,
-        etterisoleringCm: energi.etterisoleringCm,
-        effektbehovKw: energi.effektbehovKw,
-        bergvarmeKw: energi.bergvarmeKw,
-        luftVannKw: energi.luftVannKw,
-        aarligVarmebehovKwh: energi.aarligVarmebehovKwh,
-        bergSpartKwh: energi.bergSpartKwh,
-        luftSpartKwh: energi.luftSpartKwh,
-        bergSpartKr: energi.bergSpartKr,
-        luftSpartKr: energi.luftSpartKr,
-        bergAarsVarmefaktor: energi.bergAarsVarmefaktor,
-        luftAarsVarmefaktor: energi.luftAarsVarmefaktor
-      } : null,
-      gulvvarme: gulvvarme ? {
-        totalKvm: gulvvarme.totalKvm,
-        totalRoer: gulvvarme.totalRoer,
-        totalKurser: gulvvarme.totalKurser,
-        antallRom: gulvvarme.antallRom,
-        aktuatorer: gulvvarme.aktuatorer,
-        termostater: gulvvarme.termostater,
-        boeyefiksturer: gulvvarme.boeyefiksturer,
-        styringsenheter: gulvvarme.styringsenheter,
-        materialSummary: gulvvarme.materialSummary,
-        rom: gulvvarme.rom ? gulvvarme.rom.map(function(r) {
-          return {
-            romtype: r.romtype,
-            kvm: r.kvm,
-            kurser: r.kurser,
-            roer: Math.ceil(r.roer),
-            konstruksjonLabel: r.konstruksjonLabel || '',
-            undertypeLabel: r.undertypeLabel || ''
-          };
-        }) : []
-      } : null
+    return {
+      systemType: systemType,
+      recommendedRange: range,
+      nibeOption: nibeOption,
+      igluOption: igluOption,
+      reasonNibe: reasonNibe,
+      reasonIglu: reasonIglu,
+      annualHeatingDemandKwh: Math.round(energi.annualHeatingDemandKwh),
+      heatPumpConsumptionKwh: Math.round(heatPumpConsumptionKwh),
+      savedKwh: Math.round(savedKwh)
     };
+  }
 
-    // Store submission in Netlify Forms as backup/overview.
-    var netlifyParams = new URLSearchParams();
-    netlifyParams.append('form-name', 'kalkulator-lead');
-    netlifyParams.append('bot-field', payload.botField);
-    netlifyParams.append('navn', kontakt.navn);
-    netlifyParams.append('epost', kontakt.epost);
-    netlifyParams.append('telefon', kontakt.telefon);
-    netlifyParams.append('adresse', kontakt.adresse || '');
-    netlifyParams.append('tjenester', state.tjenester.join(', '));
-    netlifyParams.append('data', JSON.stringify(payload));
+  function followUpPriority(reco, building) {
+    if (!reco) return 'Normal';
+    if (reco.annualHeatingDemandKwh >= 30000 || (building.waterborne_heating === 'nei' && building.wants_floor_heating === 'ja')) {
+      return 'Høy';
+    }
+    if (reco.annualHeatingDemandKwh >= 18000) return 'Middels';
+    return 'Normal';
+  }
 
-    var formPromise = fetch('/', {
+  async function submitCalculatorLead() {
+    var button = document.getElementById('step3Next');
+    var originalText = button.getAttribute('data-submit-label') || button.textContent;
+    button.disabled = true;
+    button.textContent = 'Sender...';
+    setStatus('Sender forespørsel til Therwatt ...', true);
+
+    try {
+      var kontakt = collectKontakt();
+      var building = collectBuilding();
+      var energi = state.showEnergi ? beregnEnergi() : null;
+      var gulvvarme = state.showGulvvarme ? beregnGulvvarme() : null;
+      var recommendation = energi ? velgSystemAnbefaling(energi, building) : null;
+
+      var priority = followUpPriority(recommendation, building);
+      var submissions = [];
+
+      if (energi && recommendation) {
+        submissions.push(sendNetlifyForm('energy-calculation', {
+          'form-name': 'energy-calculation',
+          'bot-field': kontakt.botField,
+          lead_type: 'energy-calculation',
+          name: kontakt.name,
+          phone: kontakt.phone,
+          email: kontakt.email,
+          address: kontakt.address,
+          postal_code: kontakt.postal_code,
+          city: kontakt.city,
+          selected_service: 'Varmepumpe og energiberegning',
+          property_size_m2: building.property_size_m2,
+          construction_year: energi.byggeaarLabel,
+          number_of_floors: building.number_of_floors,
+          existing_heating_system: building.existing_heating_system,
+          waterborne_heating: building.waterborne_heating,
+          wants_floor_heating: building.wants_floor_heating,
+          desired_solution: building.desired_solution,
+          recommended_system: recommendation.systemType,
+          recommended_output_range_kw: recommendation.recommendedRange,
+          estimated_annual_heating_demand_kwh: recommendation.annualHeatingDemandKwh,
+          estimated_heatpump_consumption_kwh: recommendation.heatPumpConsumptionKwh,
+          estimated_annual_saved_kwh: recommendation.savedKwh,
+          recommended_nibe_model: recommendation.nibeOption,
+          recommended_iglu_model: recommendation.igluOption,
+          recommendation_reason_nibe: recommendation.reasonNibe,
+          recommendation_reason_iglu: recommendation.reasonIglu,
+          follow_up_priority: priority,
+          message: kontakt.message
+        }));
+      }
+
+      if (gulvvarme) {
+        submissions.push(sendNetlifyForm('floor-heating-calculator', {
+          'form-name': 'floor-heating-calculator',
+          'bot-field': kontakt.botField,
+          lead_type: 'floor-heating-calculator',
+          name: kontakt.name,
+          phone: kontakt.phone,
+          email: kontakt.email,
+          address: kontakt.address,
+          postal_code: kontakt.postal_code,
+          city: kontakt.city,
+          selected_service: 'Gulvvarmekalkulator',
+          property_size_m2: building.property_size_m2,
+          construction_year: building.construction_year,
+          number_of_floors: building.number_of_floors,
+          existing_heating_system: building.existing_heating_system,
+          waterborne_heating: building.waterborne_heating,
+          wants_floor_heating: 'ja',
+          desired_solution: building.desired_solution,
+          floor_area_m2: gulvvarme.totalKvm,
+          floor_total_circuits: gulvvarme.totalKurser,
+          floor_total_pipe_m: gulvvarme.totalRoer,
+          floor_material_summary: JSON.stringify(gulvvarme.materialSummary),
+          follow_up_priority: priority,
+          message: kontakt.message
+        }));
+      }
+
+      var results = await Promise.allSettled(submissions);
+      var ok = results.length > 0 && results.every(function(r) { return r.status === 'fulfilled'; });
+
+      var payload = {
+        generatedAt: new Date().toISOString(),
+        submitted: ok,
+        selectedServices: state.tjenester.slice(),
+        contact: kontakt,
+        building: building,
+        energy: recommendation,
+        floorHeating: gulvvarme,
+        followUpPriority: priority,
+        nextStep: 'Bestill befaring og detaljert dimensjonering fra Therwatt.'
+      };
+
+      sessionStorage.setItem('therwattCalcResult', JSON.stringify(payload));
+      window.location.href = '/kalkulator-resultat';
+    } catch (error) {
+      setStatus(ERROR_MESSAGE, false);
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  }
+
+  function sendNetlifyForm(formName, data) {
+    var params = new URLSearchParams();
+    Object.keys(data).forEach(function(key) {
+      params.append(key, data[key] == null ? '' : String(data[key]));
+    });
+
+    return fetch('/__forms.html', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: netlifyParams.toString()
-    }).catch(function() {});
-
-    // Send structured email delivery through SendGrid function.
-    var mailPromise = fetch('/api/send-email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).then(function(res) {
-      return res.ok;
-    }).catch(function() {
-      return false;
-    });
-
-    return Promise.all([formPromise, mailPromise]).then(function(results) {
-      return !!results[1];
+      body: params.toString()
+    }).then(function(response) {
+      if (!response.ok) {
+        throw new Error('Innsending feilet for ' + formName);
+      }
+      return true;
     });
   }
 
-  // ============================================================
-  // Result page actions
-  // ============================================================
-  function bindResult() {
-    document.getElementById('skrivUt').addEventListener('click', function() {
-      window.print();
-    });
-
-    document.getElementById('startPaaNytt').addEventListener('click', function() {
-      // Reset
-      document.querySelectorAll('input[name="tjeneste"]').forEach(function(cb) { cb.checked = false; });
-      document.getElementById('step1Next').disabled = true;
-      document.getElementById('samtykke').checked = false;
-      document.getElementById('step3Next').disabled = true;
-      document.getElementById('step3Next').textContent = 'Se resultat';
-      document.getElementById('kunEpost').checked = false;
-      document.getElementById('fullKontaktFelter').style.display = '';
-      document.getElementById('kunEpostFelter').style.display = 'none';
-      document.getElementById('samtykkeTekst').textContent = 'Jeg samtykker til at Therwatt lagrer mine opplysninger og kan kontakte meg med resultat og eventuelt tilbud. Opplysningene deles ikke med tredjepart.';
-      state.tjenester = [];
-      state.showEnergi = false;
-      state.showGulvvarme = false;
-      state.rom = [];
-      state.romIdCounter = 0;
-      document.getElementById('resultatInnhold').innerHTML = '';
-      document.getElementById('energiSection').style.display = 'none';
-      document.getElementById('gulvvarmeSection').style.display = 'none';
-      document.getElementById('kontaktBotField').value = '';
-      showStep(1);
-    });
-  }
-
-  // ============================================================
-  // Boot
-  // ============================================================
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
-
 })();
