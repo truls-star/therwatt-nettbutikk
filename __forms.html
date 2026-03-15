@@ -5,49 +5,93 @@
   <title>Forms detection</title>
 </head>
 <body>
-  <form name="kontakt-hjem" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="kontakt-hjem">
+  <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="contact">
     <input name="bot-field">
+    <input name="lead_type">
     <input name="name">
-    <input name="email">
-    <input name="phone">
     <input name="address">
-    <input name="inquiry_type">
+    <input name="postal_code">
+    <input name="city">
+    <input name="phone">
+    <input name="email">
+    <input name="selected_service">
+    <input name="desired_solution">
     <textarea name="message"></textarea>
   </form>
 
-  <form name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="kontakt">
+  <form name="energy-calculation" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="energy-calculation">
     <input name="bot-field">
+    <input name="lead_type">
     <input name="name">
-    <input name="email">
     <input name="phone">
+    <input name="email">
     <input name="address">
-    <input name="company">
+    <input name="postal_code">
+    <input name="city">
+    <input name="selected_service">
+    <input name="property_size_m2">
+    <input name="construction_year">
+    <input name="number_of_floors">
+    <input name="existing_heating_system">
+    <input name="waterborne_heating">
+    <input name="wants_floor_heating">
+    <input name="desired_solution">
+    <input name="recommended_system">
+    <input name="recommended_output_range_kw">
+    <input name="estimated_annual_heating_demand_kwh">
+    <input name="estimated_heatpump_consumption_kwh">
+    <input name="estimated_annual_saved_kwh">
+    <input name="recommended_nibe_model">
+    <input name="recommended_iglu_model">
+    <input name="follow_up_priority">
+    <textarea name="recommendation_reason_nibe"></textarea>
+    <textarea name="recommendation_reason_iglu"></textarea>
     <textarea name="message"></textarea>
   </form>
 
-  <form name="tilbud" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="tilbud">
+  <form name="floor-heating-calculator" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="floor-heating-calculator">
     <input name="bot-field">
+    <input name="lead_type">
     <input name="name">
-    <input name="email">
     <input name="phone">
+    <input name="email">
     <input name="address">
-    <input name="company">
+    <input name="postal_code">
+    <input name="city">
+    <input name="selected_service">
+    <input name="property_size_m2">
+    <input name="construction_year">
+    <input name="number_of_floors">
+    <input name="existing_heating_system">
+    <input name="waterborne_heating">
+    <input name="wants_floor_heating">
+    <input name="desired_solution">
+    <input name="floor_area_m2">
+    <input name="floor_total_circuits">
+    <input name="floor_total_pipe_m">
+    <input name="follow_up_priority">
+    <textarea name="floor_material_summary"></textarea>
+    <textarea name="message"></textarea>
+  </form>
+
+  <form name="quote-request" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="quote-request">
+    <input name="bot-field">
+    <input name="lead_type">
+    <input name="name">
+    <input name="address">
+    <input name="postal_code">
+    <input name="city">
+    <input name="phone">
+    <input name="email">
+    <input name="selected_service">
     <input name="product">
+    <input name="company">
+    <input name="desired_solution">
     <textarea name="message"></textarea>
-  </form>
-
-  <form name="kalkulator-lead" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="kalkulator-lead">
-    <input name="bot-field">
-    <input name="navn">
-    <input name="epost">
-    <input name="telefon">
-    <input name="adresse">
-    <input name="tjenester">
-    <textarea name="data"></textarea>
   </form>
 </body>
 </html>

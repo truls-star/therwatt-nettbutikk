@@ -69,10 +69,6 @@
             <span class="step-num">3</span>
             <span class="step-label">Kontaktinfo</span>
           </div>
-          <div class="calc-step" data-step="4">
-            <span class="step-num">4</span>
-            <span class="step-label">Resultat</span>
-          </div>
         </div>
 
         <!-- STEP 1: Velg tjeneste -->
@@ -159,6 +155,51 @@
               <label for="areal">Oppvarmet areal (m²)</label>
               <input class="input" type="number" id="areal" min="10" max="1000" placeholder="f.eks. 150" required>
             </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="antallEtasjer">Antall etasjer</label>
+                <select class="input" id="antallEtasjer" required>
+                  <option value="">Velg…</option>
+                  <option value="1">1 etasje</option>
+                  <option value="2">2 etasjer</option>
+                  <option value="3">3 etasjer</option>
+                  <option value="4+">4 eller flere</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="eksisterendeVarme">Eksisterende varmesystem</label>
+                <select class="input" id="eksisterendeVarme" required>
+                  <option value="">Velg…</option>
+                  <option value="panelovner">Panelovner / direkte elektrisk</option>
+                  <option value="oljefyr">Oljefyr / eldre kjel</option>
+                  <option value="vedovn">Vedfyring som hovedkilde</option>
+                  <option value="luftluft">Luft-luft varmepumpe</option>
+                  <option value="eldre-varmepumpe">Eldre luft-vann eller bergvarme</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="vannbarenVarme">Har boligen vannbåren varme i dag?</label>
+                <select class="input" id="vannbarenVarme" required>
+                  <option value="">Velg…</option>
+                  <option value="ja">Ja</option>
+                  <option value="nei">Nei</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="onsketLosning">Ønsket løsning</label>
+                <select class="input" id="onsketLosning" required>
+                  <option value="">Velg…</option>
+                  <option value="luft-vann">Luft-vann varmepumpe</option>
+                  <option value="bergvarme">Bergvarme</option>
+                  <option value="avtrekk">Avtrekksvarmepumpe</option>
+                  <option value="usikker">Usikker / ønskes vurdert av Therwatt</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <!-- Gulvvarmekalkulator -->
@@ -216,72 +257,59 @@
         <div class="calc-panel" id="step3">
           <div class="calc-card">
             <h2>Dine kontaktopplysninger</h2>
-            <p class="muted" id="step3Beskrivelse">Vi trenger noen opplysninger for å sende deg resultatet og eventuelt kontakte deg med et tilbud.</p>
+            <p class="muted" id="step3Beskrivelse">Oppgi kontaktinformasjon for å motta resultatet og forslag til videre teknisk oppfølging.</p>
 
-            <div class="kun-epost-gruppe">
-              <label class="checkbox-label kun-epost-label">
-                <input type="checkbox" id="kunEpost">
-                <span>Jeg ønsker kun å dele e-postadresse – send meg beregningen på e-post</span>
-              </label>
-            </div>
-
-            <div id="fullKontaktFelter">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="kontaktNavn">Navn *</label>
-                  <input class="input" type="text" id="kontaktNavn" required placeholder="Fullt navn">
-                </div>
-                <div class="form-group">
-                  <label for="kontaktTelefon">Telefon *</label>
-                  <input class="input" type="tel" id="kontaktTelefon" required placeholder="Mobilnummer">
-                </div>
-              </div>
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="kontaktEpost">E-post *</label>
-                  <input class="input" type="email" id="kontaktEpost" required placeholder="din@epost.no">
-                </div>
-                <div class="form-group">
-                  <label for="kontaktAdresse">Adresse</label>
-                  <input class="input" type="text" id="kontaktAdresse" placeholder="Gate og husnummer">
-                </div>
-              </div>
-            </div>
-
-            <div id="kunEpostFelter" class="hidden">
+            <div class="form-grid">
               <div class="form-group">
-                <label for="kontaktEpostKun">E-post *</label>
-                <input class="input" type="email" id="kontaktEpostKun" placeholder="din@epost.no">
+                <label for="kontaktNavn">Fullt navn *</label>
+                <input class="input" type="text" id="kontaktNavn" required placeholder="Fullt navn">
               </div>
+              <div class="form-group">
+                <label for="kontaktTelefon">Telefon *</label>
+                <input class="input" type="tel" id="kontaktTelefon" required placeholder="Mobilnummer">
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="kontaktEpost">E-post *</label>
+                <input class="input" type="email" id="kontaktEpost" required placeholder="din@epost.no">
+              </div>
+              <div class="form-group">
+                <label for="kontaktAdresse">Adresse</label>
+                <input class="input" type="text" id="kontaktAdresse" placeholder="Gate og husnummer">
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="kontaktPostnummer">Postnummer</label>
+                <input class="input" type="text" id="kontaktPostnummer" inputmode="numeric" placeholder="F.eks. 1410">
+              </div>
+              <div class="form-group">
+                <label for="kontaktBy">Poststed</label>
+                <input class="input" type="text" id="kontaktBy" placeholder="F.eks. Kolbotn">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="kontaktMelding">Tilleggsnotater</label>
+              <textarea class="input" id="kontaktMelding" rows="4" placeholder="F.eks. ønsket oppstart, utfordringer i dagens anlegg eller annen relevant info"></textarea>
             </div>
 
             <div class="consent-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="samtykke" required>
-                <span id="samtykkeTekst">Jeg samtykker til at Therwatt lagrer mine opplysninger og kan kontakte meg med resultat og eventuelt tilbud. Opplysningene deles ikke med tredjepart.</span>
+                <span id="samtykkeTekst">Jeg samtykker til at Therwatt lagrer mine opplysninger i Netlify Forms og kan kontakte meg med resultat og forslag til løsning. Opplysningene deles ikke med tredjepart.</span>
               </label>
             </div>
             <div style="display:none">
               <label for="kontaktBotField">Ikke fyll ut dette feltet</label>
               <input class="input" type="text" id="kontaktBotField" autocomplete="off" tabindex="-1">
             </div>
+            <div class="notice" id="kalkulatorStatus" style="display:none;margin-top:12px"></div>
           </div>
 
           <div class="calc-actions">
             <button class="btn secondary" id="step3Back">Tilbake</button>
-            <button class="btn warm large" id="step3Next" disabled>Se resultat</button>
-          </div>
-        </div>
-
-        <!-- STEP 4: Resultat -->
-        <div class="calc-panel" id="step4">
-          <div id="resultatInnhold"></div>
-          <div class="calc-actions no-print">
-            <button class="btn secondary" id="startPaaNytt">Start på nytt</button>
-            <button class="btn" id="skrivUt">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              Skriv ut resultat
-            </button>
+            <button class="btn warm large" id="step3Next" disabled data-submit-label="Se resultat">Se resultat</button>
           </div>
         </div>
 
@@ -333,12 +361,35 @@
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
 </button>
 
-<!-- Hidden Netlify Form for form detection -->
-<form name="kalkulator-lead" data-netlify="true" netlify-honeypot="bot-field" hidden>
-  <input type="hidden" name="form-name" value="kalkulator-lead">
+<!-- Hidden Netlify Forms for build-time detection -->
+<form name="energy-calculation" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="energy-calculation">
   <input name="bot-field">
-  <input name="navn"><input name="epost"><input name="telefon">
-  <input name="adresse"><input name="tjenester"><textarea name="data"></textarea>
+  <input name="lead_type">
+  <input name="name"><input name="phone"><input name="email"><input name="address">
+  <input name="postal_code"><input name="city"><input name="selected_service">
+  <input name="property_size_m2"><input name="construction_year"><input name="number_of_floors">
+  <input name="existing_heating_system"><input name="waterborne_heating"><input name="wants_floor_heating">
+  <input name="desired_solution"><input name="recommended_system"><input name="recommended_output_range_kw">
+  <input name="estimated_annual_heating_demand_kwh"><input name="estimated_heatpump_consumption_kwh"><input name="estimated_annual_saved_kwh">
+  <input name="recommended_nibe_model"><input name="recommended_iglu_model"><input name="follow_up_priority">
+  <textarea name="recommendation_reason_nibe"></textarea>
+  <textarea name="recommendation_reason_iglu"></textarea>
+  <textarea name="message"></textarea>
+</form>
+
+<form name="floor-heating-calculator" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="floor-heating-calculator">
+  <input name="bot-field">
+  <input name="lead_type">
+  <input name="name"><input name="phone"><input name="email"><input name="address">
+  <input name="postal_code"><input name="city"><input name="selected_service">
+  <input name="property_size_m2"><input name="construction_year"><input name="number_of_floors">
+  <input name="existing_heating_system"><input name="waterborne_heating"><input name="wants_floor_heating">
+  <input name="desired_solution"><input name="floor_area_m2"><input name="floor_total_circuits"><input name="floor_total_pipe_m">
+  <input name="follow_up_priority">
+  <textarea name="floor_material_summary"></textarea>
+  <textarea name="message"></textarea>
 </form>
 
 <script src="Assets/config.js"></script>

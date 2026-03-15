@@ -243,31 +243,44 @@
       </div>
       <div class="card th-form-card">
         <h3>Send prosjektforespørsel</h3>
-        <form name="kontakt-hjem" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-email-form="true" data-email-type="contact" action="takke.html">
-          <input type="hidden" name="form-name" value="kontakt-hjem">
+        <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" data-netlify-ajax="true" action="/takke">
+          <input type="hidden" name="form-name" value="contact">
+          <input type="hidden" name="lead_type" value="contact">
           <p style="display:none">
             <label>Ikke fyll ut dette feltet: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
           </p>
-          <label for="contactName">Navn</label>
+          <label for="contactName">Fullt navn *</label>
           <input class="input" id="contactName" name="name" required>
-          <label for="contactEmail">E-post</label>
+          <label for="contactEmail">E-post *</label>
           <input class="input" id="contactEmail" name="email" type="email" required>
-          <label for="contactPhone">Telefon</label>
-          <input class="input" id="contactPhone" name="phone">
+          <label for="contactPhone">Telefon *</label>
+          <input class="input" id="contactPhone" name="phone" required>
           <label for="contactAddress">Adresse</label>
           <input class="input" id="contactAddress" name="address" autocomplete="street-address">
-          <label for="contactType">Henvendelsestype</label>
-          <select class="input" id="contactType" name="inquiry_type" required>
+          <div class="grid cols-2" style="gap:12px;margin:12px 0">
+            <div>
+              <label for="contactPostal">Postnummer</label>
+              <input class="input" id="contactPostal" name="postal_code" inputmode="numeric">
+            </div>
+            <div>
+              <label for="contactCity">Poststed</label>
+              <input class="input" id="contactCity" name="city">
+            </div>
+          </div>
+          <label for="contactType">Valgt tjeneste *</label>
+          <select class="input" id="contactType" name="selected_service" required>
             <option value="">Velg</option>
-            <option>Prosjektering av varmepumpe</option>
-            <option>Vannbårent varmesystem</option>
-            <option>Vurdering av energiberegning</option>
-            <option>Rådgivning / prosjektstøtte</option>
+            <option value="Varmepumpe">Varmepumpe</option>
+            <option value="Vannbåren varme">Vannbåren varme</option>
+            <option value="Gulvvarme">Gulvvarme</option>
+            <option value="Prosjektering og befaring">Prosjektering og befaring</option>
           </select>
-          <label for="contactMessage">Prosjektdetaljer</label>
+          <label for="contactSolution">Ønsket løsning</label>
+          <input class="input" id="contactSolution" name="desired_solution" placeholder="F.eks. luft-vann varmepumpe med gulvvarme">
+          <label for="contactMessage">Prosjektdetaljer *</label>
           <textarea class="input" id="contactMessage" name="message" rows="5" required></textarea>
           <div class="notice" data-form-status style="display:none;margin-top:12px"></div>
-          <button class="btn warm" type="submit">Send melding</button>
+          <button class="btn warm" type="submit" data-submit-label="Send melding">Send melding</button>
         </form>
       </div>
     </div>
@@ -305,14 +318,18 @@
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
 </button>
 
-<form name="kontakt-hjem" data-netlify="true" netlify-honeypot="bot-field" hidden>
-  <input type="hidden" name="form-name" value="kontakt-hjem">
+<form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="contact">
   <input name="bot-field">
+  <input name="lead_type">
   <input name="name">
   <input name="email">
   <input name="phone">
   <input name="address">
-  <input name="inquiry_type">
+  <input name="postal_code">
+  <input name="city">
+  <input name="selected_service">
+  <input name="desired_solution">
   <textarea name="message"></textarea>
 </form>
 

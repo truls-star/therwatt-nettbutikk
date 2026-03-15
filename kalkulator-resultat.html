@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Produkt – Therwatt</title>
+  <title>Kalkulatorresultat – Therwatt</title>
+  <meta name="description" content="Teknisk resultat fra Therwatt sin energikalkulator med anbefalt varmepumpeløsning og neste steg.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="Assets/styles.css">
+  <link rel="stylesheet" href="Assets/kalkulator.css">
 </head>
 <body>
-
 <header class="topbar">
   <div class="nav">
     <a class="brand" href="index.html">
@@ -38,14 +39,23 @@
   </div>
 </header>
 
-<main class="wrap product-page">
-  <div id="productRoot">
-    <div style="text-align:center;padding:60px 0">
-      <div class="skeleton" style="width:100%;max-width:600px;height:300px;margin:0 auto 20px"></div>
-      <div class="skeleton" style="width:200px;height:24px;margin:0 auto 12px"></div>
-      <div class="skeleton" style="width:300px;height:16px;margin:0 auto"></div>
+<main class="wrap">
+  <section class="section">
+    <div class="kicker">Kalkulatorresultat</div>
+    <h1 style="font-size:34px">Teknisk anbefaling for ditt prosjekt</h1>
+    <p class="subtitle">Resultatet er bygget for å gi et realistisk beslutningsgrunnlag før befaring og detaljert dimensjonering.</p>
+
+    <div id="calcResultRoot" class="resultat-grid" aria-live="polite"></div>
+
+    <div class="hero-card" style="padding:26px;margin-top:20px">
+      <h2 style="margin-top:0">Neste steg</h2>
+      <p id="nextStepText" class="muted">Bestill befaring for endelig dimensjonering, valg av innedel, akkumulering og styringsstrategi.</p>
+      <div class="actions" style="margin-top:14px">
+        <a class="btn warm" href="kontakt.html">Be om kontakt</a>
+        <a class="btn" href="tel:+4790280156">Ring 902 80 156</a>
+      </div>
     </div>
-  </div>
+  </section>
 </main>
 
 <footer>
@@ -61,7 +71,7 @@
       </div>
       <div>
         <strong>Tjenester</strong>
-        <p><a href="tjenester-prosjektering.html">Prosjektering</a><br><a href="tjenester-konsulent.html">Konsulentbistand</a><br><a href="tjenester-sourcing.html">Sourcing</a></p>
+        <p><a href="tjenester-prosjektering.html">Prosjektering</a><br><a href="tjenester-konsulent.html">Konsulentbistand</a><br><a href="tjenester-sourcing.html">Sourcing</a><br><a href="kalkulator.html">Kalkulator</a></p>
       </div>
       <div>
         <strong>Kontakt</strong>
@@ -75,30 +85,9 @@
   </div>
 </footer>
 
-<button class="scroll-top" id="scrollTop" aria-label="Til toppen">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
-</button>
-
-<form name="quote-request" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
-  <input type="hidden" name="form-name" value="quote-request">
-  <input name="bot-field">
-  <input name="lead_type">
-  <input name="name">
-  <input name="email">
-  <input name="phone">
-  <input name="address">
-  <input name="postal_code">
-  <input name="city">
-  <input name="company">
-  <input name="selected_service">
-  <input name="desired_solution">
-  <input name="product">
-  <textarea name="message"></textarea>
-</form>
-
 <script src="Assets/config.js"></script>
 <script src="Assets/main.js"></script>
 <script src="Assets/cart.js"></script>
-<script src="Assets/product.js"></script>
+<script src="Assets/kalkulator-resultat.js"></script>
 </body>
 </html>

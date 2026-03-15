@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const SUCCESS_MESSAGE =
     "Takk for forespørselen. Vi har mottatt informasjonen din og tar kontakt så snart som mulig.";
@@ -48,17 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initLanguageSelector();
 
-  // Active page highlighting
   const path = location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("[data-page]").forEach((el) => {
     if (el.getAttribute("data-page") === path) el.classList.add("active");
   });
 
-  // Year in footer
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
 
-  // Mobile menu toggle
   const toggle = document.getElementById("menuToggle");
   const menu = document.getElementById("mainMenu");
   if (toggle && menu) {
@@ -77,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Mobile dropdown toggle
   document.querySelectorAll(".nav-dropdown > a").forEach((trigger) => {
     trigger.addEventListener("click", (e) => {
       if (window.innerWidth <= 768) {
@@ -87,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Scroll to top button
   const scrollBtn = document.getElementById("scrollTop");
   if (scrollBtn) {
     window.addEventListener("scroll", () => {
@@ -97,8 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
-
-  const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value || "");
 
   const setFormStatus = (form, message, isSuccess) => {
     const box = form.querySelector("[data-form-status]");
@@ -113,70 +105,42 @@ document.addEventListener("DOMContentLoaded", () => {
     box.style.display = "";
   };
 
-  const postNetlifyForm = async (formName, formData) => {
-    const fallbackPayload = new URLSearchParams();
-    fallbackPayload.set("form-name", formName);
-    formData.forEach((value, key) => {
-      fallbackPayload.append(key, value);
-    });
-
-    await fetch("/", {
+  const postNetlifyForm = async (formData) => {
+    await fetch("/__forms.html", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: fallbackPayload.toString(),
+      body: new URLSearchParams(formData).toString(),
     });
   };
 
   document.addEventListener("submit", async (event) => {
     const form = event.target;
     if (!(form instanceof HTMLFormElement)) return;
-    if (form.dataset.emailForm !== "true") return;
+    if (form.dataset.netlifyAjax !== "true") return;
 
     event.preventDefault();
     setFormStatus(form, "", true);
 
+    if (!form.reportValidity()) {
+      setFormStatus(form, "Fyll ut alle obligatoriske felt før innsending.", false);
+      return;
+    }
+
     const submitButton = form.querySelector("button[type='submit']");
-    if (submitButton) submitButton.disabled = true;
+    const originalLabel = submitButton ? (submitButton.dataset.submitLabel || submitButton.textContent) : "";
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sender...";
+    }
 
     try {
       const formData = new FormData(form);
-      const sourceForm = form.getAttribute("name") || formData.get("form-name") || "ukjent";
-      const botField = String(formData.get("bot-field") || "").trim();
-      const email = String(formData.get("email") || "").trim();
+      await postNetlifyForm(formData);
 
-      if (!email || !isValidEmail(email)) {
-        throw new Error("invalid-email");
-      }
-
-      const message = String(formData.get("message") || "").trim();
-      if (!message) {
-        throw new Error("missing-message");
-      }
-
-      await postNetlifyForm(sourceForm, formData).catch(() => {});
-
-      const payload = {
-        type: form.dataset.emailType || "contact",
-        sourceForm,
-        botField,
-        name: String(formData.get("name") || "").trim(),
-        email,
-        phone: String(formData.get("phone") || "").trim(),
-        address: String(formData.get("address") || "").trim(),
-        company: String(formData.get("company") || "").trim(),
-        inquiry_type: String(formData.get("inquiry_type") || "").trim(),
-        product: String(formData.get("product") || "").trim(),
-        message,
-      };
-
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error("delivery-failed");
+      const action = form.getAttribute("action");
+      if (action) {
+        window.location.href = action;
+        return;
       }
 
       form.reset();
@@ -184,7 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       setFormStatus(form, ERROR_MESSAGE, false);
     } finally {
-      if (submitButton) submitButton.disabled = false;
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalLabel;
+      }
     }
   });
 });
