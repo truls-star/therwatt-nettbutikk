@@ -1,5 +1,48 @@
 
 document.addEventListener("DOMContentLoaded", () => {
+  const languageOptions = [
+    { code: "no", label: "Norsk" },
+    { code: "en", label: "English" },
+    { code: "fr", label: "Français" },
+    { code: "es", label: "Español" },
+    { code: "de", label: "Deutsch" }
+  ];
+
+  const buildTranslateUrl = (langCode) => {
+    const pageUrl = `${location.origin}${location.pathname}${location.search}`;
+    return `https://translate.google.com/translate?sl=no&tl=${langCode}&u=${encodeURIComponent(pageUrl)}`;
+  };
+
+  const initLanguageSelector = () => {
+    const nav = document.querySelector(".nav");
+    if (!nav || document.getElementById("languageSelect")) return;
+
+    const langWrap = document.createElement("div");
+    langWrap.className = "lang-switch";
+    langWrap.innerHTML = `
+      <label class="lang-label" for="languageSelect">Språk</label>
+      <select id="languageSelect" class="lang-select" aria-label="Velg språk">
+        ${languageOptions.map((opt) => `<option value="${opt.code}">${opt.label}</option>`).join("")}
+      </select>
+    `;
+
+    const menuToggle = document.getElementById("menuToggle");
+    nav.insertBefore(langWrap, menuToggle || null);
+
+    const select = langWrap.querySelector("#languageSelect");
+    select.value = "no";
+
+    select.addEventListener("change", (event) => {
+      const selectedLang = event.target.value;
+      document.documentElement.lang = selectedLang;
+      if (selectedLang !== "no") {
+        location.href = buildTranslateUrl(selectedLang);
+      }
+    });
+  };
+
+  initLanguageSelector();
+
   // Active page highlighting
   const path = location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("[data-page]").forEach((el) => {

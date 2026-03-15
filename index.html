@@ -3,233 +3,266 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Therwatt – Geoenergi, varmepumper og vannbåren varme</title>
-  <meta name="description" content="Therwatt leverer geoenergi, varmepumper og vannbårne varmeanlegg. Nettbutikk, prosjektering, konsulentbistand og faghandel for VVS.">
+  <title>Therwatt | Geoenergi, varmepumper og vannbåren varme</title>
+  <meta name="description" content="Therwatt er et skandinavisk ingeniørselskap som leverer geotermiske systemer, varmepumper og vannbåren varme med prosjektering, installasjon og rådgivning.">
+  <meta property="og:title" content="Therwatt | Geoenergi, varmepumper og vannbåren varme">
+  <meta property="og:description" content="Ingeniørdrevet leveranse av varme- og energisystemer for boliger og mindre næringsbygg.">
+  <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="Assets/styles.css">
+  <link rel="stylesheet" href="Assets/home.css">
 </head>
 <body>
-
 <header class="topbar">
   <div class="nav">
-    <a class="brand" href="index.html">
+    <a class="brand" href="index.html" aria-label="Therwatt forside">
       <span class="logo"><img src="Assets/Images/therwatt-logo.png" alt="Therwatt logo"></span>
       <span>Therwatt</span>
     </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Meny">
+    <button class="menu-toggle" id="menuToggle" aria-label="Åpne meny">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
-    <nav class="menu" id="mainMenu">
+    <nav class="menu" id="mainMenu" aria-label="Hovednavigasjon">
       <a data-page="index.html" href="index.html">Forside</a>
-      <div class="nav-dropdown">
-        <a href="tjenester.html">Tjenester</a>
-        <div class="dropdown-menu">
-          <a href="tjenester-prosjektering.html">Prosjektering og installasjon<small>Vannbåren varme og varmepumper</small></a>
-          <a href="tjenester-konsulent.html">Konsulentbistand<small>Energi og varmetekniske installasjoner</small></a>
-          <a href="tjenester-sourcing.html">Sourcing<small>Produktsøk og leverandørvalg</small></a>
-          <a href="kalkulator.html">Kalkulator<small>Energiberegning og gulvvarme</small></a>
-        </div>
-      </div>
-      <a data-page="butikk.html" href="butikk.html">Nettbutikk</a>
-      <a data-page="om-oss.html" href="om-oss.html">Om oss</a>
-      <a data-page="kontakt.html" href="kontakt.html">Kontakt</a>
+      <a href="#services">Tjenester</a>
+      <a href="#energy-calculator">Energikalkulator</a>
+      <a href="#heat-pumps">Varmepumper</a>
+      <a href="#hydronic">Vannbåren varme</a>
+      <a href="#consulting">Rådgivning</a>
+      <a href="butikk.html">Nettbutikk</a>
+      <a href="#contact">Kontakt</a>
     </nav>
   </div>
 </header>
 
-<div class="trust-bar">
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-    <span>Faghandel for VVS</span>
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-    <span>Prosjektering og rådgivning</span>
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    <span>Trygg betaling med Stripe</span>
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-    <span>Personlig rådgivning</span>
-  </div>
-</div>
-
 <main>
-  <section class="hero">
-    <div class="wrap hero-grid">
+  <section class="th-hero" id="home">
+    <div class="wrap th-hero-grid">
       <div>
-        <div class="kicker">Energi, varme og faghandel</div>
+        <p class="th-kicker">Skandinavisk energiingeniørfag</p>
         <h1>Geoenergi, varmepumper og vannbåren varme</h1>
-        <p class="lead">Therwatt leverer faglige tjenester innen prosjektering, installasjon og rådgivning for varmesystemer — kombinert med en nettbutikk med over 26 000 produkter for VVS og energiteknikk.</p>
-        <div class="actions">
-          <a class="btn warm large" href="tjenester.html">Våre tjenester</a>
+        <p class="th-lead">Therwatt leverer profesjonelle energiløsninger for boliger og mindre næringsbygg.</p>
+        <p class="th-body">Therwatt er spesialisert på geotermiske systemer, varmepumper og vannbåren varme, og kombinerer ingeniørkompetanse med praktisk installasjonserfaring. Med mer enn 25 års erfaring innen rør, VVS og energisystemer støtter selskapet boligeiere, utbyggere og entreprenører med effektiv og driftssikker varmeprosjektering og gjennomføring.</p>
+        <div class="actions th-actions">
+          <a class="btn warm large" href="#services">Våre tjenester</a>
           <a class="btn large" href="butikk.html">Åpne nettbutikk</a>
         </div>
-        <div class="stats">
-          <div class="stat">
-            <b>26 626</b>
-            <span class="muted">produkter</span>
-          </div>
-          <div class="stat">
-            <b>11</b>
-            <span class="muted">produktkategorier</span>
-          </div>
-          <div class="stat">
-            <b>Stripe</b>
-            <span class="muted">sikker betaling</span>
-          </div>
-        </div>
-      </div>
-      <div class="hero-card">
-        <div class="badge warm">Tjenester og produkter</div>
-        <h2 style="margin:16px 0 12px;font-size:22px;letter-spacing:-0.02em">Mer enn en nettbutikk</h2>
-        <p class="muted" style="font-size:14px;line-height:1.7">Therwatt tilbyr prosjektering, konsulentbistand og sourcing i tillegg til produktsalg. Vi hjelper deg med alt fra planlegging av varmeanlegg til å finne riktig komponent for ditt prosjekt.</p>
-        <div class="notice" style="margin-top:16px">
-          <strong>Prosjektpriser:</strong> Kontakt oss for spesialtilbud på større prosjekter og mengderabatter.
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="section" id="tjenester">
-    <div class="wrap">
-      <div class="kicker warm">Tjenester</div>
-      <h2>Hva Therwatt leverer</h2>
-      <p class="subtitle">Vi kombinerer fagkompetanse, rådgivning og prosjektleveranser med en komplett nettbutikk for VVS-produkter.</p>
-      <div class="grid cols-3">
-        <a class="service-card card" href="tjenester-prosjektering.html" style="text-decoration:none">
-          <div class="service-icon warm">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20M5 20V10l7-6 7 6v10M9 20v-6h6v6"/></svg>
-          </div>
-          <div class="badge warm" style="margin-bottom:12px">Spesialområde</div>
-          <h3>Prosjektering og installasjon</h3>
-          <p>Planlegging, dimensjonering og installasjon av vannbårne varmeanlegg og varmepumper for nybygg og rehabilitering.</p>
-        </a>
-        <a class="service-card card" href="tjenester-konsulent.html" style="text-decoration:none">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
-          </div>
-          <div class="badge" style="margin-bottom:12px">Rådgivning</div>
-          <h3>Konsulentbistand</h3>
-          <p>Faglig rådgivning, tekniske vurderinger, feilsøking og analyse av eksisterende varme- og energisystemer.</p>
-        </a>
-        <a class="service-card card" href="tjenester-sourcing.html" style="text-decoration:none">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          </div>
-          <div class="badge" style="margin-bottom:12px">Sourcing</div>
-          <h3>Produktsøk og leverandørvalg</h3>
-          <p>Vi bistår med å finne riktige produkter, komponenter og leverandører som passer ditt prosjekts behov.</p>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="calculator-promo">
-        <div class="calculator-promo-content">
-          <div class="kicker warm">Verktøy og beregning</div>
-          <h2>Energiberegning og Gulvvarmekalkulator</h2>
-          <p>Beregn effektbehov for varmepumpe, få anbefaling for bergvarme eller luft-vann, og kalkuler nøyaktig materialbehov for gulvvarme. Alt tilpasset din bolig.</p>
-          <ul class="calculator-promo-features">
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-              Energiberegning for varmepumpe
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-              Materialberegning for gulvvarme
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-              Utskrivbar resultatoversikt
-            </li>
+        <article class="th-calculator-intro" id="energy-calculator">
+          <p class="th-kicker th-kicker-small">Energikalkulator</p>
+          <h2>Energiberegning og gulvvarmekalkulator</h2>
+          <p>Beregn varmebehovet i boligen og få anbefalinger for riktig varmepumpeløsning. Verktøyet kan også estimere materialbehov for vannbåren gulvvarme basert på romløsning og konstruksjonstype.</p>
+          <ul>
+            <li>estimert varmebehov i kW</li>
+            <li>anbefalt varmepumpekapasitet</li>
+            <li>materialbehov for gulvvarme</li>
+            <li>en utskriftsvennlig oppsummering av resultatene</li>
           </ul>
-          <a class="btn warm large" href="kalkulator.html">Åpne kalkulatoren</a>
+          <a class="btn warm" href="kalkulator.html">Start beregning</a>
+          <p class="th-note">Usikker på hvilken løsning som passer best for boligen? Send inn beregningen, så vurderer Therwatt-ingeniørene resultatet og anbefaler en optimal varmeløsning.</p>
+        </article>
+      </div>
+
+      <aside class="th-hero-panel" aria-label="Teknisk profil">
+        <div class="th-hero-metric">
+          <span>Erfaring</span>
+          <strong>25+ år</strong>
         </div>
-        <div class="calculator-promo-visual">
-          <div class="calculator-promo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h2v2H8zM14 10h2v2h-2zM8 14h2v2H8zM14 14h2v2h-2zM8 18h8"/></svg>
-          </div>
-          <div class="calculator-promo-stats">
-            <div class="calculator-promo-stat">
-              <b>3</b>
-              <span>beregningsmodus</span>
-            </div>
-            <div class="calculator-promo-stat">
-              <b>Gratis</b>
-              <span>beregning</span>
-            </div>
-          </div>
+        <div class="th-hero-metric">
+          <span>Nettbutikk-katalog</span>
+          <strong>26 000+ produkter</strong>
         </div>
+        <div class="th-hero-metric">
+          <span>Fokusområder</span>
+          <strong>Geoenergi, VVS og vannbåren varme</strong>
+        </div>
+        <div class="th-sketch" aria-hidden="true">
+          <svg viewBox="0 0 320 280" fill="none">
+            <rect x="28" y="28" width="264" height="224" rx="14"></rect>
+            <path d="M56 208h208M56 72h208M56 120h140M56 160h168"></path>
+            <circle cx="92" cy="120" r="11"></circle>
+            <circle cx="204" cy="160" r="11"></circle>
+            <path d="M92 131v55M204 171v38M92 186h112"></path>
+          </svg>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section th-section" id="services">
+    <div class="wrap">
+      <p class="th-kicker">Tjenester</p>
+      <h2>Profesjonelle varme- og energisystemer</h2>
+      <p class="subtitle th-subtitle">Therwatt tilbyr prosjektering, rådgivning og installasjonstjenester for moderne energisystemer.</p>
+      <div class="grid cols-3 th-service-grid">
+        <article class="card th-service">
+          <span class="th-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2v20M5 7h14M5 17h14M8 7v10M16 7v10"/></svg>
+          </span>
+          <h3>Geotermiske systemer og energibronner</h3>
+          <p>Bergvarmekonsepter, sløyfestrategi og teknisk grunnlag for stabil årsdrift.</p>
+        </article>
+        <article class="card th-service">
+          <span class="th-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2l7 4v12l-7 4-7-4V6z"/><path d="M8 10h8M8 14h8"/></svg>
+          </span>
+          <h3>Luft-til-vann-varmepumpesystemer</h3>
+          <p>Kapasitetsdimensjonering, lavtemperaturdistribusjon og praktisk integrasjon med eksisterende anlegg.</p>
+        </article>
+        <article class="card th-service">
+          <span class="th-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M3 11h18M6 11v10M12 11v10M18 11v10"/></svg>
+          </span>
+          <h3>Vannbårne gulvvarmesystemer</h3>
+          <p>Planlegging av løsning, sløyfestrategi og materialspesifikasjon for forutsigbar komfort.</p>
+        </article>
+        <article class="card th-service">
+          <span class="th-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17l5-5 4 4 7-7"/><path d="M4 7h6v6"/></svg>
+          </span>
+          <h3>Optimalisering av varmeanlegg</h3>
+          <p>Vurdering av oppgraderinger for eldre anlegg med fokus på lavere energibruk og bedre styring.</p>
+        </article>
+        <article class="card th-service">
+          <span class="th-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+          </span>
+          <h3>Prosjektering og systemdesign</h3>
+          <p>Dokumentasjon, systemtegninger og utstyrsvalg tilpasset prosjektkrav.</p>
+        </article>
+        <article class="card th-service">
+          <span class="th-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </span>
+          <h3>Teknisk rådgivning</h3>
+          <p>Uavhengig teknisk rådgivning til boligeiere, utbyggere og entreprenører før gjennomføring.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="section section-alt">
-    <div class="wrap">
-      <div class="kicker">Sortiment</div>
-      <h2>Produktkategorier</h2>
-      <p class="subtitle">Utforsk produkter gruppert etter Dahl.no sin kategoristruktur.</p>
-      <div class="grid cols-4">
-        <a class="category-card card" href="butikk.html#Teknisk%20VVS">
-          <span class="badge">6 767 produkter</span>
-          <h3 style="margin-top:12px">Teknisk VVS</h3>
-          <p>Rør-i-rør, pressystemer, avløp, kobberrør, ventiler og isolasjon.</p>
-        </a>
-        <a class="category-card card" href="butikk.html#Synlig%20VVS">
-          <span class="badge">2 706 produkter</span>
-          <h3 style="margin-top:12px">Synlig VVS</h3>
-          <p>Armatur, baderomsmøbler, servanter, toaletter, dusj og badekar.</p>
-        </a>
-        <a class="category-card card" href="butikk.html#Industri">
-          <span class="badge">4 335 produkter</span>
-          <h3 style="margin-top:12px">Industri</h3>
-          <p>Karbonstål, rustfrie rør og deler, industriarmaturer og kjøling.</p>
-        </a>
-        <a class="category-card card" href="butikk.html#VMT">
-          <span class="badge">3 988 produkter</span>
-          <h3 style="margin-top:12px">VMT</h3>
-          <p>PE-rør, drensrør, kummer, gategods og renseløsninger.</p>
-        </a>
+  <section class="section th-section th-split" id="hydronic">
+    <div class="wrap th-split-grid">
+      <div>
+        <p class="th-kicker">Vannbåren varme</p>
+        <h2>Vannbårne varmesystemer</h2>
+        <p>Vannbårne varmesystemer distribuerer varme via vann i stedet for direkte elektrisk oppvarming. Det gjør at varmeenergien kan produseres effektivt med varmepumper eller andre energikilder.</p>
+        <ul class="th-bullets">
+          <li>jevn varmefordeling</li>
+          <li>bedre innekomfort</li>
+          <li>høyere energieffektivitet</li>
+          <li>lavere driftskostnader</li>
+          <li>kompatibilitet med moderne varmepumpesystemer</li>
+        </ul>
       </div>
-      <div class="grid cols-4" style="margin-top:16px">
-        <a class="category-card card" href="butikk.html#Verkt%C3%B8y%20og%20Maskiner">
-          <span class="badge">3 546 produkter</span>
-          <h3 style="margin-top:12px">Verktøy og Maskiner</h3>
-          <p>Håndverktøy, elektroverktøy, rørverktøy og montasjemateriell.</p>
-        </a>
-        <a class="category-card card" href="butikk.html#Varmel%C3%B8sninger%20%26%20energi">
-          <span class="badge">1 169 produkter</span>
-          <h3 style="margin-top:12px">Varmeløsninger & energi</h3>
-          <p>Varmepumper, beredere, gulvvarme, radiatorer og kjeler.</p>
-        </a>
-        <a class="category-card card" href="butikk.html#Brannsikkerhet">
-          <span class="badge">821 produkter</span>
-          <h3 style="margin-top:12px">Brannsikkerhet</h3>
-          <p>Rillekuplinger, brannslukkemateriell og vanntåkesystemer.</p>
-        </a>
-        <a class="category-card card" href="butikk.html#Samferdsel">
-          <span class="badge">856 produkter</span>
-          <h3 style="margin-top:12px">Samferdsel</h3>
-          <p>Trafikkskilt, vegsikring, arbeidsvarsling og utemiljø.</p>
-        </a>
+      <div class="card th-system-card">
+        <h3>Hvordan systemene fungerer</h3>
+        <p><strong>Gulvvarme:</strong> Lavtemperert vann sirkulerer gjennom rørsløyfer under gulvet. Stor avgivelsesflate gir stabil og jevn romtemperatur.</p>
+        <p><strong>Radiatorsystemer:</strong> Vann fra varmekilden distribueres gjennom radiatorer utformet for romvis regulering og enkel ettermontering.</p>
       </div>
     </div>
   </section>
 
-  <section class="cta-section">
+  <section class="section th-section" id="heat-pumps">
     <div class="wrap">
-      <h2>Trenger du hjelp med et prosjekt?</h2>
-      <p>Ta kontakt for å få tilbud på prosjektleveranser, teknisk rådgivning eller hjelp til riktig løsning.</p>
-      <div class="actions" style="justify-content:center">
-        <a class="btn" href="kontakt.html">Kontakt oss</a>
-        <a class="btn secondary" href="tjenester.html">Se våre tjenester</a>
+      <p class="th-kicker">Varmepumpeteknologier</p>
+      <h2>Moderne varmepumpeløsninger</h2>
+      <div class="grid cols-3 th-tech-grid">
+        <article class="card th-tech-card">
+          <h3>Bergvarmepumper</h3>
+          <p>Stabile kildetemperaturer og høy årsvirkningsgrad gir langsiktig og kostnadseffektiv drift.</p>
+        </article>
+        <article class="card th-tech-card">
+          <h3>Luft-til-vann-varmepumper</h3>
+          <p>Effektiv oppgraderingsløsning med høy kompatibilitet for vannbåren distribusjon i eksisterende bygg.</p>
+        </article>
+        <article class="card th-tech-card">
+          <h3>Hybride varmesystemer</h3>
+          <p>Kombinerer varmepumpedrift med tilleggskilder for å sikre ytelse under toppbelastning.</p>
+        </article>
+      </div>
+      <p class="th-footnote">Alle løsninger vurderes for effektivitet, redusert energiforbruk, langsiktige driftsbesparelser og integrasjon med vannbårne varmesystemer.</p>
+    </div>
+  </section>
+
+  <section class="section th-section th-split" id="consulting">
+    <div class="wrap th-split-grid">
+      <div>
+        <p class="th-kicker">Rådgivning</p>
+        <h2>Ingeniørfaglig og teknisk rådgivning</h2>
+        <p>Therwatt bistår boligeiere, utbyggere og entreprenører med planlegging og utforming av varmesystemer.</p>
+        <ul class="th-bullets">
+          <li>energiberegninger</li>
+          <li>systemdesign</li>
+          <li>utstyrsvalg</li>
+          <li>teknisk dokumentasjon</li>
+          <li>prosjektstøtte</li>
+        </ul>
+      </div>
+      <div class="card th-consult-cta">
+        <h3>Trenger du profesjonell veiledning?</h3>
+        <p>Therwatt vurderer prosjektforutsetninger, verifiserer antakelser og anbefaler en teknisk robust varmeløsning før innkjøp og installasjon.</p>
+        <a class="btn" href="#contact">Kontakt ingeniorteamet</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section th-section th-muted" id="webshop">
+    <div class="wrap th-webshop-wrap">
+      <div>
+        <p class="th-kicker">Nettbutikk</p>
+        <h2>Teknisk faghandel for VVS og varme</h2>
+        <p>Therwatt driver også en profesjonell nettbutikk med et bredt utvalg av VVS- og varmekomponenter. Butikken inneholder mer enn 26 000 produkter brukt i vannbårne varmesystemer, VVS-installasjoner og tekniske prosjekter.</p>
+      </div>
+      <a class="btn" href="butikk.html">Se produkter</a>
+    </div>
+  </section>
+
+  <section class="section th-section" id="product-categories">
+    <div class="wrap">
+      <p class="th-kicker">Produktkategorier</p>
+      <h2>Utforsk produktfamilier</h2>
+      <p class="subtitle th-subtitle">Kategorier lastes fra produktdatabasen og grupperes for raskere navigasjon.</p>
+      <div class="grid cols-4" id="homeCategoryGrid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="section th-section" id="contact">
+    <div class="wrap th-contact-grid">
+      <div>
+        <p class="th-kicker">Kontakt</p>
+        <h2>Kontakt Therwatt</h2>
+        <p>Hvis du planlegger oppgradering av varmeanlegg, installasjon av varmepumpe eller utforming av vannbårent varmesystem, kan Therwatt bistå med beregninger og komplette løsninger.</p>
+        <div class="card th-contact-card">
+          <p><strong>Telefon:</strong> <a href="tel:+4790280156">+47 902 80 156</a></p>
+          <p><strong>E-post:</strong> <a href="mailto:post@therwatt.no">post@therwatt.no</a></p>
+          <p><strong>Organisasjonsnummer:</strong> 937099789</p>
+        </div>
+      </div>
+      <div class="card th-form-card">
+        <h3>Send prosjektforespørsel</h3>
+        <form name="kontakt-hjem" method="POST" data-netlify="true" action="takke.html">
+          <input type="hidden" name="form-name" value="kontakt-hjem">
+          <label for="contactName">Navn</label>
+          <input class="input" id="contactName" name="name" required>
+          <label for="contactEmail">E-post</label>
+          <input class="input" id="contactEmail" name="email" type="email" required>
+          <label for="contactPhone">Telefon</label>
+          <input class="input" id="contactPhone" name="phone">
+          <label for="contactType">Henvendelsestype</label>
+          <select class="input" id="contactType" name="inquiry_type" required>
+            <option value="">Velg</option>
+            <option>Prosjektering av varmepumpe</option>
+            <option>Vannbårent varmesystem</option>
+            <option>Vurdering av energiberegning</option>
+            <option>Rådgivning / prosjektstøtte</option>
+          </select>
+          <label for="contactMessage">Prosjektdetaljer</label>
+          <textarea class="input" id="contactMessage" name="message" rows="5" required></textarea>
+          <button class="btn warm" type="submit">Send melding</button>
+        </form>
       </div>
     </div>
   </section>
@@ -240,24 +273,24 @@
     <div class="footer-grid">
       <div>
         <strong>Therwatt AS</strong>
-        <p>Faghandel og rådgivning innen geoenergi, varmepumper, vannbårne varmeanlegg og VVS-produkter.</p>
+        <p>Faglig leverandør av geoenergi, varmepumper og vannbåren varme for boliger og mindre næringsbygg.</p>
       </div>
       <div>
         <strong>Navigasjon</strong>
-        <p><a href="index.html">Forside</a><br><a href="tjenester.html">Tjenester</a><br><a href="butikk.html">Nettbutikk</a><br><a href="om-oss.html">Om oss</a></p>
+        <p><a href="index.html">Forside</a><br><a href="#services">Tjenester</a><br><a href="#energy-calculator">Energikalkulator</a><br><a href="#contact">Kontakt</a></p>
       </div>
       <div>
-        <strong>Tjenester</strong>
-        <p><a href="tjenester-prosjektering.html">Prosjektering</a><br><a href="tjenester-konsulent.html">Konsulentbistand</a><br><a href="tjenester-sourcing.html">Sourcing</a><br><a href="kalkulator.html">Kalkulator</a></p>
+        <strong>Løsninger</strong>
+        <p><a href="#heat-pumps">Varmepumper</a><br><a href="#hydronic">Vannbåren varme</a><br><a href="#consulting">Rådgivning</a><br><a href="butikk.html">Nettbutikk</a></p>
       </div>
       <div>
-        <strong>Kontakt</strong>
-        <p>Telefon: <a href="tel:+4790280156">902 80 156</a><br>E-post: <a href="mailto:post@therwatt.no">post@therwatt.no</a><br>Org.nr: 937 099 789</p>
+        <strong>Juridisk og kontakt</strong>
+        <p>Telefon: <a href="tel:+4790280156">+47 902 80 156</a><br>E-post: <a href="mailto:post@therwatt.no">post@therwatt.no</a><br>Org.nr: 937 099 789<br><a href="salgsbetingelser.html">Salgsbetingelser og juridisk informasjon</a></p>
       </div>
     </div>
     <div class="footer-bottom">
       <span>&copy; <span id="year"></span> Therwatt AS</span>
-      <span><a href="salgsbetingelser.html">Salgsbetingelser</a></span>
+      <span><a href="kalkulator.html">Åpne kalkulator</a></span>
     </div>
   </div>
 </footer>
@@ -266,8 +299,18 @@
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
 </button>
 
+<form name="kontakt-hjem" data-netlify="true" hidden>
+  <input type="hidden" name="form-name" value="kontakt-hjem">
+  <input name="name">
+  <input name="email">
+  <input name="phone">
+  <input name="inquiry_type">
+  <textarea name="message"></textarea>
+</form>
+
 <script src="Assets/config.js"></script>
 <script src="Assets/main.js"></script>
 <script src="Assets/cart.js"></script>
+<script src="Assets/home.js"></script>
 </body>
 </html>
