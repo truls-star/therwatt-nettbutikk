@@ -1,5 +1,5 @@
 [build]
-  command = "npm install"
+  command = "npm install && node scripts/build-listing.js"
   publish = "."
   functions = "netlify/functions"
 

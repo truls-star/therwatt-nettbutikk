@@ -7,11 +7,28 @@
   let areaFilter = "";
   let groupFilter = "";
   let query = "";
-  let catalog = [];
+  let meta = null;
+  let loadedCategories = {};
 
   const $ = (id) => document.getElementById(id);
   const C = window.TherwattCart;
   const fmt = C.fmt;
+
+  /* Compact-key → full-key mapping (matches build-listing.js) */
+  const KEY_EXPAND = {
+    s: "sku", n: "name", p: "gross_price", u: "unit",
+    gn: "group_name", gc: "group_code", an: "area_name",
+    b: "brand", nb: "nobb_number", mc: "dahl_main_category",
+    sc: "dahl_sub_category", ssc: "dahl_sub_sub_category", i: "image_url"
+  };
+
+  function expand(compact) {
+    const full = {};
+    for (const k in compact) {
+      full[KEY_EXPAND[k] || k] = compact[k];
+    }
+    return full;
+  }
 
   function escapeHtml(str) {
     const div = document.createElement("div");
@@ -25,79 +42,140 @@
     return res.json();
   }
 
+  function showLoading(message) {
+    var el = $("resultsText");
+    if (el) el.textContent = message || "Laster produkter...";
+  }
+
+  async function loadCategoryProducts(slug) {
+    if (loadedCategories[slug]) return loadedCategories[slug];
+    var data = await loadJson("Data/listing/" + slug + ".json");
+    var products = data.map(expand);
+    loadedCategories[slug] = products;
+    return products;
+  }
+
   async function loadProducts() {
-    catalog = await loadJson("Data/catalog.json");
-    const files = catalog.map((entry) => "Data/" + entry.file);
-    const payloads = await Promise.all(files.map(loadJson));
-    allProducts = payloads.flat();
-    filtered = allProducts;
+    showLoading("Laster produktkategorier...");
+    meta = await loadJson("Data/listing/meta.json");
 
     // Handle hash-based area filter
-    const hash = decodeURIComponent(location.hash.replace("#", ""));
+    var hash = decodeURIComponent(location.hash.replace("#", ""));
     if (hash && hash !== "alle") {
-      const match = allProducts.find(p => (p.dahl_main_category || p.area_name) === hash);
-      if (match) areaFilter = hash;
+      var matchCat = meta.categories.find(function(c) { return c.name === hash; });
+      if (matchCat) areaFilter = hash;
     }
 
     renderAreaNav();
+
+    // Load products for selected category or all
+    await loadCurrentProducts();
+  }
+
+  async function loadCurrentProducts() {
+    if (areaFilter) {
+      var cat = meta.categories.find(function(c) { return c.name === areaFilter; });
+      if (cat) {
+        showLoading("Laster " + cat.name + "...");
+        allProducts = await loadCategoryProducts(cat.slug);
+      }
+    } else {
+      // Load all categories progressively
+      showLoading("Laster alle produkter...");
+      allProducts = [];
+      for (var i = 0; i < meta.categories.length; i++) {
+        var cat = meta.categories[i];
+        showLoading("Laster " + cat.name + " (" + (i + 1) + "/" + meta.categories.length + ")...");
+        var products = await loadCategoryProducts(cat.slug);
+        allProducts = allProducts.concat(products);
+        // Show partial results as they load
+        filtered = applyFilterLogic(allProducts);
+        renderProducts();
+      }
+    }
+
+    filtered = applyFilterLogic(allProducts);
     renderGroupList();
-    applyFilters();
+    renderProducts();
   }
 
   function areas() {
-    return [...new Set(allProducts.map(p => p.dahl_main_category || p.area_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
+    if (!meta) return [];
+    return meta.categories.map(function(c) { return c.name; }).sort(function(a, b) { return a.localeCompare(b, "no"); });
   }
+
   function groupsForArea(area) {
-    return [...new Set(allProducts.filter(p => !area || (p.dahl_main_category || p.area_name) === area).map(p => p.dahl_sub_category || p.group_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
+    if (!meta) return [];
+    if (area) {
+      var cat = meta.categories.find(function(c) { return c.name === area; });
+      if (cat) return cat.subcategories.map(function(s) { return s.name; });
+      return [];
+    }
+    // All groups from loaded products
+    return [...new Set(allProducts.map(function(p) { return p.dahl_sub_category || p.group_name; }))].filter(Boolean).sort(function(a, b) { return a.localeCompare(b, "no"); });
   }
 
   function renderAreaNav() {
-    const el = $("areaNav");
+    var el = $("areaNav");
     if (!el) return;
-    const items = ["Alle", ...areas()];
-    el.innerHTML = items.map(name => {
-      const active = ((name === "Alle" && !areaFilter) || name === areaFilter) ? "active" : "";
-      const href = name === "Alle" ? "#alle" : "#" + encodeURIComponent(name);
+    var items = ["Alle"].concat(areas());
+    el.innerHTML = items.map(function(name) {
+      var active = ((name === "Alle" && !areaFilter) || name === areaFilter) ? "active" : "";
+      var href = name === "Alle" ? "#alle" : "#" + encodeURIComponent(name);
       return '<a class="' + active + '" href="' + href + '" data-area="' + (name === "Alle" ? "" : escapeHtml(name)) + '">' + escapeHtml(name) + "</a>";
     }).join("");
-    el.querySelectorAll("[data-area]").forEach(a => a.addEventListener("click", (e) => {
-      e.preventDefault();
-      areaFilter = a.dataset.area;
-      groupFilter = "";
-      currentPage = 1;
-      renderAreaNav();
-      renderGroupList();
-      applyFilters();
-    }));
+    el.querySelectorAll("[data-area]").forEach(function(a) {
+      a.addEventListener("click", function(e) {
+        e.preventDefault();
+        var newArea = a.dataset.area;
+        if (newArea !== areaFilter) {
+          areaFilter = newArea;
+          groupFilter = "";
+          currentPage = 1;
+          renderAreaNav();
+          loadCurrentProducts().catch(function(err) {
+            console.error("Failed to load products:", err);
+            showLoading("Kunne ikke laste produkter. Prøv igjen.");
+          });
+        }
+      });
+    });
   }
 
   function renderGroupList() {
-    const el = $("groupList");
+    var el = $("groupList");
     if (!el) return;
-    const groups = groupsForArea(areaFilter);
-    el.innerHTML = groups.map(g => {
-      const count = allProducts.filter(p => (!areaFilter || (p.dahl_main_category || p.area_name) === areaFilter) && (p.dahl_sub_category || p.group_name) === g).length;
-      const active = groupFilter === g ? "active" : "";
+    var groups = groupsForArea(areaFilter);
+    el.innerHTML = groups.map(function(g) {
+      var count = allProducts.filter(function(p) { return (!areaFilter || (p.dahl_main_category || p.area_name) === areaFilter) && (p.dahl_sub_category || p.group_name) === g; }).length;
+      var active = groupFilter === g ? "active" : "";
       return '<div class="filter-item ' + active + '" data-group="' + escapeHtml(g) + '"><span>' + escapeHtml(g) + "</span><span class='small'>" + count + "</span></div>";
     }).join("");
-    el.querySelectorAll("[data-group]").forEach(item => item.addEventListener("click", () => {
-      groupFilter = item.dataset.group === groupFilter ? "" : item.dataset.group;
-      currentPage = 1;
-      renderGroupList();
-      applyFilters();
-    }));
+    el.querySelectorAll("[data-group]").forEach(function(item) {
+      item.addEventListener("click", function() {
+        groupFilter = item.dataset.group === groupFilter ? "" : item.dataset.group;
+        currentPage = 1;
+        renderGroupList();
+        filtered = applyFilterLogic(allProducts);
+        renderProducts();
+      });
+    });
   }
 
-  function applyFilters() {
-    filtered = allProducts.filter(p => {
+  function applyFilterLogic(products) {
+    return products.filter(function(p) {
       if (areaFilter && (p.dahl_main_category || p.area_name) !== areaFilter) return false;
       if (groupFilter && (p.dahl_sub_category || p.group_name) !== groupFilter) return false;
       if (query) {
-        const hay = (p.sku + " " + p.name + " " + (p.dahl_main_category || p.area_name) + " " + (p.dahl_sub_category || p.group_name) + " " + (p.dahl_sub_sub_category || "") + " " + (p.brand || "")).toLowerCase();
+        var hay = (p.sku + " " + p.name + " " + (p.dahl_main_category || p.area_name) + " " + (p.dahl_sub_category || p.group_name) + " " + (p.dahl_sub_sub_category || "") + " " + (p.brand || "")).toLowerCase();
         if (!hay.includes(query)) return false;
       }
       return true;
     });
+  }
+
+  function applyFilters() {
+    filtered = applyFilterLogic(allProducts);
     renderProducts();
   }
 
@@ -109,19 +187,19 @@
   }
 
   function renderProducts() {
-    const grid = $("productGrid");
+    var grid = $("productGrid");
     if (!grid) return;
-    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
     currentPage = Math.min(Math.max(currentPage, 1), totalPages);
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const items = filtered.slice(start, start + PAGE_SIZE);
+    var start = (currentPage - 1) * PAGE_SIZE;
+    var items = filtered.slice(start, start + PAGE_SIZE);
     $("resultsText").textContent = filtered.length.toLocaleString("no-NO") + " produkter" + (areaFilter ? " i " + areaFilter : "") + (groupFilter ? " \u203A " + groupFilter : "");
 
-    grid.innerHTML = items.map(p => {
-      const price = window.TherwattPricing.priceInclVat(p);
-      const requestOnly = window.TherwattPricing.isRequestOnly(p);
-      const brand = p.brand || "";
-      const imgSrc = getProductImage(p, 400);
+    grid.innerHTML = items.map(function(p) {
+      var price = window.TherwattPricing.priceInclVat(p);
+      var requestOnly = window.TherwattPricing.isRequestOnly(p);
+      var brand = p.brand || "";
+      var imgSrc = getProductImage(p, 400);
 
       return '<article class="product-card">' +
         '<a class="product-media" href="produkt.html?sku=' + encodeURIComponent(p.sku) + '">' +
@@ -145,16 +223,17 @@
       "</article>";
     }).join("");
 
-    grid.querySelectorAll("[data-add]").forEach(btn => btn.addEventListener("click", () => {
-      const p = allProducts.find(x => x.sku === btn.dataset.add);
-      if (p) {
-        C.add(p);
-        // Brief visual feedback on button
-        btn.textContent = "Lagt til!";
-        btn.style.background = "var(--success)";
-        setTimeout(() => { btn.textContent = "Legg i kurv"; btn.style.background = ""; }, 1200);
-      }
-    }));
+    grid.querySelectorAll("[data-add]").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var p = allProducts.find(function(x) { return x.sku === btn.dataset.add; });
+        if (p) {
+          C.add(p);
+          btn.textContent = "Lagt til!";
+          btn.style.background = "var(--success)";
+          setTimeout(function() { btn.textContent = "Legg i kurv"; btn.style.background = ""; }, 1200);
+        }
+      });
+    });
     renderPager(totalPages);
   }
 
@@ -164,11 +243,32 @@
     $("nextPage").disabled = currentPage >= totalPages;
   }
 
-  document.addEventListener("DOMContentLoaded", async () => {
-    $("searchInput").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); currentPage = 1; applyFilters(); });
-    $("clearFilters").addEventListener("click", () => { areaFilter = ""; groupFilter = ""; query = ""; $("searchInput").value = ""; renderAreaNav(); renderGroupList(); applyFilters(); });
-    $("prevPage").addEventListener("click", () => { currentPage -= 1; renderProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
-    $("nextPage").addEventListener("click", () => { currentPage += 1; renderProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
-    await loadProducts();
+  document.addEventListener("DOMContentLoaded", async function() {
+    $("searchInput").addEventListener("input", function(e) { query = e.target.value.trim().toLowerCase(); currentPage = 1; applyFilters(); });
+    $("clearFilters").addEventListener("click", function() {
+      areaFilter = ""; groupFilter = ""; query = ""; $("searchInput").value = "";
+      renderAreaNav();
+      loadCurrentProducts().catch(function(err) {
+        console.error("Failed to load products:", err);
+        showLoading("Kunne ikke laste produkter. Prøv igjen.");
+      });
+    });
+    $("prevPage").addEventListener("click", function() { currentPage -= 1; renderProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+    $("nextPage").addEventListener("click", function() { currentPage += 1; renderProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+    try {
+      await loadProducts();
+    } catch (err) {
+      console.error("Failed to load products:", err);
+      var grid = $("productGrid");
+      if (grid) {
+        grid.innerHTML = '<div class="hero-card" style="padding:40px;text-align:center">' +
+          '<h2 style="margin-top:0">Kunne ikke laste produkter</h2>' +
+          '<p class="muted">' + escapeHtml(err.message) + '</p>' +
+          '<div class="actions" style="justify-content:center;margin-top:16px">' +
+            '<button class="btn" onclick="location.reload()">Prøv igjen</button>' +
+          '</div></div>';
+      }
+    }
   });
 })();
