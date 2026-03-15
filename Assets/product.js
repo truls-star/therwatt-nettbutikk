@@ -14,12 +14,6 @@
   const sku = params.get("sku");
   if (!sku) return;
 
-  async function loadJson(path) {
-    const res = await fetch(path);
-    if (!res.ok) throw new Error("Kunne ikke laste " + path);
-    return res.json();
-  }
-
   function getProductImage(p, width) {
     var url = p.image_url || (p.images && p.images.length > 0 ? p.images[0] : null);
     if (!url) return "Assets/Images/no-image.jpg";
@@ -28,16 +22,12 @@
   }
 
   try {
-    const skuIndex = await loadJson("Data/sku-index.json");
-    const file = skuIndex[sku];
-    if (!file) {
-      $("productRoot").innerHTML = '<div class="hero-card" style="padding:40px;text-align:center"><h1 style="font-size:28px;margin-top:0">Produkt ikke funnet</h1><p class="muted">Vi fant ikke varen du ba om. Prøv å søke i nettbutikken.</p><div class="actions" style="justify-content:center;margin-top:16px"><a class="btn" href="butikk.html">Til nettbutikk</a></div></div>';
-      return;
-    }
-    const products = await loadJson("Data/" + file);
-    const product = products.find(p => p.sku === sku);
+    const res = await fetch("/api/products?sku=" + encodeURIComponent(sku));
+    if (!res.ok) throw new Error("Kunne ikke laste produktdata");
+    const data = await res.json();
+    const product = data.product;
     if (!product) {
-      $("productRoot").innerHTML = '<div class="hero-card" style="padding:40px;text-align:center"><h1 style="font-size:28px;margin-top:0">Produkt ikke funnet</h1><p class="muted">Vi fant ikke varen du ba om.</p><div class="actions" style="justify-content:center;margin-top:16px"><a class="btn" href="butikk.html">Til nettbutikk</a></div></div>';
+      $("productRoot").innerHTML = '<div class="hero-card" style="padding:40px;text-align:center"><h1 style="font-size:28px;margin-top:0">Produkt ikke funnet</h1><p class="muted">Vi fant ikke varen du ba om. Prøv å søke i nettbutikken.</p><div class="actions" style="justify-content:center;margin-top:16px"><a class="btn" href="butikk.html">Til nettbutikk</a></div></div>';
       return;
     }
 

@@ -1,13 +1,14 @@
 
 (async () => {
   const PAGE_SIZE = 24;
-  let allProducts = [];
-  let filtered = [];
   let currentPage = 1;
+  let totalPages = 1;
+  let totalProducts = 0;
   let areaFilter = "";
   let groupFilter = "";
   let query = "";
-  let catalog = [];
+  let metaData = null;
+  let currentProducts = [];
 
   const $ = (id) => document.getElementById(id);
   const C = window.TherwattCart;
@@ -19,36 +20,81 @@
     return div.innerHTML;
   }
 
-  async function loadJson(path) {
-    const res = await fetch(path);
-    if (!res.ok) throw new Error("Kunne ikke laste " + path);
+  async function apiFetch(params) {
+    const qs = Object.entries(params)
+      .filter(([, v]) => v !== "" && v !== undefined && v !== null)
+      .map(([k, v]) => encodeURIComponent(k) + "=" + encodeURIComponent(v))
+      .join("&");
+    const res = await fetch("/api/products?" + qs);
+    if (!res.ok) throw new Error("API-feil: " + res.status);
     return res.json();
   }
 
-  async function loadProducts() {
-    catalog = await loadJson("Data/catalog.json");
-    const files = catalog.map((entry) => "Data/" + entry.file);
-    const payloads = await Promise.all(files.map(loadJson));
-    allProducts = payloads.flat();
-    filtered = allProducts;
-
+  async function loadMeta() {
+    metaData = await apiFetch({ meta: "1" });
     // Handle hash-based area filter
     const hash = decodeURIComponent(location.hash.replace("#", ""));
-    if (hash && hash !== "alle") {
-      const match = allProducts.find(p => (p.dahl_main_category || p.area_name) === hash);
-      if (match) areaFilter = hash;
+    if (hash && hash !== "alle" && metaData.areas && metaData.areas[hash]) {
+      areaFilter = hash;
     }
-
     renderAreaNav();
     renderGroupList();
-    applyFilters();
+  }
+
+  async function loadProducts() {
+    try {
+      $("resultsText").textContent = "Laster produkter...";
+      const data = await apiFetch({
+        page: currentPage,
+        pageSize: PAGE_SIZE,
+        area: areaFilter,
+        group: groupFilter,
+        q: query
+      });
+      currentProducts = data.products || [];
+      totalProducts = data.totalProducts || 0;
+      totalPages = data.totalPages || 1;
+      currentPage = data.page || 1;
+      renderProducts();
+    } catch (err) {
+      $("productGrid").innerHTML = '<div style="text-align:center;padding:40px;grid-column:1/-1"><h3>Kunne ikke laste produkter</h3><p class="muted">' + escapeHtml(err.message) + '</p><button class="btn" onclick="location.reload()">Prøv igjen</button></div>';
+      $("resultsText").textContent = "Feil ved lasting av produkter";
+    }
   }
 
   function areas() {
-    return [...new Set(allProducts.map(p => p.dahl_main_category || p.area_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
+    if (!metaData || !metaData.areas) return [];
+    return Object.keys(metaData.areas).sort((a, b) => a.localeCompare(b, "no"));
   }
+
   function groupsForArea(area) {
-    return [...new Set(allProducts.filter(p => !area || (p.dahl_main_category || p.area_name) === area).map(p => p.dahl_sub_category || p.group_name))].filter(Boolean).sort((a, b) => a.localeCompare(b, "no"));
+    if (!metaData || !metaData.areas) return [];
+    if (area) {
+      var areaData = metaData.areas[area];
+      if (!areaData || !areaData.groups) return [];
+      return Object.keys(areaData.groups).sort((a, b) => a.localeCompare(b, "no"));
+    }
+    // All groups across all areas
+    var allGroups = {};
+    Object.values(metaData.areas).forEach(function (a) {
+      if (a.groups) {
+        Object.entries(a.groups).forEach(function (entry) {
+          allGroups[entry[0]] = (allGroups[entry[0]] || 0) + entry[1];
+        });
+      }
+    });
+    return Object.keys(allGroups).sort((a, b) => a.localeCompare(b, "no"));
+  }
+
+  function groupCount(group) {
+    if (!metaData || !metaData.areas) return 0;
+    var count = 0;
+    var areasToCheck = areaFilter ? [areaFilter] : Object.keys(metaData.areas);
+    areasToCheck.forEach(function (areaKey) {
+      var a = metaData.areas[areaKey];
+      if (a && a.groups && a.groups[group]) count += a.groups[group];
+    });
+    return count;
   }
 
   function renderAreaNav() {
@@ -67,7 +113,7 @@
       currentPage = 1;
       renderAreaNav();
       renderGroupList();
-      applyFilters();
+      loadProducts();
     }));
   }
 
@@ -76,7 +122,7 @@
     if (!el) return;
     const groups = groupsForArea(areaFilter);
     el.innerHTML = groups.map(g => {
-      const count = allProducts.filter(p => (!areaFilter || (p.dahl_main_category || p.area_name) === areaFilter) && (p.dahl_sub_category || p.group_name) === g).length;
+      const count = groupCount(g);
       const active = groupFilter === g ? "active" : "";
       return '<div class="filter-item ' + active + '" data-group="' + escapeHtml(g) + '"><span>' + escapeHtml(g) + "</span><span class='small'>" + count + "</span></div>";
     }).join("");
@@ -84,21 +130,8 @@
       groupFilter = item.dataset.group === groupFilter ? "" : item.dataset.group;
       currentPage = 1;
       renderGroupList();
-      applyFilters();
+      loadProducts();
     }));
-  }
-
-  function applyFilters() {
-    filtered = allProducts.filter(p => {
-      if (areaFilter && (p.dahl_main_category || p.area_name) !== areaFilter) return false;
-      if (groupFilter && (p.dahl_sub_category || p.group_name) !== groupFilter) return false;
-      if (query) {
-        const hay = (p.sku + " " + p.name + " " + (p.dahl_main_category || p.area_name) + " " + (p.dahl_sub_category || p.group_name) + " " + (p.dahl_sub_sub_category || "") + " " + (p.brand || "")).toLowerCase();
-        if (!hay.includes(query)) return false;
-      }
-      return true;
-    });
-    renderProducts();
   }
 
   function getProductImage(p, width) {
@@ -111,13 +144,9 @@
   function renderProducts() {
     const grid = $("productGrid");
     if (!grid) return;
-    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-    currentPage = Math.min(Math.max(currentPage, 1), totalPages);
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const items = filtered.slice(start, start + PAGE_SIZE);
-    $("resultsText").textContent = filtered.length.toLocaleString("no-NO") + " produkter" + (areaFilter ? " i " + areaFilter : "") + (groupFilter ? " \u203A " + groupFilter : "");
+    $("resultsText").textContent = totalProducts.toLocaleString("no-NO") + " produkter" + (areaFilter ? " i " + areaFilter : "") + (groupFilter ? " \u203A " + groupFilter : "");
 
-    grid.innerHTML = items.map(p => {
+    grid.innerHTML = currentProducts.map(p => {
       const price = window.TherwattPricing.priceInclVat(p);
       const requestOnly = window.TherwattPricing.isRequestOnly(p);
       const brand = p.brand || "";
@@ -146,29 +175,38 @@
     }).join("");
 
     grid.querySelectorAll("[data-add]").forEach(btn => btn.addEventListener("click", () => {
-      const p = allProducts.find(x => x.sku === btn.dataset.add);
+      const sku = btn.dataset.add;
+      const p = currentProducts.find(x => x.sku === sku);
       if (p) {
         C.add(p);
-        // Brief visual feedback on button
         btn.textContent = "Lagt til!";
         btn.style.background = "var(--success)";
         setTimeout(() => { btn.textContent = "Legg i kurv"; btn.style.background = ""; }, 1200);
       }
     }));
-    renderPager(totalPages);
+    renderPager();
   }
 
-  function renderPager(totalPages) {
+  function renderPager() {
     $("pageInfo").textContent = "Side " + currentPage + " av " + totalPages;
     $("prevPage").disabled = currentPage <= 1;
     $("nextPage").disabled = currentPage >= totalPages;
   }
 
+  // Debounce for search input
+  let searchTimer = null;
+
   document.addEventListener("DOMContentLoaded", async () => {
-    $("searchInput").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); currentPage = 1; applyFilters(); });
-    $("clearFilters").addEventListener("click", () => { areaFilter = ""; groupFilter = ""; query = ""; $("searchInput").value = ""; renderAreaNav(); renderGroupList(); applyFilters(); });
-    $("prevPage").addEventListener("click", () => { currentPage -= 1; renderProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
-    $("nextPage").addEventListener("click", () => { currentPage += 1; renderProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+    $("searchInput").addEventListener("input", e => {
+      query = e.target.value.trim().toLowerCase();
+      currentPage = 1;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => loadProducts(), 300);
+    });
+    $("clearFilters").addEventListener("click", () => { areaFilter = ""; groupFilter = ""; query = ""; $("searchInput").value = ""; currentPage = 1; renderAreaNav(); renderGroupList(); loadProducts(); });
+    $("prevPage").addEventListener("click", () => { currentPage -= 1; loadProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+    $("nextPage").addEventListener("click", () => { currentPage += 1; loadProducts(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+    await loadMeta();
     await loadProducts();
   });
 })();
