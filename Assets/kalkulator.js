@@ -5,6 +5,9 @@
 (function() {
   'use strict';
 
+  var SUCCESS_MESSAGE = 'Takk for forespørselen. Vi har mottatt informasjonen din og tar kontakt så snart som mulig.';
+  var ERROR_MESSAGE = 'Det oppstod en feil ved sending. Prøv igjen, eller kontakt oss på post@therwatt.no.';
+
   var CFG = window.KALKULATOR_CONFIG;
   var state = {
     tjenester: [],      // 'energi', 'gulvvarme', or 'begge'
@@ -78,7 +81,10 @@
     });
     document.getElementById('step3Back').addEventListener('click', function() { showStep(2); });
     document.getElementById('step3Next').addEventListener('click', function() {
-      if (validateStep3()) generateResult();
+      if (validateStep3()) {
+        this.disabled = true;
+        generateResult();
+      }
     });
   }
 
@@ -526,13 +532,18 @@
       };
     }
 
-    // Submit lead and send emails
-    submitLead(kontakt, energi, gulvvarme);
-
     // Build result HTML
     var html = buildResultHTML(energi, gulvvarme, kontakt);
     document.getElementById('resultatInnhold').innerHTML = html;
     showStep(4);
+
+    // Submit lead and update delivery state in result view
+    submitLead(kontakt, energi, gulvvarme).then(function(ok) {
+      var statusEl = document.getElementById('kalkulatorLeadStatus');
+      if (!statusEl) return;
+      statusEl.className = ok ? 'notice success' : 'notice';
+      statusEl.textContent = ok ? SUCCESS_MESSAGE : ERROR_MESSAGE;
+    });
   }
 
   function buildResultHTML(energi, gulvvarme, kontakt) {
@@ -553,6 +564,7 @@
     } else {
       h += '<p>Vi har mottatt dine opplysninger og beregninger. En rådgiver fra Therwatt kan kontakte deg for å gå gjennom resultatet og gi et tilpasset tilbud.</p>';
     }
+    h += '<div id="kalkulatorLeadStatus" class="notice" style="margin-top:14px">Sender forespørsel ...</div>';
     h += '</div>';
 
     h += '<div class="resultat-grid">';
@@ -771,6 +783,9 @@
   // ============================================================
   function submitLead(kontakt, energi, gulvvarme) {
     var payload = {
+      type: 'calculator',
+      sourceForm: 'kalkulator-lead',
+      botField: (document.getElementById('kontaktBotField') && document.getElementById('kontaktBotField').value.trim()) || '',
       timestamp: new Date().toISOString(),
       kontakt: kontakt,
       tjenester: state.tjenester,
@@ -814,29 +829,37 @@
       } : null
     };
 
-    // Submit to Netlify Function (stores lead + sends emails)
-    fetch('/api/kalkulator-lead', {
+    // Store submission in Netlify Forms as backup/overview.
+    var netlifyParams = new URLSearchParams();
+    netlifyParams.append('form-name', 'kalkulator-lead');
+    netlifyParams.append('bot-field', payload.botField);
+    netlifyParams.append('navn', kontakt.navn);
+    netlifyParams.append('epost', kontakt.epost);
+    netlifyParams.append('telefon', kontakt.telefon);
+    netlifyParams.append('adresse', kontakt.adresse || '');
+    netlifyParams.append('tjenester', state.tjenester.join(', '));
+    netlifyParams.append('data', JSON.stringify(payload));
+
+    var formPromise = fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: netlifyParams.toString()
+    }).catch(function() {});
+
+    // Send structured email delivery through SendGrid function.
+    var mailPromise = fetch('/api/send-email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
+    }).then(function(res) {
+      return res.ok;
     }).catch(function() {
-      // Silent fail – lead also stored via Netlify Forms fallback
+      return false;
     });
 
-    // Also submit as Netlify Form (hidden form fallback)
-    var formData = new FormData();
-    formData.append('form-name', 'kalkulator-lead');
-    formData.append('navn', kontakt.navn);
-    formData.append('epost', kontakt.epost);
-    formData.append('telefon', kontakt.telefon);
-    formData.append('adresse', kontakt.adresse || '');
-    formData.append('tjenester', state.tjenester.join(', '));
-    formData.append('data', JSON.stringify(payload));
-
-    fetch('/', {
-      method: 'POST',
-      body: formData
-    }).catch(function() {});
+    return Promise.all([formPromise, mailPromise]).then(function(results) {
+      return !!results[1];
+    });
   }
 
   // ============================================================
@@ -853,6 +876,7 @@
       document.getElementById('step1Next').disabled = true;
       document.getElementById('samtykke').checked = false;
       document.getElementById('step3Next').disabled = true;
+      document.getElementById('step3Next').textContent = 'Se resultat';
       document.getElementById('kunEpost').checked = false;
       document.getElementById('fullKontaktFelter').style.display = '';
       document.getElementById('kunEpostFelter').style.display = 'none';
@@ -865,6 +889,7 @@
       document.getElementById('resultatInnhold').innerHTML = '';
       document.getElementById('energiSection').style.display = 'none';
       document.getElementById('gulvvarmeSection').style.display = 'none';
+      document.getElementById('kontaktBotField').value = '';
       showStep(1);
     });
   }

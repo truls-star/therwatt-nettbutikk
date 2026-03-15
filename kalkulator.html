@@ -261,6 +261,10 @@
                 <span id="samtykkeTekst">Jeg samtykker til at Therwatt lagrer mine opplysninger og kan kontakte meg med resultat og eventuelt tilbud. Opplysningene deles ikke med tredjepart.</span>
               </label>
             </div>
+            <div style="display:none">
+              <label for="kontaktBotField">Ikke fyll ut dette feltet</label>
+              <input class="input" type="text" id="kontaktBotField" autocomplete="off" tabindex="-1">
+            </div>
           </div>
 
           <div class="calc-actions">
@@ -330,8 +334,9 @@
 </button>
 
 <!-- Hidden Netlify Form for form detection -->
-<form name="kalkulator-lead" data-netlify="true" hidden>
+<form name="kalkulator-lead" data-netlify="true" netlify-honeypot="bot-field" hidden>
   <input type="hidden" name="form-name" value="kalkulator-lead">
+  <input name="bot-field">
   <input name="navn"><input name="epost"><input name="telefon">
   <input name="adresse"><input name="tjenester"><textarea name="data"></textarea>
 </form>

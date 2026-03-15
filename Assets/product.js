@@ -139,16 +139,19 @@
       '<div class="hero-card request-box" id="request" style="padding:28px">' +
         '<h2 style="margin-top:0;font-size:22px">Be om tilbud</h2>' +
         '<p class="subtitle" style="font-size:14px">For prosjektpriser, mengderabatter eller teknisk r\u00e5dgivning.</p>' +
-        '<form name="tilbud" method="POST" data-netlify="true" action="takke.html">' +
+        '<form name="tilbud" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-email-form="true" data-email-type="contact" action="takke.html">' +
           '<input type="hidden" name="form-name" value="tilbud" />' +
+          '<p style="display:none"><label>Ikke fyll ut dette feltet: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>' +
           '<input type="hidden" name="product" value="' + escapeHtml(product.sku) + ' \u2013 ' + escapeHtml(product.name) + '" />' +
           '<div class="grid cols-2">' +
             '<div><label>Navn</label><input class="input" name="name" required></div>' +
             '<div><label>E-post</label><input class="input" name="email" type="email" required></div>' +
             '<div><label>Telefon</label><input class="input" name="phone"></div>' +
+            '<div><label>Adresse</label><input class="input" name="address" autocomplete="street-address"></div>' +
             '<div><label>Firma</label><input class="input" name="company"></div>' +
           '</div>' +
-          '<div style="margin-top:12px"><label>Melding</label><textarea name="message" rows="4" placeholder="Beskriv prosjektet eller \u00f8nsket ditt..."></textarea></div>' +
+          '<div style="margin-top:12px"><label>Melding</label><textarea name="message" rows="4" placeholder="Beskriv prosjektet eller \u00f8nsket ditt..." required></textarea></div>' +
+          '<div class="notice" data-form-status style="display:none;margin-top:12px"></div>' +
           '<div class="actions" style="margin-top:16px"><button class="btn" type="submit">Send foresp\u00f8rsel</button></div>' +
         '</form>' +
       '</div>';
