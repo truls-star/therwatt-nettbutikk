@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import xlsx from 'xlsx';
 
+const VAT_RATE = 0.25;
+
 const repoRoot = process.cwd();
 const excelFile = fs
   .readdirSync(repoRoot)
@@ -14,8 +16,20 @@ if (!excelFile) {
 
 const dahlPath = path.join(repoRoot, 'data/raw/dahl_enrichment.json');
 const dahlRecords = fs.existsSync(dahlPath) ? JSON.parse(fs.readFileSync(dahlPath, 'utf8')) : [];
+const dahlByProductNumber = new Map(
+  dahlRecords
+    .filter((record) => record && record.productNumber)
+    .map((record) => [String(record.productNumber).trim().toLowerCase(), record])
+);
+
+const groupDiscountPath = path.join(repoRoot, 'data/raw/group_discounts.json');
+const groupDiscountPercent = fs.existsSync(groupDiscountPath)
+  ? JSON.parse(fs.readFileSync(groupDiscountPath, 'utf8'))
+  : {};
+const defaultGroupDiscountPercent = Number(process.env.DEFAULT_GROUP_DISCOUNT_PERCENT || 0);
 
 const normalize = (value) => String(value || '').trim().toLowerCase();
+
 const valueFrom = (row, keys) => {
   for (const key of keys) {
     if (row[key] !== undefined && row[key] !== null && row[key] !== '') return row[key];
@@ -23,53 +37,38 @@ const valueFrom = (row, keys) => {
   return '';
 };
 
-const calculateProductPricing = ({ grossPrice, supplierDiscountPercent }) => {
-  const customerDiscountPercent = supplierDiscountPercent * 0.1;
-  const customerPriceExVat = Number((grossPrice * (1 - customerDiscountPercent / 100)).toFixed(2));
-  const finalPriceIncVat = Number((customerPriceExVat * 1.25).toFixed(2));
-  return { customerDiscountPercent: Number(customerDiscountPercent.toFixed(2)), customerPriceExVat, finalPriceIncVat };
-};
-
 const tokenize = (value) =>
   normalize(value)
     .split(/[^a-z0-9]+/)
     .filter((token) => token && token.length > 2);
 
-const overlapScore = (a, b) => {
-  const t1 = new Set(tokenize(a));
-  const t2 = new Set(tokenize(b));
-  if (!t1.size || !t2.size) return 0;
-  let shared = 0;
-  for (const token of t1) {
-    if (t2.has(token)) shared += 1;
+const round = (value) => Number((value + Number.EPSILON).toFixed(2));
+
+const getGroupDiscountPercent = ({ groupCode, category }) => {
+  const normalizedGroupCode = String(groupCode || '').trim().toUpperCase();
+  const normalizedCategory = String(category || '').trim().toUpperCase();
+
+  if (normalizedGroupCode && normalizedGroupCode in groupDiscountPercent) {
+    return Number(groupDiscountPercent[normalizedGroupCode]) || 0;
   }
-  return shared / Math.max(t1.size, t2.size);
+
+  if (normalizedCategory && normalizedCategory in groupDiscountPercent) {
+    return Number(groupDiscountPercent[normalizedCategory]) || 0;
+  }
+
+  return defaultGroupDiscountPercent;
 };
 
-const findEnrichment = (row) => {
-  const productNumber = normalize(row.productNumber);
-  const nobb = normalize(row.nobbNumber);
+const calculateProductPricing = ({ grossPrice, groupCode, category }) => {
+  const appliedDiscountPercent = getGroupDiscountPercent({ groupCode, category });
+  const customerPriceExVat = round(grossPrice * (1 - appliedDiscountPercent / 100));
+  const finalPriceIncVat = round(customerPriceExVat * (1 + VAT_RATE));
 
-  const byProductNumber = dahlRecords.find((record) => normalize(record.productNumber) === productNumber);
-  if (byProductNumber) return byProductNumber;
-
-  if (nobb) {
-    const byNobb = dahlRecords.find((record) => normalize(record.nobbNumber) === nobb);
-    if (byNobb) return byNobb;
-  }
-
-  let best;
-  let bestScore = 0;
-  for (const record of dahlRecords) {
-    const score = overlapScore(row.name, record.name);
-    if (score > bestScore) {
-      best = record;
-      bestScore = score;
-    }
-  }
-
-  if (bestScore >= 0.6) return best;
-  return undefined;
+  return {
+    groupDiscountPercent: round(appliedDiscountPercent),
+    customerPriceExVat,
+    finalPriceIncVat
+  };
 };
 
 const workbook = xlsx.readFile(path.join(repoRoot, excelFile));
@@ -88,10 +87,17 @@ for (const row of rows) {
   const name = String(row.Varetekst || '').trim();
   const grossPrice = Number(valueFrom(row, ['Bruttopris']) || 0);
   const supplierDiscountPercent = Number(valueFrom(row, ['Rabatt i %']) || 0);
+  const groupCode = String(row.Varegruppe || '').trim() || undefined;
+  const excelCategory = String(row['Varegruppe beskrivelse'] || '').trim();
+  const enrichment = dahlByProductNumber.get(normalize(productNumber));
+
+  const category =
+    enrichment?.category || enrichment?.breadcrumb?.at(-1) || excelCategory || 'Uklassifisert';
 
   const pricingResult = calculateProductPricing({
     grossPrice,
-    supplierDiscountPercent
+    groupCode,
+    category
   });
 
   const productBase = {
@@ -99,22 +105,29 @@ for (const row of rows) {
     productNumber,
     name,
     brand: String(row.Varegruppe || '').trim() || 'Therwatt',
-    supplier: String(valueFrom(row, ['Forretningsområde beskrivelse', 'Forretningsomrade beskrivelse']) || '').trim() || 'Therwatt',
+    supplier:
+      String(valueFrom(row, ['Forretningsområde beskrivelse', 'Forretningsomrade beskrivelse']) || '').trim() ||
+      'Therwatt',
     nobbNumber: String(valueFrom(row, ['NOBB', 'Nobb']) || '').trim() || undefined,
     unit: String(row.Enhet || '').trim() || undefined,
-    groupCode: String(row.Varegruppe || '').trim() || undefined,
-    category: String(row['Varegruppe beskrivelse'] || 'Uklassifisert').trim(),
-    businessArea: String(valueFrom(row, ['Forretningsområde beskrivelse', 'Forretningsomrade beskrivelse']) || '').trim() || undefined,
-    keywords: tokenize(`${name} ${row.Varegruppe || ''} ${row['Varegruppe beskrivelse'] || ''}`)
+    groupCode,
+    category,
+    businessArea:
+      String(valueFrom(row, ['Forretningsområde beskrivelse', 'Forretningsomrade beskrivelse']) || '').trim() ||
+      undefined,
+    keywords: tokenize(`${name} ${row.Varegruppe || ''} ${excelCategory || ''}`)
   };
 
-  const enrichment = findEnrichment(productBase);
   const product = {
     ...productBase,
     description: enrichment?.description || undefined,
     technicalSpecs: enrichment?.technicalSpecs || undefined,
     imageUrl: enrichment?.imageUrl || undefined,
-    keywords: [...new Set([...(productBase.keywords || []), ...tokenize(enrichment?.keywords?.join(' ') || '')])]
+    productUrl: enrichment?.productUrl || undefined,
+    dahlCategoryPath: Array.isArray(enrichment?.breadcrumb) ? enrichment.breadcrumb : undefined,
+    keywords: [
+      ...new Set([...(productBase.keywords || []), ...tokenize(enrichment?.keywords?.join(' ') || '')])
+    ]
   };
 
   products.push(product);
@@ -122,10 +135,11 @@ for (const row of rows) {
     productNumber,
     grossPrice,
     supplierDiscountPercent,
-    customerDiscountPercent: pricingResult.customerDiscountPercent,
+    groupDiscountPercent: pricingResult.groupDiscountPercent,
     customerPriceExVat: pricingResult.customerPriceExVat,
     finalPriceIncVat: pricingResult.finalPriceIncVat,
     currency: 'NOK',
+    vatRate: VAT_RATE,
     sourceDate: row['Fra dato'] || undefined
   });
 
@@ -152,4 +166,6 @@ fs.writeFileSync(path.join(outputDir, 'products_normalized.json'), JSON.stringif
 fs.writeFileSync(path.join(outputDir, 'pricing_data.json'), JSON.stringify(sortedPricing, null, 2));
 fs.writeFileSync(path.join(outputDir, 'catalog_index.json'), JSON.stringify(index, null, 2));
 
-console.log(`Import fullfort. Produkter: ${sortedProducts.length}, priser: ${sortedPricing.length}`);
+console.log(
+  `Import fullfort. Produkter: ${sortedProducts.length}, priser: ${sortedPricing.length}, dahl-koblinger: ${dahlByProductNumber.size}`
+);

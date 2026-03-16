@@ -1,26 +1,27 @@
-import { pricingConfig } from '../../config/pricing';
+import { getGroupDiscountPercent, pricingConfig } from '../../config/pricing';
 
 type PricingInput = {
   grossPrice: number;
-  supplierDiscountPercent: number;
+  groupCode?: string;
+  category?: string;
 };
 
 export type PricingOutput = {
-  customerDiscountPercent: number;
+  groupDiscountPercent: number;
   customerPriceExVat: number;
   finalPriceIncVat: number;
 };
 
 const roundPrice = (value: number) => Math.round((value + Number.EPSILON) * 100) / 100;
 
-export const calculateProductPricing = ({ grossPrice, supplierDiscountPercent }: PricingInput): PricingOutput => {
-  const customerDiscountPercent = supplierDiscountPercent * pricingConfig.customerShareOfSupplierDiscount;
-  const discountDecimal = Math.max(0, customerDiscountPercent / 100);
+export const calculateProductPricing = ({ grossPrice, groupCode, category }: PricingInput): PricingOutput => {
+  const groupDiscountPercent = getGroupDiscountPercent(groupCode, category);
+  const discountDecimal = Math.max(0, groupDiscountPercent / 100);
   const customerPriceExVat = roundPrice(grossPrice * (1 - discountDecimal));
   const finalPriceIncVat = roundPrice(customerPriceExVat * (1 + pricingConfig.vatRate));
 
   return {
-    customerDiscountPercent: roundPrice(customerDiscountPercent),
+    groupDiscountPercent: roundPrice(groupDiscountPercent),
     customerPriceExVat,
     finalPriceIncVat
   };

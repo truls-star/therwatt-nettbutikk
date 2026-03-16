@@ -3,7 +3,7 @@
     {
       "id": "HÅNDVERKTØY OG TILBEHØR",
       "name": "HÅNDVERKTØY OG TILBEHØR",
-      "productCount": 1374
+      "productCount": 1155
     },
     {
       "id": "SVEISE-/GJ.DELER KARBON INDUSTRI",
@@ -11,14 +11,14 @@
       "productCount": 1057
     },
     {
-      "id": "RØROPPHENG",
-      "name": "RØROPPHENG",
-      "productCount": 1049
-    },
-    {
       "id": "RUSTFRIE/SYREF. DELER INDUSTRI",
       "name": "RUSTFRIE/SYREF. DELER INDUSTRI",
       "productCount": 1043
+    },
+    {
+      "id": "RØROPPHENG",
+      "name": "RØROPPHENG",
+      "productCount": 1041
     },
     {
       "id": "DELER FOR STØPEJERNSRØR VMT",
@@ -48,22 +48,22 @@
     {
       "id": "SKRUER, BOLTER O.L.",
       "name": "SKRUER, BOLTER O.L.",
-      "productCount": 535
+      "productCount": 521
     },
     {
       "id": "ARBEIDSKLÆR",
       "name": "ARBEIDSKLÆR",
-      "productCount": 490
-    },
-    {
-      "id": "PERSONLIG VERNEUTSTYR",
-      "name": "PERSONLIG VERNEUTSTYR",
-      "productCount": 483
+      "productCount": 487
     },
     {
       "id": "RILLEKUPLINGER",
       "name": "RILLEKUPLINGER",
       "productCount": 463
+    },
+    {
+      "id": "PERSONLIG VERNEUTSTYR",
+      "name": "PERSONLIG VERNEUTSTYR",
+      "productCount": 459
     },
     {
       "id": "PRESSFITTINGS KOBBER",
@@ -76,14 +76,14 @@
       "productCount": 419
     },
     {
-      "id": "MONTASJEMATERIELL",
-      "name": "MONTASJEMATERIELL",
-      "productCount": 414
-    },
-    {
       "id": "SLUK, INSPEKSJONSLUKER OG JORDINGSRØR",
       "name": "SLUK, INSPEKSJONSLUKER OG JORDINGSRØR",
-      "productCount": 407
+      "productCount": 406
+    },
+    {
+      "id": "MONTASJEMATERIELL",
+      "name": "MONTASJEMATERIELL",
+      "productCount": 379
     },
     {
       "id": "GULVVARME, SNØSMELTE OG KULVERTER",
@@ -111,24 +111,24 @@
       "productCount": 353
     },
     {
-      "id": "RØRVERKTØY",
-      "name": "RØRVERKTØY",
-      "productCount": 350
-    },
-    {
       "id": "RØRDELER FOR PE-RØR",
       "name": "RØRDELER FOR PE-RØR",
       "productCount": 349
     },
     {
-      "id": "VANNLÅS OG DIVERSE AVLØPSDELER",
-      "name": "VANNLÅS OG DIVERSE AVLØPSDELER",
-      "productCount": 323
+      "id": "RØRVERKTØY",
+      "name": "RØRVERKTØY",
+      "productCount": 338
     },
     {
       "id": "ADUSERTE RØRDELER SORT OG GALVANISERT",
       "name": "ADUSERTE RØRDELER SORT OG GALVANISERT",
       "productCount": 323
+    },
+    {
+      "id": "VANNLÅS OG DIVERSE AVLØPSDELER",
+      "name": "VANNLÅS OG DIVERSE AVLØPSDELER",
+      "productCount": 322
     },
     {
       "id": "AVLØPSRØR / DELER PP INNOMHUS",
@@ -156,11 +156,6 @@
       "productCount": 301
     },
     {
-      "id": "KJEMI",
-      "name": "KJEMI",
-      "productCount": 286
-    },
-    {
       "id": "RØR-I-RØR/MULTILAYER UPONOR",
       "name": "RØR-I-RØR/MULTILAYER UPONOR",
       "productCount": 285
@@ -176,19 +171,24 @@
       "productCount": 273
     },
     {
-      "id": "DELER FOR DRENS-/ANLEGGS-/OVERVANNSRØR",
-      "name": "DELER FOR DRENS-/ANLEGGS-/OVERVANNSRØR",
-      "productCount": 271
+      "id": "SØMLØSE RØR KARBON INDUSTRI",
+      "name": "SØMLØSE RØR KARBON INDUSTRI",
+      "productCount": 258
     },
     {
       "id": "ARBEIDSUTSTYR",
       "name": "ARBEIDSUTSTYR",
-      "productCount": 266
+      "productCount": 257
     },
     {
-      "id": "SØMLØSE RØR KARBON INDUSTRI",
-      "name": "SØMLØSE RØR KARBON INDUSTRI",
-      "productCount": 258
+      "id": "DELER FOR DRENS-/ANLEGGS-/OVERVANNSRØR",
+      "name": "DELER FOR DRENS-/ANLEGGS-/OVERVANNSRØR",
+      "productCount": 257
+    },
+    {
+      "id": "KJEMI",
+      "name": "KJEMI",
+      "productCount": 255
     },
     {
       "id": "MESSINGDELER",
@@ -221,14 +221,14 @@
       "productCount": 247
     },
     {
-      "id": "ELEKTROVERKTØY",
-      "name": "ELEKTROVERKTØY",
-      "productCount": 240
-    },
-    {
       "id": "VENTILER VMT/VANNMÅLERE/BAKKEKRANER",
       "name": "VENTILER VMT/VANNMÅLERE/BAKKEKRANER",
       "productCount": 238
+    },
+    {
+      "id": "ELEKTROVERKTØY",
+      "name": "ELEKTROVERKTØY",
+      "productCount": 235
     },
     {
       "id": "AVLØPSRØR / DELER DIV. PLAST",
@@ -271,24 +271,24 @@
       "productCount": 185
     },
     {
-      "id": "GATEGODS",
-      "name": "GATEGODS",
-      "productCount": 159
-    },
-    {
       "id": "KAPILLARDELER",
       "name": "KAPILLARDELER",
       "productCount": 156
     },
     {
-      "id": "DELER SANITÆRARMATUR",
-      "name": "DELER SANITÆRARMATUR",
-      "productCount": 146
+      "id": "GATEGODS",
+      "name": "GATEGODS",
+      "productCount": 155
     },
     {
       "id": "ARBEIDSKLÆR OG TILBEHØR",
       "name": "ARBEIDSKLÆR OG TILBEHØR",
       "productCount": 146
+    },
+    {
+      "id": "DELER SANITÆRARMATUR",
+      "name": "DELER SANITÆRARMATUR",
+      "productCount": 145
     },
     {
       "id": "RADIATORER OG KONVEKTORER",
@@ -318,7 +318,7 @@
     {
       "id": "DELER SERVANTER/KLOSETTER",
       "name": "DELER SERVANTER/KLOSETTER",
-      "productCount": 118
+      "productCount": 116
     },
     {
       "id": "VANNFORS.-,AVLØP-,HÅNDPUMPER OG TILBEHØR",
@@ -343,7 +343,7 @@
     {
       "id": "SANITÆRARMATUR ORAS",
       "name": "SANITÆRARMATUR ORAS",
-      "productCount": 107
+      "productCount": 105
     },
     {
       "id": "ALUMESS/CUNI INDUSTRI",
@@ -411,9 +411,14 @@
       "productCount": 80
     },
     {
+      "id": "Skruverktøy",
+      "name": "Skruverktøy",
+      "productCount": 79
+    },
+    {
       "id": "ISOLASJON AV MINERALULL",
       "name": "ISOLASJON AV MINERALULL",
-      "productCount": 78
+      "productCount": 77
     },
     {
       "id": "VEGSIKRING",
@@ -433,7 +438,7 @@
     {
       "id": "DRENS-/ANLEGGS-/OVERVANNSRØR",
       "name": "DRENS-/ANLEGGS-/OVERVANNSRØR",
-      "productCount": 68
+      "productCount": 67
     },
     {
       "id": "DUSJ PALME/HUPPE",
@@ -441,14 +446,14 @@
       "productCount": 62
     },
     {
-      "id": "RUSTFRITT SANITÆRUTSTYR",
-      "name": "RUSTFRITT SANITÆRUTSTYR",
-      "productCount": 61
-    },
-    {
       "id": "KJØLERØR OG DELER",
       "name": "KJØLERØR OG DELER",
       "productCount": 61
+    },
+    {
+      "id": "RUSTFRITT SANITÆRUTSTYR",
+      "name": "RUSTFRITT SANITÆRUTSTYR",
+      "productCount": 60
     },
     {
       "id": "ISOLERTE- OG HURTIGKOBLINGSRØR OG DELER",
@@ -566,14 +571,19 @@
       "productCount": 29
     },
     {
-      "id": "Uklassifisert",
-      "name": "Uklassifisert",
-      "productCount": 28
-    },
-    {
       "id": "SERVANTER OG KLOSETTER DIV.LEVERANDØRER",
       "name": "SERVANTER OG KLOSETTER DIV.LEVERANDØRER",
       "productCount": 27
+    },
+    {
+      "id": "Tenger og avbitere",
+      "name": "Tenger og avbitere",
+      "productCount": 26
+    },
+    {
+      "id": "Uklassifisert",
+      "name": "Uklassifisert",
+      "productCount": 26
     },
     {
       "id": "SERVANTER OG KLOSETTER DURAVIT",
@@ -596,14 +606,14 @@
       "productCount": 26
     },
     {
-      "id": "ØVRIG FIBERDUK",
-      "name": "ØVRIG FIBERDUK",
-      "productCount": 25
-    },
-    {
       "id": "HYDRAULIKK RØR OG DELER",
       "name": "HYDRAULIKK RØR OG DELER",
       "productCount": 25
+    },
+    {
+      "id": "Tilbehør elektroverktøy",
+      "name": "Tilbehør elektroverktøy",
+      "productCount": 24
     },
     {
       "id": "GRUNNAVLØPSRØR PLAST VMT",
@@ -611,9 +621,24 @@
       "productCount": 24
     },
     {
+      "id": "Måleverktøy",
+      "name": "Måleverktøy",
+      "productCount": 23
+    },
+    {
+      "id": "ØVRIG FIBERDUK",
+      "name": "ØVRIG FIBERDUK",
+      "productCount": 23
+    },
+    {
       "id": "RØR DUPLEX/STAINLESS STEEL/TITAN",
       "name": "RØR DUPLEX/STAINLESS STEEL/TITAN",
       "productCount": 22
+    },
+    {
+      "id": "Hansker",
+      "name": "Hansker",
+      "productCount": 21
     },
     {
       "id": "GEONETT",
@@ -646,9 +671,19 @@
       "productCount": 18
     },
     {
+      "id": "Kniv, knivblad og multiverktøy",
+      "name": "Kniv, knivblad og multiverktøy",
+      "productCount": 17
+    },
+    {
       "id": "STORBEREDERE OG VILLAVARMERE",
       "name": "STORBEREDERE OG VILLAVARMERE",
       "productCount": 16
+    },
+    {
+      "id": "Drensrør og deler",
+      "name": "Drensrør og deler",
+      "productCount": 15
     },
     {
       "id": "BADEROMSUTSTYR ALTERNA",
@@ -666,9 +701,29 @@
       "productCount": 14
     },
     {
+      "id": "Filer og skraper",
+      "name": "Filer og skraper",
+      "productCount": 13
+    },
+    {
+      "id": "Plugg nylon/plast",
+      "name": "Plugg nylon/plast",
+      "productCount": 13
+    },
+    {
       "id": "SANITÆRARMATUR GUSTAVSBERG",
       "name": "SANITÆRARMATUR GUSTAVSBERG",
       "productCount": 13
+    },
+    {
+      "id": "Sag og baufil",
+      "name": "Sag og baufil",
+      "productCount": 12
+    },
+    {
+      "id": "Slange og slangetilkoblinger",
+      "name": "Slange og slangetilkoblinger",
+      "productCount": 12
     },
     {
       "id": "VOTEC NGS FIBERDUK",
@@ -679,6 +734,11 @@
       "id": "SANITÆRARMATUR DIV.",
       "name": "SANITÆRARMATUR DIV.",
       "productCount": 11
+    },
+    {
+      "id": "Fugemasse",
+      "name": "Fugemasse",
+      "productCount": 10
     },
     {
       "id": "EL.PRODUKTER/HVITEVARER",
@@ -696,6 +756,11 @@
       "productCount": 10
     },
     {
+      "id": "Oppbevaring",
+      "name": "Oppbevaring",
+      "productCount": 9
+    },
+    {
       "id": "SMARTHUS",
       "name": "SMARTHUS",
       "productCount": 9
@@ -711,6 +776,11 @@
       "productCount": 9
     },
     {
+      "id": "Slag- og bryteverktøy",
+      "name": "Slag- og bryteverktøy",
+      "productCount": 8
+    },
+    {
       "id": "KULDEAUTOMATIKK/-VENTILER/KOMPONENTER",
       "name": "KULDEAUTOMATIKK/-VENTILER/KOMPONENTER",
       "productCount": 8
@@ -721,8 +791,38 @@
       "productCount": 8
     },
     {
-      "id": "ISOLASJONSTILBEHØR, BRANNTETTING ETC.",
-      "name": "ISOLASJONSTILBEHØR, BRANNTETTING ETC.",
+      "id": "Gipsinnfesting",
+      "name": "Gipsinnfesting",
+      "productCount": 7
+    },
+    {
+      "id": "Treskruer",
+      "name": "Treskruer",
+      "productCount": 7
+    },
+    {
+      "id": "Ekspansjonsbolter",
+      "name": "Ekspansjonsbolter",
+      "productCount": 7
+    },
+    {
+      "id": "Slaganker",
+      "name": "Slaganker",
+      "productCount": 7
+    },
+    {
+      "id": "Redskap",
+      "name": "Redskap",
+      "productCount": 6
+    },
+    {
+      "id": "Lim",
+      "name": "Lim",
+      "productCount": 6
+    },
+    {
+      "id": "Rørmansjetter",
+      "name": "Rørmansjetter",
       "productCount": 6
     },
     {
@@ -731,9 +831,69 @@
       "productCount": 6
     },
     {
+      "id": "Rengjøringsmaskiner",
+      "name": "Rengjøringsmaskiner",
+      "productCount": 5
+    },
+    {
+      "id": "Kum-, mure- og flisverktøy",
+      "name": "Kum-, mure- og flisverktøy",
+      "productCount": 5
+    },
+    {
+      "id": "Rengjøringsmateriell",
+      "name": "Rengjøringsmateriell",
+      "productCount": 5
+    },
+    {
+      "id": "Patentbånd",
+      "name": "Patentbånd",
+      "productCount": 5
+    },
+    {
+      "id": "Gategods",
+      "name": "Gategods",
+      "productCount": 4
+    },
+    {
+      "id": "Sanitærinnfesting",
+      "name": "Sanitærinnfesting",
+      "productCount": 4
+    },
+    {
+      "id": "Gipsskruer",
+      "name": "Gipsskruer",
+      "productCount": 4
+    },
+    {
       "id": "SYNLIG GEOTEKNIKK",
       "name": "SYNLIG GEOTEKNIKK",
       "productCount": 4
+    },
+    {
+      "id": "Merkeverktøy",
+      "name": "Merkeverktøy",
+      "productCount": 3
+    },
+    {
+      "id": "Røroppheng",
+      "name": "Røroppheng",
+      "productCount": 3
+    },
+    {
+      "id": "Fugeverktøy og pistoler",
+      "name": "Fugeverktøy og pistoler",
+      "productCount": 3
+    },
+    {
+      "id": "Tilbehør",
+      "name": "Tilbehør",
+      "productCount": 3
+    },
+    {
+      "id": "Deler armatur",
+      "name": "Deler armatur",
+      "productCount": 3
     },
     {
       "id": "BADEKAR ALTERNA",
@@ -756,9 +916,94 @@
       "productCount": 3
     },
     {
+      "id": "Åndedrettsvern",
+      "name": "Åndedrettsvern",
+      "productCount": 2
+    },
+    {
+      "id": "Hageutstyr",
+      "name": "Hageutstyr",
+      "productCount": 2
+    },
+    {
+      "id": "Deler toalett",
+      "name": "Deler toalett",
+      "productCount": 2
+    },
+    {
+      "id": "Universal",
+      "name": "Universal",
+      "productCount": 2
+    },
+    {
+      "id": "Fiberduk",
+      "name": "Fiberduk",
+      "productCount": 2
+    },
+    {
+      "id": "Lett forankring",
+      "name": "Lett forankring",
+      "productCount": 2
+    },
+    {
       "id": "MINIKJØKKEN",
       "name": "MINIKJØKKEN",
       "productCount": 2
+    },
+    {
+      "id": "Cellegummi",
+      "name": "Cellegummi",
+      "productCount": 1
+    },
+    {
+      "id": "Kjemisk anker",
+      "name": "Kjemisk anker",
+      "productCount": 1
+    },
+    {
+      "id": "Nettdrevet verktøy 230V",
+      "name": "Nettdrevet verktøy 230V",
+      "productCount": 1
+    },
+    {
+      "id": "Avløp",
+      "name": "Avløp",
+      "productCount": 1
+    },
+    {
+      "id": "Rensespray",
+      "name": "Rensespray",
+      "productCount": 1
+    },
+    {
+      "id": "Glidemiddel",
+      "name": "Glidemiddel",
+      "productCount": 1
+    },
+    {
+      "id": "Sluk",
+      "name": "Sluk",
+      "productCount": 1
+    },
+    {
+      "id": "Baderomstilbehør",
+      "name": "Baderomstilbehør",
+      "productCount": 1
+    },
+    {
+      "id": "Hurtiglim superlim",
+      "name": "Hurtiglim superlim",
+      "productCount": 1
+    },
+    {
+      "id": "Vannlås og diverse avløpsdeler",
+      "name": "Vannlås og diverse avløpsdeler",
+      "productCount": 1
+    },
+    {
+      "id": "Hørsel- og hodevern",
+      "name": "Hørsel- og hodevern",
+      "productCount": 1
     },
     {
       "id": "SVEISTE TYNNVEGGEDE RØR MED RILLE",

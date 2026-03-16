@@ -13,16 +13,19 @@ export type Product = {
   description?: string;
   technicalSpecs?: Record<string, string>;
   imageUrl?: string;
+  productUrl?: string;
+  dahlCategoryPath?: string[];
 };
 
 export type PricingRecord = {
   productNumber: string;
   grossPrice: number;
   supplierDiscountPercent: number;
-  customerDiscountPercent: number;
+  groupDiscountPercent: number;
   customerPriceExVat: number;
   finalPriceIncVat: number;
   currency: 'NOK';
+  vatRate: number;
   sourceDate?: string;
 };
 

@@ -1,14 +1,17 @@
 [
   {
     "productNumber": "1234567",
-    "nobbNumber": "00000000",
     "name": "Eksempelprodukt",
     "imageUrl": "https://...",
     "description": "Kort teknisk beskrivelse.",
+    "productUrl": "https://www.dahl.no/.../produkt",
+    "category": "Varegruppe hos Dahl",
+    "breadcrumb": ["Teknisk VVS", "Undergruppe", "Varegruppe hos Dahl"],
     "technicalSpecs": {
       "Dimensjon": "16 mm",
       "Materiale": "Messing"
     },
-    "keywords": ["gulvvarme", "fordeler"]
+    "keywords": ["gulvvarme", "fordeler"],
+    "fetchedAt": "2026-03-16T00:00:00.000Z"
   }
 ]
