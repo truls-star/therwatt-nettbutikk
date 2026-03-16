@@ -3,15 +3,16 @@ import { Menu, PhoneCall, ShoppingCart, X } from 'lucide-react';
 import { useState } from 'react';
 import { siteConfig } from '../config/site';
 import logo from '../assets/therwatt-logo.png';
-import { useCart } from '../modules/cart/cartStore';
+import { useCart } from '../lib/cart';
+import { CartDrawer } from './CartDrawer';
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) => `nav-link${isActive ? ' active' : ''}`;
 
-export const Layout = () => {
+export function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const location = useLocation();
-  const { state, lineCount, totalIncVat, removeProduct, setQuantity } = useCart();
+  const { lineCount } = useCart();
 
   return (
     <div className="app-shell">
@@ -21,7 +22,7 @@ export const Layout = () => {
             <img src={logo} alt="Therwatt AS logo" />
             <div>
               <strong>Therwatt AS</strong>
-              <small>Geoenergi og tekniske energilosninger</small>
+              <small>Geoenergi og tekniske energiløsninger</small>
             </div>
           </Link>
 
@@ -41,7 +42,7 @@ export const Layout = () => {
               <ShoppingCart size={18} />
               {lineCount > 0 && <span className="pill">{lineCount}</span>}
             </button>
-            <button className="icon-button mobile-only" onClick={() => setMenuOpen((v) => !v)} aria-label="Aapne meny">
+            <button className="icon-button mobile-only" onClick={() => setMenuOpen((v) => !v)} aria-label="Åpne meny">
               {menuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
@@ -76,10 +77,10 @@ export const Layout = () => {
             <p>E-post: {siteConfig.email}</p>
           </div>
           <div>
-            <h4>Fagomrader</h4>
+            <h4>Fagområder</h4>
             <p>Geoenergi</p>
             <p>Luft-vann varmepumper</p>
-            <p>Vannbaren varme</p>
+            <p>Vannbåren varme</p>
           </div>
           <div>
             <h4>Navigasjon</h4>
@@ -92,52 +93,9 @@ export const Layout = () => {
         </div>
       </footer>
 
-      <aside className={`mini-cart ${cartOpen ? 'open' : ''}`} aria-hidden={!cartOpen}>
-        <div className="mini-cart-header">
-          <h3>Handlekurv</h3>
-          <button className="icon-button" onClick={() => setCartOpen(false)}>
-            <X size={18} />
-          </button>
-        </div>
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
 
-        {state.lines.length === 0 ? (
-          <p>Ingen produkter i handlekurven enda.</p>
-        ) : (
-          <div className="mini-cart-list">
-            {state.lines.map((line) => (
-              <article key={line.productNumber} className="mini-cart-line">
-                <div>
-                  <strong>{line.name}</strong>
-                  <small>Varenr {line.productNumber}</small>
-                </div>
-                <div className="line-actions">
-                  <input
-                    type="number"
-                    min={1}
-                    value={line.quantity}
-                    onChange={(event) => setQuantity(line.productNumber, Number(event.target.value))}
-                  />
-                  <button className="link-button" onClick={() => removeProduct(line.productNumber)}>
-                    Fjern
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-
-        <div className="mini-cart-footer">
-          <p>
-            Total inkl. mva: <strong>{totalIncVat.toLocaleString('nb-NO', { style: 'currency', currency: 'NOK' })}</strong>
-          </p>
-          <Link className="btn btn-primary" to="/contact" onClick={() => setCartOpen(false)}>
-            Be om tilbud
-          </Link>
-        </div>
-      </aside>
-
-      {cartOpen && <button className="scrim" onClick={() => setCartOpen(false)} aria-label="Lukk handlekurv" />}
       {location.pathname === '/energy-calculator' && <div className="print-hint">Bruk utskrift for PDF/rapport.</div>}
     </div>
   );
-};
+}
