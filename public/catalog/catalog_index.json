@@ -1,0 +1,1397 @@
+{
+  "categories": [
+    {
+      "id": "HÅNDVERKTØY OG TILBEHØR",
+      "name": "HÅNDVERKTØY OG TILBEHØR",
+      "productCount": 1374
+    },
+    {
+      "id": "SVEISE-/GJ.DELER KARBON INDUSTRI",
+      "name": "SVEISE-/GJ.DELER KARBON INDUSTRI",
+      "productCount": 1057
+    },
+    {
+      "id": "RØROPPHENG",
+      "name": "RØROPPHENG",
+      "productCount": 1049
+    },
+    {
+      "id": "RUSTFRIE/SYREF. DELER INDUSTRI",
+      "name": "RUSTFRIE/SYREF. DELER INDUSTRI",
+      "productCount": 1043
+    },
+    {
+      "id": "DELER FOR STØPEJERNSRØR VMT",
+      "name": "DELER FOR STØPEJERNSRØR VMT",
+      "productCount": 679
+    },
+    {
+      "id": "BADE-/VASKEROMSMØBLER ALTERNA",
+      "name": "BADE-/VASKEROMSMØBLER ALTERNA",
+      "productCount": 629
+    },
+    {
+      "id": "EL.SVEISEMUFFER FOR PE RØR/PE-DELER",
+      "name": "EL.SVEISEMUFFER FOR PE RØR/PE-DELER",
+      "productCount": 616
+    },
+    {
+      "id": "RØR-I-RØR/ MULTILAYER ARMATURJONSSON",
+      "name": "RØR-I-RØR/ MULTILAYER ARMATURJONSSON",
+      "productCount": 542
+    },
+    {
+      "id": "VENTILER INDUSTRI",
+      "name": "VENTILER INDUSTRI",
+      "productCount": 542
+    },
+    {
+      "id": "SKRUER, BOLTER O.L.",
+      "name": "SKRUER, BOLTER O.L.",
+      "productCount": 535
+    },
+    {
+      "id": "ARBEIDSKLÆR",
+      "name": "ARBEIDSKLÆR",
+      "productCount": 490
+    },
+    {
+      "id": "PERSONLIG VERNEUTSTYR",
+      "name": "PERSONLIG VERNEUTSTYR",
+      "productCount": 483
+    },
+    {
+      "id": "RILLEKUPLINGER",
+      "name": "RILLEKUPLINGER",
+      "productCount": 463
+    },
+    {
+      "id": "PRESSFITTINGS KOBBER",
+      "name": "PRESSFITTINGS KOBBER",
+      "productCount": 449
+    },
+    {
+      "id": "KLEMRINGSDELER OG DIV. KOBLINGER",
+      "name": "KLEMRINGSDELER OG DIV. KOBLINGER",
+      "productCount": 419
+    },
+    {
+      "id": "MONTASJEMATERIELL",
+      "name": "MONTASJEMATERIELL",
+      "productCount": 414
+    },
+    {
+      "id": "SLUK, INSPEKSJONSLUKER OG JORDINGSRØR",
+      "name": "SLUK, INSPEKSJONSLUKER OG JORDINGSRØR",
+      "productCount": 407
+    },
+    {
+      "id": "GULVVARME, SNØSMELTE OG KULVERTER",
+      "name": "GULVVARME, SNØSMELTE OG KULVERTER",
+      "productCount": 379
+    },
+    {
+      "id": "RØR-I-RØR/MULTILAYER LK",
+      "name": "RØR-I-RØR/MULTILAYER LK",
+      "productCount": 377
+    },
+    {
+      "id": "PRESSFITTINGS SYREFAST",
+      "name": "PRESSFITTINGS SYREFAST",
+      "productCount": 375
+    },
+    {
+      "id": "VARMEPUMPER",
+      "name": "VARMEPUMPER",
+      "productCount": 363
+    },
+    {
+      "id": "PRESSFITTINGS GALVANISERT",
+      "name": "PRESSFITTINGS GALVANISERT",
+      "productCount": 353
+    },
+    {
+      "id": "RØRVERKTØY",
+      "name": "RØRVERKTØY",
+      "productCount": 350
+    },
+    {
+      "id": "RØRDELER FOR PE-RØR",
+      "name": "RØRDELER FOR PE-RØR",
+      "productCount": 349
+    },
+    {
+      "id": "VANNLÅS OG DIVERSE AVLØPSDELER",
+      "name": "VANNLÅS OG DIVERSE AVLØPSDELER",
+      "productCount": 323
+    },
+    {
+      "id": "ADUSERTE RØRDELER SORT OG GALVANISERT",
+      "name": "ADUSERTE RØRDELER SORT OG GALVANISERT",
+      "productCount": 323
+    },
+    {
+      "id": "AVLØPSRØR / DELER PP INNOMHUS",
+      "name": "AVLØPSRØR / DELER PP INNOMHUS",
+      "productCount": 311
+    },
+    {
+      "id": "SPJELDVENTILER INDUSTRI",
+      "name": "SPJELDVENTILER INDUSTRI",
+      "productCount": 310
+    },
+    {
+      "id": "SANITÆRARMATUR FIMA",
+      "name": "SANITÆRARMATUR FIMA",
+      "productCount": 307
+    },
+    {
+      "id": "RØR-I-RØR/MULTILAYER DIVERSE",
+      "name": "RØR-I-RØR/MULTILAYER DIVERSE",
+      "productCount": 302
+    },
+    {
+      "id": "BRANNSIKKERHET",
+      "name": "BRANNSIKKERHET",
+      "productCount": 301
+    },
+    {
+      "id": "KJEMI",
+      "name": "KJEMI",
+      "productCount": 286
+    },
+    {
+      "id": "RØR-I-RØR/MULTILAYER UPONOR",
+      "name": "RØR-I-RØR/MULTILAYER UPONOR",
+      "productCount": 285
+    },
+    {
+      "id": "OPPSETTINGSUTSTYR",
+      "name": "OPPSETTINGSUTSTYR",
+      "productCount": 277
+    },
+    {
+      "id": "PE-RØRDELER HAVBRUK",
+      "name": "PE-RØRDELER HAVBRUK",
+      "productCount": 273
+    },
+    {
+      "id": "DELER FOR DRENS-/ANLEGGS-/OVERVANNSRØR",
+      "name": "DELER FOR DRENS-/ANLEGGS-/OVERVANNSRØR",
+      "productCount": 271
+    },
+    {
+      "id": "ARBEIDSUTSTYR",
+      "name": "ARBEIDSUTSTYR",
+      "productCount": 266
+    },
+    {
+      "id": "SØMLØSE RØR KARBON INDUSTRI",
+      "name": "SØMLØSE RØR KARBON INDUSTRI",
+      "productCount": 258
+    },
+    {
+      "id": "MESSINGDELER",
+      "name": "MESSINGDELER",
+      "productCount": 254
+    },
+    {
+      "id": "REP.MUFFER/KUPLINGER/ANBORINGSKLAMMER",
+      "name": "REP.MUFFER/KUPLINGER/ANBORINGSKLAMMER",
+      "productCount": 253
+    },
+    {
+      "id": "PLASTKUMMER OG FORDRØYNINGSSYSTEMER",
+      "name": "PLASTKUMMER OG FORDRØYNINGSSYSTEMER",
+      "productCount": 252
+    },
+    {
+      "id": "DELER GRUNNAVLØPSRØR PLAST VMT",
+      "name": "DELER GRUNNAVLØPSRØR PLAST VMT",
+      "productCount": 250
+    },
+    {
+      "id": "EKSP.KAR/SIKKERHETSVENT,LUFTUTSKILLERE",
+      "name": "EKSP.KAR/SIKKERHETSVENT,LUFTUTSKILLERE",
+      "productCount": 248
+    },
+    {
+      "id": "DUSJ ALTERNA",
+      "name": "DUSJ ALTERNA",
+      "productCount": 247
+    },
+    {
+      "id": "ELEKTROVERKTØY",
+      "name": "ELEKTROVERKTØY",
+      "productCount": 240
+    },
+    {
+      "id": "VENTILER VMT/VANNMÅLERE/BAKKEKRANER",
+      "name": "VENTILER VMT/VANNMÅLERE/BAKKEKRANER",
+      "productCount": 238
+    },
+    {
+      "id": "AVLØPSRØR / DELER DIV. PLAST",
+      "name": "AVLØPSRØR / DELER DIV. PLAST",
+      "productCount": 231
+    },
+    {
+      "id": "STENGEVENTILER,TAPPEKRANER OG MAGNETVENT",
+      "name": "STENGEVENTILER,TAPPEKRANER OG MAGNETVENT",
+      "productCount": 224
+    },
+    {
+      "id": "RØR-I-RØR/MULTILAYER ROTH",
+      "name": "RØR-I-RØR/MULTILAYER ROTH",
+      "productCount": 208
+    },
+    {
+      "id": "RØR OG DELER AV PLAST INDUSTRI",
+      "name": "RØR OG DELER AV PLAST INDUSTRI",
+      "productCount": 205
+    },
+    {
+      "id": "TRAFIKKSKILT",
+      "name": "TRAFIKKSKILT",
+      "productCount": 202
+    },
+    {
+      "id": "RUSTFRIE/SYREF. RØR INDUSTRI",
+      "name": "RUSTFRIE/SYREF. RØR INDUSTRI",
+      "productCount": 202
+    },
+    {
+      "id": "SVEISTE RØR KARBON INDUSTRI",
+      "name": "SVEISTE RØR KARBON INDUSTRI",
+      "productCount": 186
+    },
+    {
+      "id": "FILTER - KUPLINGER INDUSTRI",
+      "name": "FILTER - KUPLINGER INDUSTRI",
+      "productCount": 185
+    },
+    {
+      "id": "GATEGODS",
+      "name": "GATEGODS",
+      "productCount": 159
+    },
+    {
+      "id": "KAPILLARDELER",
+      "name": "KAPILLARDELER",
+      "productCount": 156
+    },
+    {
+      "id": "DELER SANITÆRARMATUR",
+      "name": "DELER SANITÆRARMATUR",
+      "productCount": 146
+    },
+    {
+      "id": "ARBEIDSKLÆR OG TILBEHØR",
+      "name": "ARBEIDSKLÆR OG TILBEHØR",
+      "productCount": 146
+    },
+    {
+      "id": "RADIATORER OG KONVEKTORER",
+      "name": "RADIATORER OG KONVEKTORER",
+      "productCount": 140
+    },
+    {
+      "id": "SIRKULASJONSPUMPER OG TILBEHØR",
+      "name": "SIRKULASJONSPUMPER OG TILBEHØR",
+      "productCount": 137
+    },
+    {
+      "id": "SANITÆRARMATUR ALTERNA",
+      "name": "SANITÆRARMATUR ALTERNA",
+      "productCount": 136
+    },
+    {
+      "id": "SHUNTVENTILER, AUTOMATIKK OG MÅLERE",
+      "name": "SHUNTVENTILER, AUTOMATIKK OG MÅLERE",
+      "productCount": 134
+    },
+    {
+      "id": "BD BLISTER",
+      "name": "BD BLISTER",
+      "productCount": 122
+    },
+    {
+      "id": "DELER SERVANTER/KLOSETTER",
+      "name": "DELER SERVANTER/KLOSETTER",
+      "productCount": 118
+    },
+    {
+      "id": "VANNFORS.-,AVLØP-,HÅNDPUMPER OG TILBEHØR",
+      "name": "VANNFORS.-,AVLØP-,HÅNDPUMPER OG TILBEHØR",
+      "productCount": 116
+    },
+    {
+      "id": "RØR-I-RØR/MULTILAYER ALTECH",
+      "name": "RØR-I-RØR/MULTILAYER ALTECH",
+      "productCount": 111
+    },
+    {
+      "id": "AVLØPSRØR / DELER DIV. STÅL",
+      "name": "AVLØPSRØR / DELER DIV. STÅL",
+      "productCount": 110
+    },
+    {
+      "id": "VARSLINGS- OG SIKRINGSUTSTYR",
+      "name": "VARSLINGS- OG SIKRINGSUTSTYR",
+      "productCount": 109
+    },
+    {
+      "id": "SANITÆRARMATUR ORAS",
+      "name": "SANITÆRARMATUR ORAS",
+      "productCount": 107
+    },
+    {
+      "id": "ALUMESS/CUNI INDUSTRI",
+      "name": "ALUMESS/CUNI INDUSTRI",
+      "productCount": 102
+    },
+    {
+      "id": "VANNMÅLERE, LEKKASJESIKRING OG NØDDUSJ",
+      "name": "VANNMÅLERE, LEKKASJESIKRING OG NØDDUSJ",
+      "productCount": 100
+    },
+    {
+      "id": "AVLØPSRØR / DELER MA",
+      "name": "AVLØPSRØR / DELER MA",
+      "productCount": 92
+    },
+    {
+      "id": "DIVERSE TRAFIKKSIKRING",
+      "name": "DIVERSE TRAFIKKSIKRING",
+      "productCount": 91
+    },
+    {
+      "id": "KLOSETTSETER PORSELENSLEVERANDØRER",
+      "name": "KLOSETTSETER PORSELENSLEVERANDØRER",
+      "productCount": 91
+    },
+    {
+      "id": "ELEKTRO SAMFERDSEL",
+      "name": "ELEKTRO SAMFERDSEL",
+      "productCount": 85
+    },
+    {
+      "id": "DELER DUPLEX/STAINLESS/TITAN",
+      "name": "DELER DUPLEX/STAINLESS/TITAN",
+      "productCount": 85
+    },
+    {
+      "id": "BLANDE-, SIKKERHETS.-OG TILB.SL.VENTILER",
+      "name": "BLANDE-, SIKKERHETS.-OG TILB.SL.VENTILER",
+      "productCount": 85
+    },
+    {
+      "id": "RADIATORVENTILER",
+      "name": "RADIATORVENTILER",
+      "productCount": 85
+    },
+    {
+      "id": "KABELVERN",
+      "name": "KABELVERN",
+      "productCount": 85
+    },
+    {
+      "id": "ISOLASJON AV CELLEGUMMI",
+      "name": "ISOLASJON AV CELLEGUMMI",
+      "productCount": 84
+    },
+    {
+      "id": "DUSJ MACRO",
+      "name": "DUSJ MACRO",
+      "productCount": 82
+    },
+    {
+      "id": "VARMEVEKSLERE",
+      "name": "VARMEVEKSLERE",
+      "productCount": 80
+    },
+    {
+      "id": "ISOLASJON AV MINERALULL",
+      "name": "ISOLASJON AV MINERALULL",
+      "productCount": 78
+    },
+    {
+      "id": "VEGSIKRING",
+      "name": "VEGSIKRING",
+      "productCount": 74
+    },
+    {
+      "id": "VERKTØY NETTOPRIS",
+      "name": "VERKTØY NETTOPRIS",
+      "productCount": 70
+    },
+    {
+      "id": "INNBYGNINGSSISTERNER",
+      "name": "INNBYGNINGSSISTERNER",
+      "productCount": 70
+    },
+    {
+      "id": "DRENS-/ANLEGGS-/OVERVANNSRØR",
+      "name": "DRENS-/ANLEGGS-/OVERVANNSRØR",
+      "productCount": 68
+    },
+    {
+      "id": "DUSJ PALME/HUPPE",
+      "name": "DUSJ PALME/HUPPE",
+      "productCount": 62
+    },
+    {
+      "id": "RUSTFRITT SANITÆRUTSTYR",
+      "name": "RUSTFRITT SANITÆRUTSTYR",
+      "productCount": 61
+    },
+    {
+      "id": "KJØLERØR OG DELER",
+      "name": "KJØLERØR OG DELER",
+      "productCount": 61
+    },
+    {
+      "id": "ISOLERTE- OG HURTIGKOBLINGSRØR OG DELER",
+      "name": "ISOLERTE- OG HURTIGKOBLINGSRØR OG DELER",
+      "productCount": 58
+    },
+    {
+      "id": "BETONGVARER",
+      "name": "BETONGVARER",
+      "productCount": 53
+    },
+    {
+      "id": "SILER, FILTERE OG REDUKSJONSVENTILER",
+      "name": "SILER, FILTERE OG REDUKSJONSVENTILER",
+      "productCount": 53
+    },
+    {
+      "id": "DUSJ DELER",
+      "name": "DUSJ DELER",
+      "productCount": 53
+    },
+    {
+      "id": "SANITÆRARMATUR HANS GROHE",
+      "name": "SANITÆRARMATUR HANS GROHE",
+      "productCount": 50
+    },
+    {
+      "id": "SANITÆRARMATUR FMM",
+      "name": "SANITÆRARMATUR FMM",
+      "productCount": 49
+    },
+    {
+      "id": "DELER FOR KABELVERN",
+      "name": "DELER FOR KABELVERN",
+      "productCount": 48
+    },
+    {
+      "id": "ALTECH OB",
+      "name": "ALTECH OB",
+      "productCount": 47
+    },
+    {
+      "id": "STRUPE- OG INNREGULERINGSVENTILER",
+      "name": "STRUPE- OG INNREGULERINGSVENTILER",
+      "productCount": 45
+    },
+    {
+      "id": "BEREDERTILBEHØR OG DELER",
+      "name": "BEREDERTILBEHØR OG DELER",
+      "productCount": 44
+    },
+    {
+      "id": "SANITÆRARMATUR DLINE",
+      "name": "SANITÆRARMATUR DLINE",
+      "productCount": 43
+    },
+    {
+      "id": "PE-RØR RETTE",
+      "name": "PE-RØR RETTE",
+      "productCount": 42
+    },
+    {
+      "id": "SERVANTER OG KLOSETTER PB",
+      "name": "SERVANTER OG KLOSETTER PB",
+      "productCount": 40
+    },
+    {
+      "id": "SERVANTER OG TOALETTER ROCA",
+      "name": "SERVANTER OG TOALETTER ROCA",
+      "productCount": 39
+    },
+    {
+      "id": "VANNTÅKE",
+      "name": "VANNTÅKE",
+      "productCount": 36
+    },
+    {
+      "id": "BOLIGBEREDERE",
+      "name": "BOLIGBEREDERE",
+      "productCount": 36
+    },
+    {
+      "id": "PLASTVENTILER HAVBRUK",
+      "name": "PLASTVENTILER HAVBRUK",
+      "productCount": 36
+    },
+    {
+      "id": "KOBBERRØR",
+      "name": "KOBBERRØR",
+      "productCount": 34
+    },
+    {
+      "id": "DELER FOR TRYKKRØR PVC",
+      "name": "DELER FOR TRYKKRØR PVC",
+      "productCount": 33
+    },
+    {
+      "id": "PE-RØR HAVBRUK",
+      "name": "PE-RØR HAVBRUK",
+      "productCount": 31
+    },
+    {
+      "id": "SERVANTER OG KLOSETTER ALTERNA",
+      "name": "SERVANTER OG KLOSETTER ALTERNA",
+      "productCount": 30
+    },
+    {
+      "id": "ISOLASJON",
+      "name": "ISOLASJON",
+      "productCount": 29
+    },
+    {
+      "id": "LUFT- PEILERØRSARMATUR INDUSTRI",
+      "name": "LUFT- PEILERØRSARMATUR INDUSTRI",
+      "productCount": 29
+    },
+    {
+      "id": "Uklassifisert",
+      "name": "Uklassifisert",
+      "productCount": 28
+    },
+    {
+      "id": "SERVANTER OG KLOSETTER DIV.LEVERANDØRER",
+      "name": "SERVANTER OG KLOSETTER DIV.LEVERANDØRER",
+      "productCount": 27
+    },
+    {
+      "id": "SERVANTER OG KLOSETTER DURAVIT",
+      "name": "SERVANTER OG KLOSETTER DURAVIT",
+      "productCount": 26
+    },
+    {
+      "id": "DIVERSE VMT",
+      "name": "DIVERSE VMT",
+      "productCount": 26
+    },
+    {
+      "id": "KJELER OG BRENNERE",
+      "name": "KJELER OG BRENNERE",
+      "productCount": 26
+    },
+    {
+      "id": "PE-RØR KVEIL",
+      "name": "PE-RØR KVEIL",
+      "productCount": 26
+    },
+    {
+      "id": "ØVRIG FIBERDUK",
+      "name": "ØVRIG FIBERDUK",
+      "productCount": 25
+    },
+    {
+      "id": "HYDRAULIKK RØR OG DELER",
+      "name": "HYDRAULIKK RØR OG DELER",
+      "productCount": 25
+    },
+    {
+      "id": "GRUNNAVLØPSRØR PLAST VMT",
+      "name": "GRUNNAVLØPSRØR PLAST VMT",
+      "productCount": 24
+    },
+    {
+      "id": "RØR DUPLEX/STAINLESS STEEL/TITAN",
+      "name": "RØR DUPLEX/STAINLESS STEEL/TITAN",
+      "productCount": 22
+    },
+    {
+      "id": "GEONETT",
+      "name": "GEONETT",
+      "productCount": 21
+    },
+    {
+      "id": "SERVANTER OG KLOSETTER GB",
+      "name": "SERVANTER OG KLOSETTER GB",
+      "productCount": 21
+    },
+    {
+      "id": "BRANNSLUKKEMATERIELL",
+      "name": "BRANNSLUKKEMATERIELL",
+      "productCount": 21
+    },
+    {
+      "id": "SERVANTER OG KLOSETTER V&B",
+      "name": "SERVANTER OG KLOSETTER V&B",
+      "productCount": 19
+    },
+    {
+      "id": "BADEROMSUTSTYR",
+      "name": "BADEROMSUTSTYR",
+      "productCount": 19
+    },
+    {
+      "id": "UTEMILJØ",
+      "name": "UTEMILJØ",
+      "productCount": 18
+    },
+    {
+      "id": "STORBEREDERE OG VILLAVARMERE",
+      "name": "STORBEREDERE OG VILLAVARMERE",
+      "productCount": 16
+    },
+    {
+      "id": "BADEROMSUTSTYR ALTERNA",
+      "name": "BADEROMSUTSTYR ALTERNA",
+      "productCount": 15
+    },
+    {
+      "id": "BADEKAR OG TILBEHØR",
+      "name": "BADEKAR OG TILBEHØR",
+      "productCount": 15
+    },
+    {
+      "id": "BADE-/VASKEROMSMØBLER DIV.",
+      "name": "BADE-/VASKEROMSMØBLER DIV.",
+      "productCount": 14
+    },
+    {
+      "id": "SANITÆRARMATUR GUSTAVSBERG",
+      "name": "SANITÆRARMATUR GUSTAVSBERG",
+      "productCount": 13
+    },
+    {
+      "id": "VOTEC NGS FIBERDUK",
+      "name": "VOTEC NGS FIBERDUK",
+      "productCount": 11
+    },
+    {
+      "id": "SANITÆRARMATUR DIV.",
+      "name": "SANITÆRARMATUR DIV.",
+      "productCount": 11
+    },
+    {
+      "id": "EL.PRODUKTER/HVITEVARER",
+      "name": "EL.PRODUKTER/HVITEVARER",
+      "productCount": 10
+    },
+    {
+      "id": "KULDEMEDIER/-BÆRERE/OLJER",
+      "name": "KULDEMEDIER/-BÆRERE/OLJER",
+      "productCount": 10
+    },
+    {
+      "id": "STØPEJERNSRØR VMT",
+      "name": "STØPEJERNSRØR VMT",
+      "productCount": 10
+    },
+    {
+      "id": "SMARTHUS",
+      "name": "SMARTHUS",
+      "productCount": 9
+    },
+    {
+      "id": "FUNKSJONSUTSTYR",
+      "name": "FUNKSJONSUTSTYR",
+      "productCount": 9
+    },
+    {
+      "id": "TRYKKRØR PVC",
+      "name": "TRYKKRØR PVC",
+      "productCount": 9
+    },
+    {
+      "id": "KULDEAUTOMATIKK/-VENTILER/KOMPONENTER",
+      "name": "KULDEAUTOMATIKK/-VENTILER/KOMPONENTER",
+      "productCount": 8
+    },
+    {
+      "id": "BADE-/VASKEROMSMØBLER ROCA",
+      "name": "BADE-/VASKEROMSMØBLER ROCA",
+      "productCount": 8
+    },
+    {
+      "id": "ISOLASJONSTILBEHØR, BRANNTETTING ETC.",
+      "name": "ISOLASJONSTILBEHØR, BRANNTETTING ETC.",
+      "productCount": 6
+    },
+    {
+      "id": "GEOMEMBRAN",
+      "name": "GEOMEMBRAN",
+      "productCount": 6
+    },
+    {
+      "id": "SYNLIG GEOTEKNIKK",
+      "name": "SYNLIG GEOTEKNIKK",
+      "productCount": 4
+    },
+    {
+      "id": "BADEKAR ALTERNA",
+      "name": "BADEKAR ALTERNA",
+      "productCount": 3
+    },
+    {
+      "id": "RUSTFRITT SANITÆRUTSTYR ALTERNA",
+      "name": "RUSTFRITT SANITÆRUTSTYR ALTERNA",
+      "productCount": 3
+    },
+    {
+      "id": "DEPOSITUM, PANT UTEN RABATT",
+      "name": "DEPOSITUM, PANT UTEN RABATT",
+      "productCount": 3
+    },
+    {
+      "id": "SLAMAVSKILLERE/TANKER/PUMPER",
+      "name": "SLAMAVSKILLERE/TANKER/PUMPER",
+      "productCount": 3
+    },
+    {
+      "id": "MINIKJØKKEN",
+      "name": "MINIKJØKKEN",
+      "productCount": 2
+    },
+    {
+      "id": "SVEISTE TYNNVEGGEDE RØR MED RILLE",
+      "name": "SVEISTE TYNNVEGGEDE RØR MED RILLE",
+      "productCount": 1
+    },
+    {
+      "id": "SERVICEUTSTYR",
+      "name": "SERVICEUTSTYR",
+      "productCount": 1
+    },
+    {
+      "id": "OLJETANKER, MÅLERE OG FITTINGS",
+      "name": "OLJETANKER, MÅLERE OG FITTINGS",
+      "productCount": 1
+    }
+  ],
+  "brands": [
+    {
+      "name": "9A",
+      "productCount": 1378
+    },
+    {
+      "name": "VS",
+      "productCount": 1057
+    },
+    {
+      "name": "YC",
+      "productCount": 1053
+    },
+    {
+      "name": "VM",
+      "productCount": 1043
+    },
+    {
+      "name": "TB",
+      "productCount": 679
+    },
+    {
+      "name": "DD",
+      "productCount": 629
+    },
+    {
+      "name": "TX",
+      "productCount": 616
+    },
+    {
+      "name": "LK",
+      "productCount": 542
+    },
+    {
+      "name": "VC",
+      "productCount": 542
+    },
+    {
+      "name": "YE",
+      "productCount": 537
+    },
+    {
+      "name": "9K",
+      "productCount": 499
+    },
+    {
+      "name": "9M",
+      "productCount": 487
+    },
+    {
+      "name": "YG",
+      "productCount": 463
+    },
+    {
+      "name": "LB",
+      "productCount": 449
+    },
+    {
+      "name": "LG",
+      "productCount": 419
+    },
+    {
+      "name": "YB",
+      "productCount": 414
+    },
+    {
+      "name": "KJ",
+      "productCount": 407
+    },
+    {
+      "name": "NE",
+      "productCount": 379
+    },
+    {
+      "name": "LN",
+      "productCount": 377
+    },
+    {
+      "name": "LD",
+      "productCount": 375
+    },
+    {
+      "name": "6K",
+      "productCount": 363
+    },
+    {
+      "name": "LC",
+      "productCount": 353
+    },
+    {
+      "name": "9C",
+      "productCount": 350
+    },
+    {
+      "name": "TY",
+      "productCount": 349
+    },
+    {
+      "name": "KA",
+      "productCount": 323
+    },
+    {
+      "name": "LE",
+      "productCount": 323
+    },
+    {
+      "name": "KE",
+      "productCount": 311
+    },
+    {
+      "name": "VA",
+      "productCount": 310
+    },
+    {
+      "name": "BM",
+      "productCount": 307
+    },
+    {
+      "name": "LM",
+      "productCount": 302
+    },
+    {
+      "name": "YS",
+      "productCount": 301
+    },
+    {
+      "name": "9O",
+      "productCount": 286
+    },
+    {
+      "name": "LI",
+      "productCount": 285
+    },
+    {
+      "name": "UO",
+      "productCount": 277
+    },
+    {
+      "name": "7B",
+      "productCount": 273
+    },
+    {
+      "name": "TR",
+      "productCount": 271
+    },
+    {
+      "name": "9I",
+      "productCount": 269
+    },
+    {
+      "name": "VQ",
+      "productCount": 258
+    },
+    {
+      "name": "LA",
+      "productCount": 254
+    },
+    {
+      "name": "TE",
+      "productCount": 253
+    },
+    {
+      "name": "UB",
+      "productCount": 252
+    },
+    {
+      "name": "TH",
+      "productCount": 250
+    },
+    {
+      "name": "NB",
+      "productCount": 248
+    },
+    {
+      "name": "FB",
+      "productCount": 247
+    },
+    {
+      "name": "9E",
+      "productCount": 242
+    },
+    {
+      "name": "TC",
+      "productCount": 238
+    },
+    {
+      "name": "KG",
+      "productCount": 231
+    },
+    {
+      "name": "OA",
+      "productCount": 224
+    },
+    {
+      "name": "LH",
+      "productCount": 208
+    },
+    {
+      "name": "VI",
+      "productCount": 205
+    },
+    {
+      "name": "UN",
+      "productCount": 202
+    },
+    {
+      "name": "VK",
+      "productCount": 202
+    },
+    {
+      "name": "VO",
+      "productCount": 186
+    },
+    {
+      "name": "VE",
+      "productCount": 185
+    },
+    {
+      "name": "UC",
+      "productCount": 159
+    },
+    {
+      "name": "LP",
+      "productCount": 156
+    },
+    {
+      "name": "BY",
+      "productCount": 146
+    },
+    {
+      "name": "9L",
+      "productCount": 146
+    },
+    {
+      "name": "NG",
+      "productCount": 140
+    },
+    {
+      "name": "PB",
+      "productCount": 137
+    },
+    {
+      "name": "BN",
+      "productCount": 136
+    },
+    {
+      "name": "NA",
+      "productCount": 134
+    },
+    {
+      "name": "CA",
+      "productCount": 122
+    },
+    {
+      "name": "AY",
+      "productCount": 118
+    },
+    {
+      "name": "PD",
+      "productCount": 116
+    },
+    {
+      "name": "LJ",
+      "productCount": 111
+    },
+    {
+      "name": "KH",
+      "productCount": 110
+    },
+    {
+      "name": "UP",
+      "productCount": 109
+    },
+    {
+      "name": "BC",
+      "productCount": 107
+    },
+    {
+      "name": "VU",
+      "productCount": 102
+    },
+    {
+      "name": "OI",
+      "productCount": 100
+    },
+    {
+      "name": "KC",
+      "productCount": 92
+    },
+    {
+      "name": "UZ",
+      "productCount": 91
+    },
+    {
+      "name": "AB",
+      "productCount": 91
+    },
+    {
+      "name": "US",
+      "productCount": 85
+    },
+    {
+      "name": "8D",
+      "productCount": 85
+    },
+    {
+      "name": "OE",
+      "productCount": 85
+    },
+    {
+      "name": "NH",
+      "productCount": 85
+    },
+    {
+      "name": "TT",
+      "productCount": 85
+    },
+    {
+      "name": "MD",
+      "productCount": 84
+    },
+    {
+      "name": "FF",
+      "productCount": 82
+    },
+    {
+      "name": "NJ",
+      "productCount": 80
+    },
+    {
+      "name": "MB",
+      "productCount": 78
+    },
+    {
+      "name": "UR",
+      "productCount": 74
+    },
+    {
+      "name": "9G",
+      "productCount": 70
+    },
+    {
+      "name": "AP",
+      "productCount": 70
+    },
+    {
+      "name": "TP",
+      "productCount": 68
+    },
+    {
+      "name": "FG",
+      "productCount": 62
+    },
+    {
+      "name": "EA",
+      "productCount": 61
+    },
+    {
+      "name": "WK",
+      "productCount": 61
+    },
+    {
+      "name": "TZ",
+      "productCount": 58
+    },
+    {
+      "name": "UA",
+      "productCount": 53
+    },
+    {
+      "name": "OG",
+      "productCount": 53
+    },
+    {
+      "name": "FY",
+      "productCount": 53
+    },
+    {
+      "name": "BI",
+      "productCount": 50
+    },
+    {
+      "name": "BE",
+      "productCount": 49
+    },
+    {
+      "name": "TU",
+      "productCount": 48
+    },
+    {
+      "name": "6Z",
+      "productCount": 47
+    },
+    {
+      "name": "OB",
+      "productCount": 45
+    },
+    {
+      "name": "JA",
+      "productCount": 44
+    },
+    {
+      "name": "BO",
+      "productCount": 43
+    },
+    {
+      "name": "TW",
+      "productCount": 42
+    },
+    {
+      "name": "AC",
+      "productCount": 40
+    },
+    {
+      "name": "AD",
+      "productCount": 39
+    },
+    {
+      "name": "6Q",
+      "productCount": 36
+    },
+    {
+      "name": "JD",
+      "productCount": 36
+    },
+    {
+      "name": "7C",
+      "productCount": 36
+    },
+    {
+      "name": "LO",
+      "productCount": 34
+    },
+    {
+      "name": "TL",
+      "productCount": 33
+    },
+    {
+      "name": "7A",
+      "productCount": 31
+    },
+    {
+      "name": "AF",
+      "productCount": 30
+    },
+    {
+      "name": "UE",
+      "productCount": 29
+    },
+    {
+      "name": "VG",
+      "productCount": 29
+    },
+    {
+      "name": "AN",
+      "productCount": 27
+    },
+    {
+      "name": "AM",
+      "productCount": 26
+    },
+    {
+      "name": "UM",
+      "productCount": 26
+    },
+    {
+      "name": "NI",
+      "productCount": 26
+    },
+    {
+      "name": "TV",
+      "productCount": 26
+    },
+    {
+      "name": "UJ",
+      "productCount": 25
+    },
+    {
+      "name": "VN",
+      "productCount": 25
+    },
+    {
+      "name": "TG",
+      "productCount": 24
+    },
+    {
+      "name": "8C",
+      "productCount": 22
+    },
+    {
+      "name": "UK",
+      "productCount": 21
+    },
+    {
+      "name": "AG",
+      "productCount": 21
+    },
+    {
+      "name": "JL",
+      "productCount": 21
+    },
+    {
+      "name": "AI",
+      "productCount": 19
+    },
+    {
+      "name": "CI",
+      "productCount": 19
+    },
+    {
+      "name": "UQ",
+      "productCount": 18
+    },
+    {
+      "name": "JF",
+      "productCount": 16
+    },
+    {
+      "name": "CH",
+      "productCount": 15
+    },
+    {
+      "name": "FÆ",
+      "productCount": 15
+    },
+    {
+      "name": "DA",
+      "productCount": 14
+    },
+    {
+      "name": "BF",
+      "productCount": 13
+    },
+    {
+      "name": "UI",
+      "productCount": 11
+    },
+    {
+      "name": "BA",
+      "productCount": 11
+    },
+    {
+      "name": "GC",
+      "productCount": 10
+    },
+    {
+      "name": "WF",
+      "productCount": 10
+    },
+    {
+      "name": "TA",
+      "productCount": 10
+    },
+    {
+      "name": "6L",
+      "productCount": 9
+    },
+    {
+      "name": "CC",
+      "productCount": 9
+    },
+    {
+      "name": "TJ",
+      "productCount": 9
+    },
+    {
+      "name": "WJ",
+      "productCount": 8
+    },
+    {
+      "name": "DG",
+      "productCount": 8
+    },
+    {
+      "name": "MF",
+      "productCount": 6
+    },
+    {
+      "name": "UL",
+      "productCount": 6
+    },
+    {
+      "name": "UH",
+      "productCount": 4
+    },
+    {
+      "name": "FØ",
+      "productCount": 3
+    },
+    {
+      "name": "EB",
+      "productCount": 3
+    },
+    {
+      "name": "WG",
+      "productCount": 3
+    },
+    {
+      "name": "UG",
+      "productCount": 3
+    },
+    {
+      "name": "GA",
+      "productCount": 2
+    },
+    {
+      "name": "VP",
+      "productCount": 1
+    },
+    {
+      "name": "WI",
+      "productCount": 1
+    },
+    {
+      "name": "NU",
+      "productCount": 1
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "productNumber": "1234567",
+    "nobbNumber": "00000000",
+    "name": "Eksempelprodukt",
+    "imageUrl": "https://...",
+    "description": "Kort teknisk beskrivelse.",
+    "technicalSpecs": {
+      "Dimensjon": "16 mm",
+      "Materiale": "Messing"
+    },
+    "keywords": ["gulvvarme", "fordeler"]
+  }
+]
