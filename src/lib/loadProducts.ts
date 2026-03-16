@@ -51,14 +51,39 @@ export type Category = {
   count: number;
 };
 
+export type Supplier = {
+  id: string;
+  name: string;
+  count: number;
+};
+
+export type SubCategory = {
+  name: string;
+  product_groups: string[];
+};
+
+export type CategoryHierarchyItem = {
+  name: string;
+  sub_categories: SubCategory[];
+};
+
 export type ProductsResponse = {
   success: boolean;
   total: number;
   count: number;
   offset: number;
   categories: Category[];
+  suppliers: Supplier[];
+  categoryHierarchy: CategoryHierarchyItem[];
   parseErrors: number;
   products: Product[];
+  error?: string;
+};
+
+export type ProductBySlugResponse = {
+  success: boolean;
+  product?: Product;
+  related?: Product[];
   error?: string;
 };
 
@@ -66,11 +91,17 @@ let cache: ProductsResponse | null = null;
 
 export async function loadProducts(params?: {
   category?: string;
+  supplier?: string;
+  price_status?: string;
+  search?: string;
   limit?: number;
   offset?: number;
 }): Promise<ProductsResponse> {
   const searchParams = new URLSearchParams();
   if (params?.category) searchParams.set('category', params.category);
+  if (params?.supplier) searchParams.set('supplier', params.supplier);
+  if (params?.price_status) searchParams.set('price_status', params.price_status);
+  if (params?.search) searchParams.set('search', params.search);
   if (params?.limit) searchParams.set('limit', String(params.limit));
   if (params?.offset) searchParams.set('offset', String(params.offset));
 
@@ -98,4 +129,19 @@ export async function loadAllProducts(): Promise<ProductsResponse> {
 
 export function clearProductCache(): void {
   cache = null;
+}
+
+export async function loadProductBySlug(slug: string): Promise<ProductBySlugResponse> {
+  const response = await fetch(`/.netlify/functions/product-by-slug?slug=${encodeURIComponent(slug)}`);
+  if (!response.ok) {
+    throw new Error(`Kunne ikke hente produkt (${response.status})`);
+  }
+  return response.json();
+}
+
+/**
+ * Check if product has a price
+ */
+export function hasPrice(product: Product): boolean {
+  return product.price_status === 'active' && product.price_inc_vat > 0;
 }

@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { CartProvider } from './lib/cart';
+import { QuoteProvider } from './lib/quoteList';
 import { HomePage } from './pages/HomePage';
 import { ServicesPage } from './pages/ServicesPage';
 import { EnergyCalculatorPage } from './pages/EnergyCalculatorPage';
@@ -33,7 +34,9 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <CartProvider>
-      <RouterProvider router={router} />
+      <QuoteProvider>
+        <RouterProvider router={router} />
+      </QuoteProvider>
     </CartProvider>
   );
 }
