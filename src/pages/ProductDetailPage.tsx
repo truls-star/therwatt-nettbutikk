@@ -1,14 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
-import { getProductByProductNumber } from '../modules/catalog/catalogService';
-import { useCart } from '../modules/cart/cartStore';
 import { useEffect, useState } from 'react';
-import type { ProductWithPricing } from '../modules/catalog/catalogService';
+import { loadAllProducts, type Product } from '../lib/loadProducts';
+import { useCart } from '../lib/cart';
+import { formatPrice } from '../lib/formatters';
 
-export const ProductDetailPage = () => {
+export function ProductDetailPage() {
   const params = useParams<{ productNumber: string }>();
-  const [product, setProduct] = useState<ProductWithPricing | undefined>(undefined);
+  const [product, setProduct] = useState<Product | undefined>(undefined);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState('');
+  const [error, setError] = useState('');
   const { addProduct } = useCart();
 
   useEffect(() => {
@@ -18,40 +18,37 @@ export const ProductDetailPage = () => {
     }
 
     let mounted = true;
-    getProductByProductNumber(params.productNumber)
-      .then((result) => {
+    loadAllProducts()
+      .then((data) => {
         if (!mounted) return;
-        setProduct(result);
+        const found = data.products.find((p) => p.product_number === params.productNumber);
+        setProduct(found);
       })
-      .catch((error) => {
+      .catch((err) => {
         if (!mounted) return;
-        setLoadError(error instanceof Error ? error.message : 'Kunne ikke hente produkt.');
+        setError(err instanceof Error ? err.message : 'Kunne ikke hente produkt.');
       })
       .finally(() => {
         if (mounted) setLoading(false);
       });
 
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, [params.productNumber]);
 
   if (loading) {
     return (
       <section className="section">
-        <div className="container">
-          <p>Laster produkt...</p>
-        </div>
+        <div className="container"><p>Laster produkt...</p></div>
       </section>
     );
   }
 
-  if (loadError) {
+  if (error) {
     return (
       <section className="section">
         <div className="container">
-          <p>{loadError}</p>
-          <Link to="/webshop">Tilbake til webshop</Link>
+          <p className="status error">{error}</p>
+          <Link to="/webshop">Tilbake til nettbutikk</Link>
         </div>
       </section>
     );
@@ -62,7 +59,7 @@ export const ProductDetailPage = () => {
       <section className="section">
         <div className="container">
           <h1>Produkt ikke funnet</h1>
-          <Link to="/webshop">Tilbake til webshop</Link>
+          <Link to="/webshop">Tilbake til nettbutikk</Link>
         </div>
       </section>
     );
@@ -72,41 +69,33 @@ export const ProductDetailPage = () => {
     <section className="section">
       <div className="container split">
         <div className="product-detail-image">
-          {product.imageUrl ? <img src={product.imageUrl} alt={product.name} /> : <div className="image-fallback">THERWATT</div>}
+          {product.image && !product.image.startsWith('data:') ? (
+            <img src={product.image} alt={product.title} />
+          ) : (
+            <div className="image-fallback">THERWATT</div>
+          )}
         </div>
         <div className="prose">
-          <h1>{product.name}</h1>
-          <p>{product.description || 'Produktbeskrivelse oppdateres.'}</p>
-          <p>Merke: {product.brand || product.supplier}</p>
-          <p>Varenummer: {product.productNumber}</p>
-          <p>NOBB: {product.nobbNumber || '-'}</p>
+          <h1>{product.title}</h1>
+          <p>{product.description}</p>
+          <p>Kategori: {product.category}</p>
+          <p>Varenummer: {product.product_number}</p>
           <p>
-            Pris inkl. mva:{' '}
-            <strong>
-              {product.pricing?.finalPriceIncVat
-                ? product.pricing.finalPriceIncVat.toLocaleString('nb-NO', { style: 'currency', currency: 'NOK' })
-                : 'Pris pa foresporsel'}
-            </strong>
+            Pris inkl. mva: <strong>{formatPrice(product.price_inc_vat)}</strong>
+          </p>
+          <p className="muted-note">
+            Pris ex. mva: {formatPrice(product.price_ex_vat)}
           </p>
 
-          {product.technicalSpecs && (
-            <table className="spec-table">
-              <tbody>
-                {Object.entries(product.technicalSpecs).map(([key, value]) => (
-                  <tr key={key}>
-                    <th>{key}</th>
-                    <td>{value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-
-          <button className="btn btn-primary" onClick={() => addProduct(product)} disabled={!product.pricing?.finalPriceIncVat}>
+          <button className="btn btn-primary" onClick={() => addProduct(product)}>
             Legg i handlekurv
           </button>
+
+          <p style={{ marginTop: '1rem' }}>
+            <Link to="/webshop">Tilbake til nettbutikk</Link>
+          </p>
         </div>
       </div>
     </section>
   );
-};
+}

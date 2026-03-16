@@ -1,42 +1,50 @@
-import { Link } from 'react-router-dom';
-import type { ProductWithPricing } from '../modules/catalog/catalogService';
-import { useCart } from '../modules/cart/cartStore';
+import { useCallback, useState } from 'react';
+import type { Product } from '../lib/loadProducts';
+import { useCart } from '../lib/cart';
+import { formatPrice } from '../lib/formatters';
+import { Toast } from './Toast';
 
 type ProductCardProps = {
-  product: ProductWithPricing;
+  product: Product;
 };
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export function ProductCard({ product }: ProductCardProps) {
   const { addProduct } = useCart();
-  const price = product.pricing?.finalPriceIncVat;
+  const [toastVisible, setToastVisible] = useState(false);
+
+  const handleAdd = useCallback(() => {
+    addProduct(product);
+    setToastVisible(true);
+  }, [addProduct, product]);
+
+  const handleToastDone = useCallback(() => setToastVisible(false), []);
 
   return (
     <article className="product-card">
       <div className="product-image-wrap">
-        {product.imageUrl ? <img src={product.imageUrl} alt={product.name} loading="lazy" /> : <div className="image-fallback">THERWATT</div>}
+        {product.image && !product.image.startsWith('data:') ? (
+          <img src={product.image} alt={product.title} loading="lazy" />
+        ) : (
+          <div className="image-fallback">THERWATT</div>
+        )}
       </div>
       <div className="product-meta">
-        <span className="badge">{product.brand || product.supplier || 'Ukjent merke'}</span>
-        <h3>
-          <Link to={`/webshop/${product.productNumber}`}>{product.name}</Link>
-        </h3>
+        <span className="badge">{product.category}</span>
+        <h3>{product.title}</h3>
         <dl>
           <div>
-            <dt>Varenr</dt>
-            <dd>{product.productNumber}</dd>
-          </div>
-          <div>
-            <dt>NOBB</dt>
-            <dd>{product.nobbNumber || '-'}</dd>
+            <dt>Varenr&nbsp;</dt>
+            <dd>{product.product_number}</dd>
           </div>
         </dl>
       </div>
       <div className="product-actions">
-        <p className="price">{price ? price.toLocaleString('nb-NO', { style: 'currency', currency: 'NOK' }) : 'Pris pa foresporsel'}</p>
-        <button className="btn btn-secondary" onClick={() => addProduct(product)} disabled={!price}>
-          Legg i kurv
+        <p className="price">{formatPrice(product.price_inc_vat)}</p>
+        <button className="btn btn-secondary" onClick={handleAdd}>
+          Legg i handlekurv
         </button>
       </div>
+      <Toast message={`${product.title} lagt i handlekurven`} visible={toastVisible} onDone={handleToastDone} />
     </article>
   );
-};
+}

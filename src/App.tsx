@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { Layout } from './components/Layout';
-import { CartProvider } from './modules/cart/cartStore';
+import { CartProvider } from './lib/cart';
 import { HomePage } from './pages/HomePage';
 import { ServicesPage } from './pages/ServicesPage';
 import { EnergyCalculatorPage } from './pages/EnergyCalculatorPage';
