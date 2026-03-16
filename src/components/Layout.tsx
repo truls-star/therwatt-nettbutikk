@@ -1,18 +1,22 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Menu, PhoneCall, ShoppingCart, X } from 'lucide-react';
+import { ClipboardList, Menu, PhoneCall, ShoppingCart, X } from 'lucide-react';
 import { useState } from 'react';
 import { siteConfig } from '../config/site';
 import logo from '../assets/therwatt-logo.png';
 import { useCart } from '../lib/cart';
+import { useQuoteList } from '../lib/quoteList';
 import { CartDrawer } from './CartDrawer';
+import { QuoteDrawer } from './QuoteDrawer';
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) => `nav-link${isActive ? ' active' : ''}`;
 
 export function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [quoteOpen, setQuoteOpen] = useState(false);
   const location = useLocation();
   const { lineCount } = useCart();
+  const { lineCount: quoteCount } = useQuoteList();
 
   return (
     <div className="app-shell">
@@ -38,6 +42,10 @@ export function Layout() {
             <a className="phone-link" href={`tel:${siteConfig.phone}`}>
               <PhoneCall size={16} /> {siteConfig.phone}
             </a>
+            <button className="icon-button" onClick={() => setQuoteOpen(true)} aria-label="Vis forespørselsliste">
+              <ClipboardList size={18} />
+              {quoteCount > 0 && <span className="pill pill-quote">{quoteCount}</span>}
+            </button>
             <button className="icon-button" onClick={() => setCartOpen(true)} aria-label="Vis handlekurv">
               <ShoppingCart size={18} />
               {lineCount > 0 && <span className="pill">{lineCount}</span>}
@@ -94,6 +102,7 @@ export function Layout() {
       </footer>
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      <QuoteDrawer open={quoteOpen} onClose={() => setQuoteOpen(false)} />
 
       {location.pathname === '/energy-calculator' && <div className="print-hint">Bruk utskrift for PDF/rapport.</div>}
     </div>
