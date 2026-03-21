@@ -4,6 +4,7 @@
 
 import { route, resolve } from './router.js';
 import { icons } from './icons.js';
+import { showToast } from './cart.js';
 
 const app = document.getElementById('app');
 
@@ -354,7 +355,7 @@ function setupCalculator() {
     }
 
     // Calculate results
-    const result = calculateHeatPump(areal, byggear, type);
+    const result = calculateHeatPump(areal, byggear);
 
     document.getElementById('calc-step-2').style.display = 'none';
     document.getElementById('calc-step-3').style.display = 'block';
@@ -369,7 +370,7 @@ function setupCalculator() {
         </div>
         <div class="calc-result-item">
           <div class="label">Estimert besparelse</div>
-          <div class="value">${formatPrice(result.savings)}/år</div>
+          <div class="value">${result.savingsKwh.toLocaleString('nb-NO')} kWh/år</div>
         </div>
         <div class="calc-result-item">
           <div class="label">Boligareal</div>
@@ -384,7 +385,7 @@ function setupCalculator() {
   });
 }
 
-function calculateHeatPump(areal, byggear, heatingType) {
+function calculateHeatPump(areal, byggear) {
   // Energy factor based on build year (kWh/m²)
   const energyFactors = {
     'pre1960': 200,
@@ -394,22 +395,11 @@ function calculateHeatPump(areal, byggear, heatingType) {
     'post2010': 80
   };
 
-  // Cost per kWh for different heating types (NOK)
-  const costFactors = {
-    'electric': 1.5,
-    'oil': 1.2,
-    'district': 0.9,
-    'wood': 0.7,
-    'gas': 1.1
-  };
-
   const energyNeed = areal * (energyFactors[byggear] || 140);
-  const currentCost = energyNeed * (costFactors[heatingType] || 1.2);
-
   // COP of heat pump (typical)
   const cop = 3.5;
-  const heatPumpCost = (energyNeed / cop) * 1.5;
-  const savings = Math.round(currentCost - heatPumpCost);
+  const heatPumpEnergy = energyNeed / cop;
+  const savingsKwh = Math.round(energyNeed - heatPumpEnergy);
 
   // Required kW (peak load)
   const kw = Math.round((energyNeed / 2000) * 10) / 10;
@@ -420,7 +410,7 @@ function calculateHeatPump(areal, byggear, heatingType) {
   else if (areal < 200) pumpType = 'Luft-vann';
   else pumpType = 'Væske-vann';
 
-  return { kw: Math.max(3, Math.min(20, kw)), savings: Math.max(0, savings), type: pumpType };
+  return { kw: Math.max(3, Math.min(20, kw)), savingsKwh: Math.max(0, savingsKwh), type: pumpType };
 }
 
 
