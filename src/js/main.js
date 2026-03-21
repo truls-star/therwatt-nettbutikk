@@ -2,13 +2,10 @@
 // Therwatt – Main Application
 // ═══════════════════════════════════════════════════════════
 
-import { route, resolve, navigate } from './router.js';
-import { loadProducts, getProducts, getCategories, getProductBySlug, formatPrice, searchProducts } from './store.js';
-import { addToCart, getCartItems, getCartTotal, getCartCount, removeFromCart, updateQuantity, clearCart, showToast } from './cart.js';
+import { route, resolve } from './router.js';
 import { icons } from './icons.js';
 
 const app = document.getElementById('app');
-const PRODUCTS_PER_PAGE = 24;
 
 // ─── Escape HTML ─────────────────────────────────────────
 function esc(str) {
@@ -19,7 +16,6 @@ function esc(str) {
 
 // ─── Navigation ──────────────────────────────────────────
 function renderNav(activePath) {
-  const count = getCartCount();
   return `
     <nav class="nav" id="main-nav">
       <div class="nav-inner">
@@ -27,13 +23,7 @@ function renderNav(activePath) {
         <ul class="nav-links" id="nav-links">
           <li><a href="/" data-link class="${activePath === '/' ? 'active' : ''}">Hjem</a></li>
           <li><a href="/kalkulator" data-link class="${activePath === '/kalkulator' ? 'active' : ''}">Kalkulator</a></li>
-          <li><a href="/butikk" data-link class="${activePath === '/butikk' ? 'active' : ''}">Butikk</a></li>
-          <li>
-            <a href="/handlekurv" data-link class="nav-cart ${activePath === '/handlekurv' ? 'active' : ''}">
-              ${icons.cart}
-              <span class="nav-cart-badge ${count > 0 ? 'visible' : ''}" id="cart-badge">${count}</span>
-            </a>
-          </li>
+          <li><a href="/vannbaren-kalkulator" data-link class="${activePath === '/vannbaren-kalkulator' ? 'active' : ''}">Gulvvarme</a></li>
         </ul>
         <button class="nav-mobile-toggle" id="nav-toggle" aria-label="Meny">
           <span></span><span></span><span></span>
@@ -70,7 +60,7 @@ function renderFooter() {
         <div class="footer-grid">
           <div class="footer-brand">
             <h3>ther<span>watt</span></h3>
-            <p>Varmepumper, vannbåren varme og profesjonelt VVS-verktøy. Kvalitetsprodukter fra europeiske produsenter.</p>
+            <p>Varmepumper og vannbåren varme. Kvalitetsprodukter fra europeiske produsenter.</p>
           </div>
           <div class="footer-col">
             <h4>Sider</h4>
@@ -78,8 +68,6 @@ function renderFooter() {
               <li><a href="/" data-link>Hjem</a></li>
               <li><a href="/kalkulator" data-link>Varmepumpekalkulator</a></li>
               <li><a href="/vannbaren-kalkulator" data-link>Gulvvarmekalkulator</a></li>
-              <li><a href="/butikk" data-link>Nettbutikk</a></li>
-              <li><a href="/handlekurv" data-link>Handlekurv</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -90,7 +78,7 @@ function renderFooter() {
           </div>
         </div>
         <div class="footer-bottom">
-          &copy; ${new Date().getFullYear()} Therwatt. Alle priser er inkl. 25% mva.
+          &copy; ${new Date().getFullYear()} Therwatt. Alle rettigheter reservert.
         </div>
       </div>
     </footer>
@@ -106,9 +94,9 @@ function renderHome() {
         <div class="hero-grid"></div>
         <div class="container">
           <div class="hero-content">
-            <div class="hero-badge">${icons.tool} Varmepumper, gulvvarme og VVS-verktøy</div>
+            <div class="hero-badge">${icons.tool} Varmepumper og gulvvarme</div>
             <h1>Komplett leverandør innen <span class="accent">varme og VVS</span></h1>
-            <p>Vi leverer varmepumper, vannbåren varme og profesjonelt verktøy til fagfolk i hele Norge. Kvalitetsprodukter fra europeiske produsenter med lang erfaring.</p>
+            <p>Vi leverer varmepumper og vannbåren varme til fagfolk i hele Norge. Kvalitetsprodukter fra europeiske produsenter med lang erfaring.</p>
           </div>
         </div>
       </section>
@@ -136,14 +124,6 @@ function renderHome() {
               <p>Komplette gulvvarmesystemer med isolasjon, rør og styring for jevn og behagelig varme.</p>
               <a href="/vannbaren-kalkulator" class="btn btn-outline btn-sm showcase-btn" data-link>Beregn gulvvarme</a>
             </div>
-            <div class="showcase-card fade-in-up">
-              <div class="showcase-image">
-                <img src="/images/verktoy.jpg" alt="Profesjonelt rørbøyeverktøy" loading="lazy">
-              </div>
-              <h3>Verktøy og installasjon</h3>
-              <p>Profesjonelt verktøy for rørlegging, pressing og vedlikehold av VVS-anlegg.</p>
-              <a href="/butikk" class="btn btn-primary btn-sm showcase-btn" data-link>Se produkter</a>
-            </div>
           </div>
         </div>
       </section>
@@ -161,9 +141,9 @@ function renderHome() {
               <p>Beregn riktig varmepumpe basert på boligens areal, byggeår og oppvarmingstype. Få et skreddersydd estimat.</p>
             </div>
             <div class="feature-card fade-in-up">
-              <div class="feature-icon">${icons.store}</div>
-              <h3>Nettbutikk</h3>
-              <p>Bredt utvalg av profesjonelt verktøy for rørlegging, HVAC og VVS. Alle priser er inkl. mva.</p>
+              <div class="feature-icon">${icons.tool}</div>
+              <h3>Gulvvarmekalkulator</h3>
+              <p>Beregn rørmeter, antall kurser og materialbehov for vannbåren gulvvarme i boligen din.</p>
             </div>
             <div class="feature-card fade-in-up">
               <div class="feature-icon">${icons.package}</div>
@@ -409,619 +389,7 @@ function calculateHeatPump(areal, byggear, heatingType) {
   return { kw: Math.max(3, Math.min(20, kw)), savings: Math.max(0, savings), type: pumpType };
 }
 
-// ─── Shop Page ───────────────────────────────────────────
-let shopState = {
-  category: '',
-  search: '',
-  sort: 'name',
-  page: 1
-};
 
-function renderShop() {
-  const products = getProducts();
-  const categories = getCategories();
-
-  app.innerHTML = `
-    ${renderNav('/butikk')}
-    <main class="main">
-      <div class="section">
-        <div class="container">
-          <div class="section-header" style="margin-bottom:var(--space-8)">
-            <h2>Nettbutikk</h2>
-            <p>Profesjonelt verktøy for VVS, rørlegging og HVAC</p>
-          </div>
-
-          <div class="shop-overlay" id="shop-overlay"></div>
-
-          <div class="shop-layout">
-            <aside class="shop-sidebar" id="shop-sidebar">
-              <div class="search-box">
-                ${icons.search}
-                <input type="text" id="shop-search" placeholder="Søk etter produkter..." value="${esc(shopState.search)}">
-              </div>
-
-              <h3>Kategorier</h3>
-              <ul class="category-list" id="category-list">
-                <li class="category-item ${!shopState.category ? 'active' : ''}" data-cat="">
-                  Alle produkter
-                  <span class="category-count">${products.length}</span>
-                </li>
-                ${categories.map(cat => {
-                  const count = products.filter(p => p.category === cat).length;
-                  return `
-                    <li class="category-item ${shopState.category === cat ? 'active' : ''}" data-cat="${esc(cat)}">
-                      ${esc(cat)}
-                      <span class="category-count">${count}</span>
-                    </li>
-                  `;
-                }).join('')}
-              </ul>
-            </aside>
-
-            <div class="shop-main">
-              <div class="shop-header">
-                <div style="display:flex;align-items:center;gap:var(--space-3)">
-                  <button class="btn btn-outline-dark btn-sm mobile-filter-btn" id="mobile-filter-btn">
-                    ${icons.filter} Filter
-                  </button>
-                  <span class="shop-count" id="shop-count"></span>
-                </div>
-                <select class="sort-dropdown" id="shop-sort">
-                  <option value="name" ${shopState.sort === 'name' ? 'selected' : ''}>Navn A–Å</option>
-                  <option value="price-asc" ${shopState.sort === 'price-asc' ? 'selected' : ''}>Pris lav–høy</option>
-                  <option value="price-desc" ${shopState.sort === 'price-desc' ? 'selected' : ''}>Pris høy–lav</option>
-                  <option value="sku" ${shopState.sort === 'sku' ? 'selected' : ''}>Artikkelnummer</option>
-                </select>
-              </div>
-
-              <div class="products-grid stagger" id="products-grid"></div>
-              <div class="pagination" id="pagination"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-    ${renderFooter()}
-  `;
-  setupNav();
-  window.scrollTo(0, 0);
-  setupShop();
-  updateProductGrid();
-}
-
-function setupShop() {
-  // Search
-  const searchInput = document.getElementById('shop-search');
-  let searchTimeout;
-  searchInput.addEventListener('input', () => {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      shopState.search = searchInput.value;
-      shopState.page = 1;
-      updateProductGrid();
-    }, 250);
-  });
-
-  // Category
-  document.getElementById('category-list').addEventListener('click', (e) => {
-    const item = e.target.closest('.category-item');
-    if (item) {
-      shopState.category = item.dataset.cat;
-      shopState.page = 1;
-      document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      updateProductGrid();
-
-      // Close mobile sidebar
-      document.getElementById('shop-sidebar').classList.remove('open');
-      document.getElementById('shop-overlay').classList.remove('visible');
-    }
-  });
-
-  // Sort
-  document.getElementById('shop-sort').addEventListener('change', (e) => {
-    shopState.sort = e.target.value;
-    shopState.page = 1;
-    updateProductGrid();
-  });
-
-  // Mobile filter
-  const mobileBtn = document.getElementById('mobile-filter-btn');
-  const sidebar = document.getElementById('shop-sidebar');
-  const overlay = document.getElementById('shop-overlay');
-
-  if (mobileBtn) {
-    mobileBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('visible');
-    });
-  }
-  if (overlay) {
-    overlay.addEventListener('click', () => {
-      sidebar.classList.remove('open');
-      overlay.classList.remove('visible');
-    });
-  }
-}
-
-function getFilteredProducts() {
-  let products = getProducts();
-
-  // Filter by category
-  if (shopState.category) {
-    products = products.filter(p => p.category === shopState.category);
-  }
-
-  // Search
-  if (shopState.search) {
-    const q = shopState.search.toLowerCase();
-    products = products.filter(p =>
-      p.name.toLowerCase().includes(q) ||
-      p.sku.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q)
-    );
-  }
-
-  // Sort
-  switch (shopState.sort) {
-    case 'name':
-      products.sort((a, b) => a.name.localeCompare(b.name, 'nb'));
-      break;
-    case 'price-asc':
-      products.sort((a, b) => (a.price_nok || Infinity) - (b.price_nok || Infinity));
-      break;
-    case 'price-desc':
-      products.sort((a, b) => (b.price_nok || 0) - (a.price_nok || 0));
-      break;
-    case 'sku':
-      products.sort((a, b) => a.sku.localeCompare(b.sku));
-      break;
-  }
-
-  return products;
-}
-
-function updateProductGrid() {
-  const products = getFilteredProducts();
-  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
-  shopState.page = Math.min(shopState.page, Math.max(1, totalPages));
-  const start = (shopState.page - 1) * PRODUCTS_PER_PAGE;
-  const pageProducts = products.slice(start, start + PRODUCTS_PER_PAGE);
-
-  const grid = document.getElementById('products-grid');
-  const countEl = document.getElementById('shop-count');
-  const pagEl = document.getElementById('pagination');
-
-  countEl.textContent = `${products.length} produkter`;
-
-  if (pageProducts.length === 0) {
-    grid.innerHTML = `
-      <div class="no-results" style="grid-column:1/-1">
-        <h3>Ingen produkter funnet</h3>
-        <p>Prøv å endre søket eller filteret.</p>
-      </div>
-    `;
-    pagEl.innerHTML = '';
-    return;
-  }
-
-  grid.innerHTML = pageProducts.map(p => `
-    <div class="product-card fade-in-up">
-      <div class="product-card-body">
-        <div class="product-card-category">${esc(p.category)}</div>
-        <div class="product-card-name">
-          <a href="/produkt/${esc(p.slug)}" data-link>${esc(p.name)}</a>
-        </div>
-        <div class="product-card-sku">Art.nr: ${esc(p.sku)}</div>
-        <div class="product-card-footer">
-          ${p.price_nok
-            ? `<span class="product-price">${formatPrice(p.price_nok)}</span>`
-            : `<span class="product-price-contact">Ta kontakt</span>`
-          }
-          ${p.price_nok
-            ? `<button class="btn-add" data-sku="${esc(p.sku)}">${icons.plus} Legg i kurv</button>`
-            : ''
-          }
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  // Add to cart handlers
-  grid.querySelectorAll('.btn-add').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const sku = btn.dataset.sku;
-      const product = getProducts().find(p => p.sku === sku);
-      if (product) {
-        addToCart(product);
-        updateCartBadge();
-      }
-    });
-  });
-
-  // Pagination
-  if (totalPages > 1) {
-    let pagHTML = '';
-    pagHTML += `<button ${shopState.page <= 1 ? 'disabled' : ''} data-page="${shopState.page - 1}">${icons.chevronLeft}</button>`;
-
-    const maxButtons = 7;
-    let startPage = Math.max(1, shopState.page - Math.floor(maxButtons / 2));
-    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
-    if (endPage - startPage < maxButtons - 1) {
-      startPage = Math.max(1, endPage - maxButtons + 1);
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pagHTML += `<button class="${i === shopState.page ? 'active' : ''}" data-page="${i}">${i}</button>`;
-    }
-
-    pagHTML += `<button ${shopState.page >= totalPages ? 'disabled' : ''} data-page="${shopState.page + 1}">${icons.chevronRight}</button>`;
-    pagEl.innerHTML = pagHTML;
-
-    pagEl.querySelectorAll('button:not(:disabled)').forEach(btn => {
-      btn.addEventListener('click', () => {
-        shopState.page = parseInt(btn.dataset.page);
-        updateProductGrid();
-        window.scrollTo({ top: 200, behavior: 'smooth' });
-      });
-    });
-  } else {
-    pagEl.innerHTML = '';
-  }
-}
-
-// ─── Product Detail Page ─────────────────────────────────
-function renderProduct(params) {
-  const product = getProductBySlug(params.slug);
-
-  if (!product) {
-    app.innerHTML = `
-      ${renderNav('')}
-      <main class="main">
-        <div class="container" style="padding:6rem 1.5rem;text-align:center">
-          <h1 style="font-size:2rem;margin-bottom:1rem">Produktet ble ikke funnet</h1>
-          <p style="color:#6b7280;margin-bottom:2rem">Beklager, men dette produktet finnes ikke.</p>
-          <a href="/butikk" class="btn btn-primary btn-lg" data-link>Tilbake til butikken</a>
-        </div>
-      </main>
-    `;
-    setupNav();
-    return;
-  }
-
-  let detailQuantity = 1;
-
-  app.innerHTML = `
-    ${renderNav('')}
-    <main class="main">
-      <div class="product-detail">
-        <div class="container">
-          <div class="product-breadcrumb">
-            <a href="/" data-link>Hjem</a> ${icons.chevronRight}
-            <a href="/butikk" data-link>Butikk</a> ${icons.chevronRight}
-            <span>${esc(product.name)}</span>
-          </div>
-
-          <div class="product-detail-grid">
-            <div class="product-detail-image">
-              ${icons.package}
-            </div>
-
-            <div class="product-detail-info">
-              <div class="product-detail-supplier">${esc(product.supplier)}</div>
-              <h1>${esc(product.name)}</h1>
-              <div class="product-detail-sku">Art.nr: ${esc(product.sku)}</div>
-
-              ${product.price_nok ? `
-                <div class="product-detail-price">${formatPrice(product.price_nok)}</div>
-                <div class="product-detail-price-sub">Inkl. 25% mva</div>
-              ` : `
-                <div class="product-detail-price" style="font-size:var(--font-size-xl);color:var(--color-text-secondary)">Ta kontakt for pris</div>
-                <div class="product-detail-price-sub">&nbsp;</div>
-              `}
-
-              ${product.price_nok ? `
-                <div class="product-detail-actions">
-                  <div class="product-detail-quantity">
-                    <button id="qty-minus">${icons.minus}</button>
-                    <span id="qty-value">${detailQuantity}</span>
-                    <button id="qty-plus">${icons.plus}</button>
-                  </div>
-                  <button class="btn-add-lg" id="detail-add-cart">Legg i handlekurv</button>
-                </div>
-              ` : ''}
-
-              <div class="product-specs">
-                <div class="product-specs-header">Produktinformasjon</div>
-                <div class="product-specs-row">
-                  <span class="product-specs-label">Artikkelnummer</span>
-                  <span class="product-specs-value">${esc(product.sku)}</span>
-                </div>
-                <div class="product-specs-row">
-                  <span class="product-specs-label">Kategori</span>
-                  <span class="product-specs-value">${esc(product.category)}</span>
-                </div>
-                <div class="product-specs-row">
-                  <span class="product-specs-label">Leverandør</span>
-                  <span class="product-specs-value">${esc(product.supplier)}</span>
-                </div>
-                ${product.package ? `
-                  <div class="product-specs-row">
-                    <span class="product-specs-label">Forpakning</span>
-                    <span class="product-specs-value">${esc(product.package)}</span>
-                  </div>
-                ` : ''}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-    ${renderFooter()}
-  `;
-  setupNav();
-  window.scrollTo(0, 0);
-
-  // Quantity and add to cart
-  if (product.price_nok) {
-    const qtyMinus = document.getElementById('qty-minus');
-    const qtyPlus = document.getElementById('qty-plus');
-    const qtyVal = document.getElementById('qty-value');
-    const addBtn = document.getElementById('detail-add-cart');
-
-    qtyMinus.addEventListener('click', () => {
-      detailQuantity = Math.max(1, detailQuantity - 1);
-      qtyVal.textContent = detailQuantity;
-    });
-
-    qtyPlus.addEventListener('click', () => {
-      detailQuantity++;
-      qtyVal.textContent = detailQuantity;
-    });
-
-    addBtn.addEventListener('click', () => {
-      addToCart(product, detailQuantity);
-      updateCartBadge();
-    });
-  }
-}
-
-// ─── Cart Page ───────────────────────────────────────────
-function renderCart() {
-  const items = getCartItems();
-
-  app.innerHTML = `
-    ${renderNav('/handlekurv')}
-    <main class="main">
-      <div class="cart-page">
-        <div class="container">
-          <h1>Handlekurv</h1>
-
-          ${items.length === 0 ? `
-            <div class="cart-empty fade-in">
-              <div class="cart-empty-icon">${icons.cart}</div>
-              <h2>Handlekurven er tom</h2>
-              <p>Du har ikke lagt til noen produkter ennå.</p>
-              <a href="/butikk" class="btn btn-primary btn-lg" data-link>Gå til butikken</a>
-            </div>
-          ` : `
-            <div class="cart-layout">
-              <div>
-                <div class="cart-items" id="cart-items">
-                  ${renderCartItems(items)}
-                </div>
-
-                <div class="checkout-section" id="checkout-section">
-                  <h2>Leveringsinformasjon</h2>
-                  <form id="checkout-form" name="bestillinger" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-                    <input type="hidden" name="form-name" value="bestillinger">
-                    <p style="display:none"><input name="bot-field"></p>
-                    <input type="hidden" name="produkter" id="order-products">
-                    <input type="hidden" name="totalsum" id="order-total">
-
-                    <div class="form-group">
-                      <label class="form-label" for="checkout-navn">Navn *</label>
-                      <input type="text" id="checkout-navn" name="navn" class="form-input" required>
-                    </div>
-
-                    <div class="form-row">
-                      <div class="form-group">
-                        <label class="form-label" for="checkout-epost">E-post *</label>
-                        <input type="email" id="checkout-epost" name="epost" class="form-input" required>
-                      </div>
-                      <div class="form-group">
-                        <label class="form-label" for="checkout-telefon">Telefon *</label>
-                        <input type="tel" id="checkout-telefon" name="telefon" class="form-input" required>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="checkout-adresse">Adresse *</label>
-                      <input type="text" id="checkout-adresse" name="adresse" class="form-input" required>
-                    </div>
-
-                    <div class="form-row">
-                      <div class="form-group">
-                        <label class="form-label" for="checkout-postnummer">Postnummer *</label>
-                        <input type="text" id="checkout-postnummer" name="postnummer" class="form-input" required>
-                      </div>
-                      <div class="form-group">
-                        <label class="form-label" for="checkout-poststed">Poststed *</label>
-                        <input type="text" id="checkout-poststed" name="poststed" class="form-input" required>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="checkout-melding">Melding</label>
-                      <textarea id="checkout-melding" name="melding" class="form-textarea" rows="3"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--space-4)">Send bestilling</button>
-                  </form>
-                </div>
-
-                <div id="checkout-success" style="display:none">
-                  <div class="checkout-section">
-                    <div class="success-state">
-                      <div class="success-icon">${icons.check}</div>
-                      <h2>Bestillingen er sendt!</h2>
-                      <p>Vi har mottatt bestillingen din og tar kontakt angående betaling og levering.</p>
-                      <a href="/butikk" class="btn btn-primary btn-lg" data-link>Fortsett å handle</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="cart-summary" id="cart-summary">
-                ${renderCartSummary(items)}
-              </div>
-            </div>
-          `}
-        </div>
-      </div>
-    </main>
-    ${renderFooter()}
-  `;
-  setupNav();
-  window.scrollTo(0, 0);
-
-  if (items.length > 0) {
-    setupCartHandlers();
-    setupCheckout();
-  }
-}
-
-function renderCartItems(items) {
-  return items.map(item => `
-    <div class="cart-item" data-sku="${esc(item.sku)}">
-      <div class="cart-item-image">${icons.package}</div>
-      <div class="cart-item-info">
-        <h3><a href="/produkt/${esc(item.slug)}" data-link>${esc(item.name)}</a></h3>
-        <p>Art.nr: ${esc(item.sku)} &middot; ${esc(item.supplier)}</p>
-      </div>
-      <div class="cart-item-quantity">
-        <button class="cart-qty-minus" data-sku="${esc(item.sku)}">${icons.minus}</button>
-        <span>${item.quantity}</span>
-        <button class="cart-qty-plus" data-sku="${esc(item.sku)}">${icons.plus}</button>
-      </div>
-      <div class="cart-item-price">${item.price_nok ? formatPrice(item.price_nok * item.quantity) : 'Ta kontakt'}</div>
-      <button class="cart-item-remove" data-sku="${esc(item.sku)}" title="Fjern">${icons.trash}</button>
-    </div>
-  `).join('');
-}
-
-function renderCartSummary(items) {
-  const total = items.reduce((s, i) => s + (i.price_nok || 0) * i.quantity, 0);
-  const count = items.reduce((s, i) => s + i.quantity, 0);
-  return `
-    <h2>Oppsummering</h2>
-    <div class="cart-summary-row">
-      <span>Antall produkter</span>
-      <span>${count}</span>
-    </div>
-    <div class="cart-summary-row">
-      <span>Inkl. mva (25%)</span>
-      <span>${formatPrice(total)}</span>
-    </div>
-    <div class="cart-summary-row total">
-      <span>Totalsum</span>
-      <span>${formatPrice(total)}</span>
-    </div>
-  `;
-}
-
-function setupCartHandlers() {
-  const cartEl = document.getElementById('cart-items');
-  if (!cartEl) return;
-
-  cartEl.addEventListener('click', (e) => {
-    const btn = e.target.closest('button');
-    if (!btn) return;
-
-    const sku = btn.dataset.sku;
-    if (!sku) return;
-
-    if (btn.classList.contains('cart-qty-minus')) {
-      const items = getCartItems();
-      const item = items.find(i => i.sku === sku);
-      if (item && item.quantity > 1) {
-        updateQuantity(sku, item.quantity - 1);
-      } else {
-        removeFromCart(sku);
-      }
-    } else if (btn.classList.contains('cart-qty-plus')) {
-      const items = getCartItems();
-      const item = items.find(i => i.sku === sku);
-      if (item) updateQuantity(sku, item.quantity + 1);
-    } else if (btn.classList.contains('cart-item-remove')) {
-      removeFromCart(sku);
-    }
-
-    // Re-render cart items and summary
-    const items = getCartItems();
-    if (items.length === 0) {
-      renderCart();
-      return;
-    }
-    cartEl.innerHTML = renderCartItems(items);
-    document.getElementById('cart-summary').innerHTML = renderCartSummary(items);
-    updateCartBadge();
-  });
-}
-
-function setupCheckout() {
-  const form = document.getElementById('checkout-form');
-  if (!form) return;
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const items = getCartItems();
-    const total = getCartTotal();
-
-    // Prepare order data
-    const productList = items.map(i =>
-      `${i.name} (${i.sku}) x${i.quantity} = ${i.price_nok ? formatPrice(i.price_nok * i.quantity) : 'Ta kontakt'}`
-    ).join('\n');
-
-    document.getElementById('order-products').value = productList;
-    document.getElementById('order-total').value = formatPrice(total);
-
-    const formData = new FormData(form);
-
-    try {
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString()
-      });
-    } catch {
-      // Continue even if submission fails
-    }
-
-    // Show success
-    document.getElementById('checkout-section').style.display = 'none';
-    document.getElementById('cart-items').style.display = 'none';
-    document.getElementById('cart-summary').style.display = 'none';
-    document.getElementById('checkout-success').style.display = 'block';
-
-    clearCart();
-    updateCartBadge();
-  });
-}
-
-// ─── Cart Badge Update ───────────────────────────────────
-function updateCartBadge() {
-  const badge = document.getElementById('cart-badge');
-  if (badge) {
-    const count = getCartCount();
-    badge.textContent = count;
-    badge.classList.toggle('visible', count > 0);
-  }
-}
-
-window.addEventListener('cart-updated', updateCartBadge);
 
 // ─── Waterborne Heating Calculator ──────────────────────
 let wbRooms = [{ name: 'Rom 1', sqm: '' }];
@@ -1290,14 +658,9 @@ function setupWaterborneCalculator() {
 route('/', () => { renderHome(); });
 route('/kalkulator', () => { renderCalculator(); });
 route('/vannbaren-kalkulator', () => { renderWaterborneCalculator(); });
-route('/butikk', () => { renderShop(); });
-route('/produkt/:slug', ({ params }) => { renderProduct(params); });
-route('/handlekurv', () => { renderCart(); });
 
 // ─── Init ────────────────────────────────────────────────
-async function init() {
-  app.innerHTML = '<div class="loading-spinner" style="min-height:100vh"></div>';
-  await loadProducts();
+function init() {
   resolve();
 }
 
