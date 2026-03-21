@@ -133,20 +133,10 @@ function renderHome() {
         </div>
       </section>
 
-      <section class="hero">
-        <div class="hero-grid"></div>
-        <div class="container">
-          <div class="hero-content">
-            <div class="hero-badge">${icons.tool} Varmepumper og gulvvarme</div>
-            <h1>Komplett leverandør innen <span class="accent">varme og VVS</span></h1>
-            <p>Vi leverer varmepumper og vannbåren varme til fagfolk i hele Norge. Kvalitetsprodukter fra europeiske produsenter med lang erfaring.</p>
-          </div>
-        </div>
-      </section>
-
       <section class="showcase section">
         <div class="container">
           <div class="section-header">
+            <div class="section-overline">Ekspertise</div>
             <h2>Våre fagområder</h2>
             <p>Vi dekker hele verdikjeden innen oppvarming og VVS-installasjon</p>
           </div>
@@ -174,6 +164,7 @@ function renderHome() {
       <section class="features section">
         <div class="container">
           <div class="section-header">
+            <div class="section-overline">Fordeler</div>
             <h2>Hvorfor velge oss</h2>
             <p>Kvalitetsprodukter fra anerkjente europeiske produsenter</p>
           </div>
