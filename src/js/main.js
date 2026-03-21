@@ -90,6 +90,49 @@ function renderHome() {
   app.innerHTML = `
     ${renderNav('/')}
     <main class="main">
+      <section class="promo-film">
+        <div class="promo-film-bg"></div>
+        <div class="promo-film-particles">
+          <div class="promo-particle"></div>
+          <div class="promo-particle"></div>
+          <div class="promo-particle"></div>
+          <div class="promo-particle"></div>
+          <div class="promo-particle"></div>
+          <div class="promo-particle"></div>
+        </div>
+        <div class="promo-film-content">
+          <div class="promo-film-overline">Spesialister innen oppvarming</div>
+          <h1 class="promo-film-title">
+            <span class="promo-line"><span>Eksperter på</span></span>
+            <span class="promo-line"><span><span class="accent">varmepumper</span> og</span></span>
+            <span class="promo-line"><span><span class="accent">vannbåren varme</span></span></span>
+          </h1>
+          <div class="promo-film-divider"></div>
+          <p class="promo-film-desc">Therwatt er din spesialist på komplette varmeløsninger. Med dyp fagkompetanse innen luft-vann og væske-vann varmepumper, samt vannbåren gulvvarme, leverer vi skreddersydde løsninger for optimal komfort og energieffektivitet.</p>
+          <div class="promo-film-stats">
+            <div class="promo-stat">
+              <div class="promo-stat-value">100%</div>
+              <div class="promo-stat-label">Fagkompetanse</div>
+            </div>
+            <div class="promo-stat">
+              <div class="promo-stat-value">EU</div>
+              <div class="promo-stat-label">Kvalitetsprodukter</div>
+            </div>
+            <div class="promo-stat">
+              <div class="promo-stat-value">Hele Norge</div>
+              <div class="promo-stat-label">Leveranse</div>
+            </div>
+          </div>
+          <div class="promo-film-cta">
+            <a href="/kalkulator" class="btn btn-primary btn-lg" data-link>Beregn din varmeløsning</a>
+          </div>
+        </div>
+        <div class="promo-film-scroll-hint">
+          <span>Scroll ned</span>
+          <div class="promo-scroll-arrow"></div>
+        </div>
+      </section>
+
       <section class="hero">
         <div class="hero-grid"></div>
         <div class="container">
