@@ -1779,6 +1779,9 @@ input, textarea, select {
 .promo-film-cta {
   opacity: 0;
   animation: promoReveal 0.8s ease 3.3s both;
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
 }
 
 .promo-film-cta .btn {
@@ -2346,4 +2349,167 @@ input, textarea, select {
 
 .wb-info-box strong {
   color: rgba(255,255,255,0.75);
+}
+
+/* ─── Contact Modal ────────────────────────────────────── */
+.contact-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.contact-modal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-8) var(--space-8) var(--space-6);
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.contact-modal-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.75rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--border-radius);
+  transition: var(--transition-fast);
+}
+
+.contact-modal-close:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--color-text);
+}
+
+.contact-modal h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.contact-modal-desc {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+  line-height: 1.6;
+}
+
+.contact-info-cards {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.contact-info-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: var(--transition-fast);
+}
+
+.contact-info-card:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.contact-info-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-light);
+  border-radius: var(--border-radius);
+  color: var(--color-accent-hover);
+}
+
+.contact-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.contact-info-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.contact-info-value {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-form-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.contact-form-divider::before,
+.contact-form-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.contact-success {
+  text-align: center;
+  padding: var(--space-8) 0;
+}
+
+.contact-success h3 {
+  font-size: var(--font-size-xl);
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+.contact-success p {
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+  .contact-info-cards {
+    flex-direction: column;
+  }
+
+  .contact-modal {
+    padding: var(--space-6) var(--space-5) var(--space-5);
+  }
 }
