@@ -109,7 +109,7 @@ function renderHome() {
             <span class="promo-line"><span><span class="accent">vannbåren varme</span></span></span>
           </h1>
           <div class="promo-film-divider"></div>
-          <p class="promo-film-desc">Therwatt er din spesialist på komplette varmeløsninger. Med dyp fagkompetanse innen luft-vann og væske-vann varmepumper, samt vannbåren gulvvarme, leverer vi skreddersydde løsninger for optimal komfort og energieffektivitet.</p>
+          <p class="promo-film-desc">Therwatt leverer komplette varmeløsninger for boliger og næringsbygg i hele Norge. Vi er spesialister på luft-vann og væske-vann varmepumper, samt vannbåren gulvvarme med europeiske kvalitetsprodukter. Med vår dype fagkompetanse innen VVS og oppvarming hjelper vi deg med å finne den mest energieffektive løsningen – fra rådgivning og beregning til ferdig installert anlegg. Bruk vår kalkulator for å finne riktig varmepumpe for din bolig.</p>
           <div class="promo-film-stats">
             <div class="promo-stat">
               <div class="promo-stat-value">100%</div>
@@ -125,66 +125,7 @@ function renderHome() {
             </div>
           </div>
           <div class="promo-film-cta">
-            <a href="/kalkulator" class="btn btn-primary btn-lg" data-link>Beregn din varmeløsning</a>
-          </div>
-        </div>
-        <div class="promo-film-scroll-hint">
-          <span>Scroll ned</span>
-          <div class="promo-scroll-arrow"></div>
-        </div>
-      </section>
-
-      <section class="showcase section">
-        <div class="container">
-          <div class="section-header">
-            <div class="section-overline">Ekspertise</div>
-            <h2>Våre fagområder</h2>
-            <p>Vi dekker hele verdikjeden innen oppvarming og VVS-installasjon</p>
-          </div>
-          <div class="showcase-grid stagger">
-            <div class="showcase-card fade-in-up">
-              <div class="showcase-image">
-                <img src="/images/varmepumpe.jpg" alt="Varmepumpe for bolig og næring" loading="lazy">
-              </div>
-              <h3>Varmepumper</h3>
-              <p>Luft-vann og væske-vann varmepumper for effektiv oppvarming av boliger og næringsbygg.</p>
-              <a href="/kalkulator" class="btn btn-primary btn-sm showcase-btn" data-link>Beregn varmepumpe</a>
-            </div>
-            <div class="showcase-card fade-in-up">
-              <div class="showcase-image">
-                <img src="/images/gulvvarme.png" alt="Vannbåren gulvvarme med rør og isolasjon" loading="lazy">
-              </div>
-              <h3>Vannbåren varme</h3>
-              <p>Komplette gulvvarmesystemer med isolasjon, rør og styring for jevn og behagelig varme.</p>
-              <a href="/vannbaren-kalkulator" class="btn btn-outline btn-sm showcase-btn" data-link>Beregn gulvvarme</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="features section">
-        <div class="container">
-          <div class="section-header">
-            <div class="section-overline">Fordeler</div>
-            <h2>Hvorfor velge oss</h2>
-            <p>Kvalitetsprodukter fra anerkjente europeiske produsenter</p>
-          </div>
-          <div class="features-grid stagger">
-            <div class="feature-card fade-in-up">
-              <div class="feature-icon">${icons.calculator}</div>
-              <h3>Varmepumpekalkulator</h3>
-              <p>Beregn riktig varmepumpe basert på boligens areal, byggeår og oppvarmingstype. Få et skreddersydd estimat.</p>
-            </div>
-            <div class="feature-card fade-in-up">
-              <div class="feature-icon">${icons.tool}</div>
-              <h3>Gulvvarmekalkulator</h3>
-              <p>Beregn rørmeter, antall kurser og materialbehov for vannbåren gulvvarme i boligen din.</p>
-            </div>
-            <div class="feature-card fade-in-up">
-              <div class="feature-icon">${icons.package}</div>
-              <h3>Europeisk kvalitet</h3>
-              <p>Vi fører produkter fra anerkjente europeiske produsenter med lang erfaring innen VVS og oppvarming.</p>
-            </div>
+            <a href="/kalkulator" class="btn btn-primary btn-lg" data-link>Beregn varmepumpe</a>
           </div>
         </div>
       </section>
