@@ -126,14 +126,127 @@ function renderHome() {
           </div>
           <div class="promo-film-cta">
             <a href="/kalkulator" class="btn btn-primary btn-lg" data-link>Beregn varmepumpe</a>
+            <button class="btn btn-outline btn-lg" id="contact-btn">Kontakt oss</button>
           </div>
         </div>
       </section>
+
+      <!-- Contact Modal -->
+      <div class="contact-modal-overlay" id="contact-modal" style="display:none">
+        <div class="contact-modal">
+          <button class="contact-modal-close" id="contact-modal-close">&times;</button>
+          <h2>Kontakt oss</h2>
+          <p class="contact-modal-desc">Ta gjerne kontakt med oss for spørsmål om varmepumper og varmeløsninger.</p>
+
+          <div class="contact-info-cards">
+            <a href="mailto:post@therwatt.no" class="contact-info-card">
+              <div class="contact-info-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <span class="contact-info-label">E-post</span>
+                <span class="contact-info-value">post@therwatt.no</span>
+              </div>
+            </a>
+            <a href="tel:+4790280156" class="contact-info-card">
+              <div class="contact-info-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <span class="contact-info-label">Telefon</span>
+                <span class="contact-info-value">902 80 156</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="contact-form-divider"><span>eller send oss en melding</span></div>
+
+          <form id="contact-form" name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="kontakt">
+            <p style="display:none"><input name="bot-field"></p>
+
+            <div class="form-group">
+              <label class="form-label" for="contact-navn">Navn</label>
+              <input type="text" id="contact-navn" name="navn" class="form-input" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="contact-epost">E-post</label>
+                <input type="email" id="contact-epost" name="epost" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-telefon">Telefon</label>
+                <input type="tel" id="contact-telefon" name="telefon" class="form-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="contact-melding">Melding</label>
+              <textarea id="contact-melding" name="melding" class="form-textarea" rows="4" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--space-4)" id="contact-submit">Send melding</button>
+          </form>
+
+          <div id="contact-success" class="contact-success" style="display:none">
+            <div class="success-icon">${icons.check}</div>
+            <h3>Takk for din henvendelse!</h3>
+            <p>Vi tar kontakt med deg så snart som mulig.</p>
+          </div>
+        </div>
+      </div>
     </main>
     ${renderFooter()}
   `;
   setupNav();
+  setupContactModal();
   window.scrollTo(0, 0);
+}
+
+// ─── Contact Modal ──────────────────────────────────────
+function setupContactModal() {
+  const btn = document.getElementById('contact-btn');
+  const modal = document.getElementById('contact-modal');
+  const closeBtn = document.getElementById('contact-modal-close');
+  const form = document.getElementById('contact-form');
+  const successEl = document.getElementById('contact-success');
+
+  btn.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  });
+
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('contact-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sender...';
+
+    const formData = new FormData(form);
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      });
+    } catch {
+      // Show success even if network fails
+    }
+
+    form.style.display = 'none';
+    successEl.style.display = 'block';
+  });
 }
 
 // ─── Calculator Page ─────────────────────────────────────
