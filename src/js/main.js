@@ -8,6 +8,45 @@ import { showToast } from './cart.js';
 
 const app = document.getElementById('app');
 
+// ─── SEO: Per-page metadata ─────────────────────────────
+const pageSEO = {
+  '/': {
+    title: 'Therwatt – Varmepumper, vannbåren varme og gulvvarme i Norge | Bergvarme & radiatorer',
+    description: 'Therwatt er Norges spesialister på varmepumper, vannbåren varme, gulvvarme, bergvarme og radiatorer. Beregn besparelse med vår kalkulator. Enova-støtte opptil 55 000 kr.',
+    canonical: 'https://therwatt.netlify.app/'
+  },
+  '/kalkulator': {
+    title: 'Varmepumpekalkulator – Beregn besparelse med varmepumpe | Therwatt',
+    description: 'Beregn hvor mye du kan spare med varmepumpe. Sammenlign luft-vann og bergvarme (væske-vann), se tilbakebetalingstid, Enova-støtte og anbefalt varmepumpe for din bolig.',
+    canonical: 'https://therwatt.netlify.app/kalkulator'
+  },
+  '/vannbaren-kalkulator': {
+    title: 'Gulvvarme kalkulator – Beregn vannbåren varme, rørmeter og materialer | Therwatt',
+    description: 'Beregn rørmeter, antall kurser og materialforbruk for vannbåren gulvvarme. Velg mellom støp, avretting og sporplater. Kalkulatoren beregner alt du trenger for gulvvarme-installasjon.',
+    canonical: 'https://therwatt.netlify.app/vannbaren-kalkulator'
+  }
+};
+
+function updatePageSEO(path) {
+  const seo = pageSEO[path];
+  if (!seo) return;
+  document.title = seo.title;
+  const descMeta = document.querySelector('meta[name="description"]');
+  if (descMeta) descMeta.setAttribute('content', seo.description);
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) canonical.setAttribute('href', seo.canonical);
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', seo.title);
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.setAttribute('content', seo.description);
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute('content', seo.canonical);
+  const twTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twTitle) twTitle.setAttribute('content', seo.title);
+  const twDesc = document.querySelector('meta[name="twitter:description"]');
+  if (twDesc) twDesc.setAttribute('content', seo.description);
+}
+
 // ─── Escape HTML ─────────────────────────────────────────
 function esc(str) {
   const div = document.createElement('div');
@@ -61,25 +100,28 @@ function renderFooter() {
         <div class="footer-grid">
           <div class="footer-brand">
             <h3>ther<span>watt</span></h3>
-            <p>Varmepumper og vannbåren varme. Kvalitetsprodukter fra europeiske produsenter.</p>
+            <p>Spesialister på varmepumper, vannbåren varme, gulvvarme, bergvarme og radiatorer. Europeiske kvalitetsprodukter for boliger og næringsbygg i hele Norge.</p>
           </div>
           <div class="footer-col">
-            <h4>Sider</h4>
+            <h4>Tjenester</h4>
             <ul>
-              <li><a href="/" data-link>Hjem</a></li>
               <li><a href="/kalkulator" data-link>Varmepumpekalkulator</a></li>
-              <li><a href="/vannbaren-kalkulator" data-link>Gulvvarmekalkulator</a></li>
+              <li><a href="/vannbaren-kalkulator" data-link>Gulvvarme kalkulator</a></li>
+              <li><a href="/" data-link>Vannbåren varme</a></li>
+              <li><a href="/" data-link>Bergvarme</a></li>
+              <li><a href="/" data-link>Radiatorer</a></li>
             </ul>
           </div>
           <div class="footer-col">
             <h4>Kontakt</h4>
             <ul>
-              <li>Ta kontakt for mer informasjon</li>
+              <li><a href="mailto:post@therwatt.no">post@therwatt.no</a></li>
+              <li><a href="tel:+4790280156">902 80 156</a></li>
             </ul>
           </div>
         </div>
         <div class="footer-bottom">
-          &copy; ${new Date().getFullYear()} Therwatt. Alle rettigheter reservert.
+          &copy; ${new Date().getFullYear()} Therwatt – Varmepumper, vannbåren varme og gulvvarme i Norge. Alle rettigheter reservert.
         </div>
       </div>
     </footer>
@@ -196,6 +238,41 @@ function renderHome() {
           </div>
         </div>
       </div>
+
+      <!-- SEO Content Sections -->
+      <section class="seo-content" style="padding:var(--space-16) 0;">
+        <div class="container">
+          <div style="max-width:900px;margin:0 auto;">
+
+            <h2 style="font-size:var(--text-2xl);font-weight:700;margin-bottom:var(--space-6);color:var(--text-primary);">Varmepumper – den smarteste oppvarmingsløsningen</h2>
+            <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:var(--space-6);">
+              En <strong>varmepumpe</strong> er den mest energieffektive måten å varme opp boligen din på. Ved å hente gratis varme fra luft, jord eller grunnfjell kan du spare 50–70 % på strømregningen. Therwatt tilbyr <strong>luft-vann varmepumper</strong> og <strong>væske-vann varmepumper</strong> (bergvarme) som leverer varme via vannbåren gulvvarme eller radiatorer. Med riktig varmepumpe og et godt dimensjonert vannbårent varmesystem får du optimal komfort og lave driftskostnader.
+            </p>
+
+            <h2 style="font-size:var(--text-2xl);font-weight:700;margin-bottom:var(--space-6);color:var(--text-primary);">Vannbåren varme med gulvvarme og radiatorer</h2>
+            <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:var(--space-6);">
+              <strong>Vannbåren varme</strong> er et system der oppvarmet vann sirkulerer i rør under gulvet (<strong>gulvvarme</strong>) eller gjennom <strong>radiatorer</strong>. Dette gir en jevn og behagelig varmefordeling i hele boligen. Gulvvarme opererer på lavere vanntemperatur enn tradisjonelle radiatorer, noe som gjør det ideelt å kombinere med varmepumpe. Therwatt hjelper deg med å beregne riktig rørmeter, antall kurser og materialforbruk – bruk vår <a href="/vannbaren-kalkulator" data-link style="color:var(--accent);">gulvvarme-kalkulator</a> for nøyaktige beregninger.
+            </p>
+
+            <h2 style="font-size:var(--text-2xl);font-weight:700;margin-bottom:var(--space-6);color:var(--text-primary);">Bergvarme – maksimal energieffektivitet</h2>
+            <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:var(--space-6);">
+              <strong>Bergvarme</strong> (også kalt <strong>jordvarme</strong> eller <strong>grunnvarme</strong>) utnytter den stabile temperaturen i grunnen via en energibrønn. En væske-vann varmepumpe henter varmen fra brønnen og fordeler den gjennom vannbåren gulvvarme eller radiatorer. Med en SCOP-verdi på opptil 5.0 er bergvarme den mest energieffektive oppvarmingsløsningen tilgjengelig. Enova gir støtte på opptil 55 000 kr for bergvarmepumper, noe som gjør investeringen enda mer lønnsom.
+            </p>
+
+            <h2 style="font-size:var(--text-2xl);font-weight:700;margin-bottom:var(--space-6);color:var(--text-primary);">Radiatorer for vannbåren varme</h2>
+            <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:var(--space-6);">
+              <strong>Radiatorer</strong> er et populært valg for distribusjon av vannbåren varme, spesielt ved ettermontasje i eksisterende boliger. Moderne lavtemperatur-radiatorer er designet for å fungere effektivt med varmepumper og gir rask oppvarming av enkeltrom. Therwatt leverer europeiske kvalitetsradiatorer som kombinerer elegant design med høy varmeeffekt. Mange velger å kombinere gulvvarme på bad og oppholdsrom med radiatorer i soverom og entré.
+            </p>
+
+            <h2 style="font-size:var(--text-2xl);font-weight:700;margin-bottom:var(--space-6);color:var(--text-primary);">Enova-støtte for varmepumpe</h2>
+            <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:var(--space-4);">
+              Enova tilbyr betydelig økonomisk støtte for installasjon av energieffektive varmeløsninger. Du kan få opptil <strong>55 000 kr i Enova-støtte</strong> for bergvarmepumpe og opptil 40 000 kr for luft-vann varmepumpe med vannbåren varme. Bruk vår <a href="/kalkulator" data-link style="color:var(--accent);">varmepumpekalkulator</a> for å se nøyaktig hvor mye du kan spare, inkludert tilbakebetalingstid og Enova-støtte for din bolig.
+            </p>
+
+          </div>
+        </div>
+      </section>
+
     </main>
     ${renderFooter()}
   `;
@@ -1146,9 +1223,9 @@ function setupWaterborneCalculator() {
 }
 
 // ─── Routes ──────────────────────────────────────────────
-route('/', () => { renderHome(); });
-route('/kalkulator', () => { renderCalculator(); });
-route('/vannbaren-kalkulator', () => { renderWaterborneCalculator(); });
+route('/', () => { updatePageSEO('/'); renderHome(); });
+route('/kalkulator', () => { updatePageSEO('/kalkulator'); renderCalculator(); });
+route('/vannbaren-kalkulator', () => { updatePageSEO('/vannbaren-kalkulator'); renderWaterborneCalculator(); });
 
 // ─── Init ────────────────────────────────────────────────
 function init() {
