@@ -960,7 +960,6 @@ function calculateHeatPump(areal, byggear, heatingType, strompris, boligtype, et
 
 
 // ─── Waterborne Heating Calculator ──────────────────────
-let wbRooms = [{ name: 'Rom 1', sqm: '' }];
 
 function renderWaterborneCalculator() {
   app.innerHTML = `
@@ -970,57 +969,110 @@ function renderWaterborneCalculator() {
         <div class="container">
           <div class="calculator-hero">
             <h1>Kalkulator for vannbåren varme</h1>
-            <p>Beregn rørmeter, antall kurser og materialforbruk basert på underlag og romstørrelser.</p>
+            <p>Beregn rørmeter, antall kurser og materialforbruk basert på underlag og areal.</p>
           </div>
 
           <div class="wb-calc-card">
-            <div class="wb-calc-section">
-              <h2>Velg type underlag</h2>
-              <p>Underlaget bestemmer masseuttak og oppbygging.</p>
-              <div class="wb-substrate-options" id="wb-substrate-options">
-                <label class="wb-substrate-option active" data-substrate="stoop">
-                  <input type="radio" name="wb-substrate" value="stoop" checked>
-                  <div class="wb-substrate-content">
-                    <strong>Støp</strong>
-                    <span>Betongstøp ~65 mm</span>
-                    <span class="wb-substrate-mass">~150 kg/m²</span>
+            <!-- Step 1: Input -->
+            <div id="wb-step-1">
+              <div class="wb-calc-section">
+                <h2>Velg type underlag</h2>
+                <p>Underlaget bestemmer masseuttak og oppbygging.</p>
+                <div class="wb-substrate-options" id="wb-substrate-options">
+                  <label class="wb-substrate-option active" data-substrate="stoop">
+                    <input type="radio" name="wb-substrate" value="stoop" checked>
+                    <div class="wb-substrate-content">
+                      <strong>Støp</strong>
+                      <span>Betongstøp ~65 mm</span>
+                      <span class="wb-substrate-mass">~150 kg/m²</span>
+                    </div>
+                  </label>
+                  <label class="wb-substrate-option" data-substrate="avretting">
+                    <input type="radio" name="wb-substrate" value="avretting">
+                    <div class="wb-substrate-content">
+                      <strong>Avretting</strong>
+                      <span>Avrettingsmasse ~50 mm</span>
+                      <span class="wb-substrate-mass">~85 kg/m²</span>
+                    </div>
+                  </label>
+                  <label class="wb-substrate-option" data-substrate="sporplater">
+                    <input type="radio" name="wb-substrate" value="sporplater">
+                    <div class="wb-substrate-content">
+                      <strong>Sporplater</strong>
+                      <span>EPS-plater med spor</span>
+                      <span class="wb-substrate-mass">~1,4 plater/m²</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="wb-calc-section">
+                <h2>Areal og rom</h2>
+                <p>Oppgi totalt areal med vannbåren varme og antall rom. Kalkulatoren fordeler arealet jevnt og beregner kurser per rom.</p>
+                <div class="wb-input-row">
+                  <div class="form-group" style="flex:1;margin-bottom:0">
+                    <label class="form-label" for="wb-total-sqm">Totalt areal (m²)</label>
+                    <input type="number" id="wb-total-sqm" class="form-input" min="1" max="2000" placeholder="F.eks. 120">
                   </div>
-                </label>
-                <label class="wb-substrate-option" data-substrate="avretting">
-                  <input type="radio" name="wb-substrate" value="avretting">
-                  <div class="wb-substrate-content">
-                    <strong>Avretting</strong>
-                    <span>Avrettingsmasse ~50 mm</span>
-                    <span class="wb-substrate-mass">~85 kg/m²</span>
+                  <div class="form-group" style="flex:1;margin-bottom:0">
+                    <label class="form-label" for="wb-room-count">Antall rom</label>
+                    <input type="number" id="wb-room-count" class="form-input" min="1" max="50" placeholder="F.eks. 5">
                   </div>
-                </label>
-                <label class="wb-substrate-option" data-substrate="sporplater">
-                  <input type="radio" name="wb-substrate" value="sporplater">
-                  <div class="wb-substrate-content">
-                    <strong>Sporplater</strong>
-                    <span>EPS-plater med spor</span>
-                    <span class="wb-substrate-mass">~1,4 plater/m²</span>
-                  </div>
-                </label>
+                </div>
+              </div>
+
+              <div class="wb-calc-section">
+                <button class="btn btn-primary btn-lg" style="width:100%" id="wb-next-step">
+                  Gå videre
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:8px;vertical-align:middle"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
               </div>
             </div>
 
-            <div class="wb-calc-section">
-              <h2>Rominformasjon</h2>
-              <p>Legg inn rom med areal. Hvert rom beregnes separat for antall kurser.</p>
-              <div class="wb-rooms" id="wb-rooms">
-                ${wbRooms.map((room, i) => renderWbRoomRow(room, i)).join('')}
+            <!-- Step 2: Contact Info -->
+            <div id="wb-step-2" style="display:none">
+              <div class="wb-calc-section">
+                <h2>Få din beregning</h2>
+                <p>Fyll inn kontaktinfo under for å se din fullstendige beregning med rørmeter, kurser og materialforbruk.</p>
+
+                <form id="wb-contact-form" name="vannbaren-leads" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+                  <input type="hidden" name="form-name" value="vannbaren-leads">
+                  <p style="display:none"><input name="bot-field"></p>
+                  <input type="hidden" name="total-kvm" id="wb-form-kvm">
+                  <input type="hidden" name="antall-rom" id="wb-form-rom">
+                  <input type="hidden" name="underlag" id="wb-form-underlag">
+
+                  <div class="form-group">
+                    <label class="form-label" for="wb-navn">Navn</label>
+                    <input type="text" id="wb-navn" name="navn" class="form-input" placeholder="Ditt fulle navn" required>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="wb-epost">E-post</label>
+                      <input type="email" id="wb-epost" name="epost" class="form-input" placeholder="din@epost.no" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="wb-telefon">Telefon</label>
+                      <input type="tel" id="wb-telefon" name="telefon" class="form-input" placeholder="Mobilnummer" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="wb-melding">Eventuell melding</label>
+                    <textarea id="wb-melding" name="melding" class="form-textarea" rows="3" placeholder="F.eks. spesielle ønsker eller spørsmål"></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--space-4)">Se beregning</button>
+                  <button type="button" class="btn btn-outline btn-sm" style="width:100%;margin-top:var(--space-2)" id="wb-back-1">Tilbake</button>
+                </form>
               </div>
-              <button class="btn btn-outline-dark btn-sm" id="wb-add-room" style="margin-top:var(--space-4)">
-                ${icons.plus} Legg til rom
-              </button>
             </div>
 
-            <div class="wb-calc-section">
-              <button class="btn btn-primary btn-lg" style="width:100%" id="wb-calculate">Beregn</button>
+            <!-- Step 3: Results -->
+            <div id="wb-step-3" style="display:none">
+              <div id="wb-results"></div>
             </div>
-
-            <div id="wb-results" style="display:none"></div>
           </div>
         </div>
       </div>
@@ -1032,27 +1084,11 @@ function renderWaterborneCalculator() {
   setupWaterborneCalculator();
 }
 
-function renderWbRoomRow(room, index) {
-  return `
-    <div class="wb-room-row" data-index="${index}">
-      <div class="form-group" style="flex:1;margin-bottom:0">
-        <label class="form-label">Romnavn</label>
-        <input type="text" class="form-input wb-room-name" value="${esc(room.name)}" placeholder="F.eks. Stue">
-      </div>
-      <div class="form-group" style="width:120px;margin-bottom:0">
-        <label class="form-label">m²</label>
-        <input type="number" class="form-input wb-room-sqm" value="${room.sqm}" min="1" max="200" placeholder="m²">
-      </div>
-      ${wbRooms.length > 1 ? `<button class="wb-room-remove" data-index="${index}" title="Fjern rom">${icons.trash}</button>` : ''}
-    </div>
-  `;
-}
-
 function setupWaterborneCalculator() {
   const substrateOptions = document.getElementById('wb-substrate-options');
-  const roomsEl = document.getElementById('wb-rooms');
-  const addRoomBtn = document.getElementById('wb-add-room');
-  const calcBtn = document.getElementById('wb-calculate');
+  const nextBtn = document.getElementById('wb-next-step');
+  const backBtn = document.getElementById('wb-back-1');
+  const form = document.getElementById('wb-contact-form');
 
   substrateOptions.addEventListener('change', (e) => {
     if (e.target.name === 'wb-substrate') {
@@ -1061,66 +1097,63 @@ function setupWaterborneCalculator() {
     }
   });
 
-  function syncRoomsFromDom() {
-    const rows = roomsEl.querySelectorAll('.wb-room-row');
-    wbRooms = Array.from(rows).map(row => ({
-      name: row.querySelector('.wb-room-name').value || 'Rom',
-      sqm: row.querySelector('.wb-room-sqm').value
-    }));
-  }
+  nextBtn.addEventListener('click', () => {
+    const totalSqm = document.getElementById('wb-total-sqm').value;
+    const roomCount = document.getElementById('wb-room-count').value;
 
-  addRoomBtn.addEventListener('click', () => {
-    syncRoomsFromDom();
-    wbRooms.push({ name: `Rom ${wbRooms.length + 1}`, sqm: '' });
-    roomsEl.innerHTML = wbRooms.map((room, i) => renderWbRoomRow(room, i)).join('');
-  });
-
-  roomsEl.addEventListener('click', (e) => {
-    const removeBtn = e.target.closest('.wb-room-remove');
-    if (removeBtn) {
-      syncRoomsFromDom();
-      const idx = parseInt(removeBtn.dataset.index);
-      wbRooms.splice(idx, 1);
-      roomsEl.innerHTML = wbRooms.map((room, i) => renderWbRoomRow(room, i)).join('');
+    if (!totalSqm || parseFloat(totalSqm) <= 0) {
+      showToast('Oppgi totalt areal');
+      return;
     }
-  });
-
-  calcBtn.addEventListener('click', () => {
-    syncRoomsFromDom();
-    const substrate = document.querySelector('input[name="wb-substrate"]:checked').value;
-
-    const validRooms = wbRooms.filter(r => r.sqm && parseFloat(r.sqm) > 0);
-    if (validRooms.length === 0) {
-      showToast('Legg inn minst ett rom med areal');
+    if (!roomCount || parseInt(roomCount) <= 0) {
+      showToast('Oppgi antall rom');
       return;
     }
 
+    const substrate = document.querySelector('input[name="wb-substrate"]:checked').value;
+    document.getElementById('wb-form-kvm').value = totalSqm;
+    document.getElementById('wb-form-rom').value = roomCount;
+    document.getElementById('wb-form-underlag').value = substrate;
+
+    document.getElementById('wb-step-1').style.display = 'none';
+    document.getElementById('wb-step-2').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  backBtn.addEventListener('click', () => {
+    document.getElementById('wb-step-2').style.display = 'none';
+    document.getElementById('wb-step-1').style.display = 'block';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const totalSqm = parseFloat(document.getElementById('wb-form-kvm').value);
+    const roomCount = parseInt(document.getElementById('wb-form-rom').value);
+    const substrate = document.getElementById('wb-form-underlag').value;
+
+    // Submit form to Netlify
+    const formData = new FormData(form);
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      });
+    } catch {
+      // Continue showing results even if submission fails
+    }
+
+    // Calculate
     const PIPE_PER_SQM = 5.5;
     const MAX_PIPE_PER_CIRCUIT = 100;
 
-    let totalSqm = 0;
-    let totalPipe = 0;
-    let totalCircuits = 0;
-    const roomResults = [];
-
-    for (const room of validRooms) {
-      const sqm = parseFloat(room.sqm);
-      const pipe = sqm * PIPE_PER_SQM;
-      const circuits = Math.ceil(pipe / MAX_PIPE_PER_CIRCUIT);
-      const pipePerCircuit = Math.round((pipe / circuits) * 10) / 10;
-
-      totalSqm += sqm;
-      totalPipe += pipe;
-      totalCircuits += circuits;
-
-      roomResults.push({
-        name: room.name,
-        sqm,
-        pipe: Math.round(pipe * 10) / 10,
-        circuits,
-        pipePerCircuit
-      });
-    }
+    const sqmPerRoom = Math.round((totalSqm / roomCount) * 10) / 10;
+    const totalPipe = totalSqm * PIPE_PER_SQM;
+    const pipePerRoom = sqmPerRoom * PIPE_PER_SQM;
+    const circuitsPerRoom = Math.ceil(pipePerRoom / MAX_PIPE_PER_CIRCUIT);
+    const pipePerCircuit = Math.round((pipePerRoom / circuitsPerRoom) * 10) / 10;
+    const totalCircuits = circuitsPerRoom * roomCount;
 
     let massHTML = '';
     if (substrate === 'stoop') {
@@ -1155,42 +1188,41 @@ function setupWaterborneCalculator() {
     }
 
     const resultsEl = document.getElementById('wb-results');
-    resultsEl.style.display = 'block';
+    document.getElementById('wb-step-2').style.display = 'none';
+    document.getElementById('wb-step-3').style.display = 'block';
+
     resultsEl.innerHTML = `
       <div class="wb-calc-section">
         <h2>Resultat</h2>
 
-        <div class="wb-room-results">
-          <table class="wb-table">
-            <thead>
-              <tr>
-                <th>Rom</th>
-                <th>m²</th>
-                <th>Rørmeter</th>
-                <th>Kurser</th>
-                <th>m/kurs</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${roomResults.map(r => `
-                <tr>
-                  <td>${esc(r.name)}</td>
-                  <td>${r.sqm}</td>
-                  <td>${r.pipe} m</td>
-                  <td>${r.circuits}</td>
-                  <td>${r.pipePerCircuit} m</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+        <div class="wb-summary">
+          <h3>Snittforbruk per rom</h3>
+          <div class="wb-result-grid">
+            <div class="wb-result-item">
+              <div class="label">Snitt areal per rom</div>
+              <div class="value">${sqmPerRoom} m²</div>
+            </div>
+            <div class="wb-result-item">
+              <div class="label">Rørmeter per rom</div>
+              <div class="value">${Math.round(pipePerRoom * 10) / 10} m</div>
+            </div>
+            <div class="wb-result-item">
+              <div class="label">Kurser per rom</div>
+              <div class="value">${circuitsPerRoom}</div>
+            </div>
+            <div class="wb-result-item">
+              <div class="label">Meter per kurs</div>
+              <div class="value">${pipePerCircuit} m</div>
+            </div>
+          </div>
         </div>
 
         <div class="wb-summary">
-          <h3>Oppsummering</h3>
+          <h3>Totalt</h3>
           <div class="wb-result-grid">
             <div class="wb-result-item">
               <div class="label">Antall rom</div>
-              <div class="value">${validRooms.length}</div>
+              <div class="value">${roomCount}</div>
             </div>
             <div class="wb-result-item">
               <div class="label">Totalt areal</div>
@@ -1213,12 +1245,12 @@ function setupWaterborneCalculator() {
         </div>
 
         <div class="wb-info-box">
-          <strong>Beregningsgrunnlag:</strong> 5,5 meter rør per m², maks 100 meter per kurs. Rom som krever mer enn 100 m rør deles opp i like kurser. Hver kurs tilsvarer én utgang på fordeleren.
+          <strong>Beregningsgrunnlag:</strong> 5,5 meter rør per m², maks 100 meter per kurs. Arealet er fordelt jevnt mellom ${roomCount} rom (ca. ${sqmPerRoom} m² per rom). Rom som krever mer enn 100 m rør deles opp i like kurser.
         </div>
       </div>
     `;
 
-    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
