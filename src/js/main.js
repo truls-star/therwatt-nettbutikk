@@ -256,25 +256,65 @@ function renderCalculator() {
     <main class="main">
       <div class="calculator-page">
         <div class="container">
+
+          <!-- Hero Section -->
           <div class="calculator-hero">
-            <h1>Varmepumpekalkulator</h1>
-            <p>Fyll inn opplysninger om boligen din for å få en beregning av anbefalt varmepumpe.</p>
+            <div class="calc-hero-badge">Norges mest informative varmepumpekalkulator</div>
+            <h1>Hvor mye kan du spare med varmepumpe?</h1>
+            <p>Beregn besparelse, tilbakebetalingstid og anbefalt varmepumpe basert på din bolig. Oppdatert med markedsdata for 2026.</p>
           </div>
 
+          <!-- Benefits Bar -->
+          <div class="calc-benefits-bar">
+            <div class="calc-benefit-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              <span>Spar 50–70 % på oppvarming</span>
+            </div>
+            <div class="calc-benefit-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <span>Tilbakebetalt på 3–6 år</span>
+            </div>
+            <div class="calc-benefit-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+              <span>Opptil 55 000 kr i Enova-støtte</span>
+            </div>
+          </div>
+
+          <!-- Calculator Card -->
           <div class="calculator-card">
             <div class="calculator-progress">
-              <div class="calculator-progress-step active" id="prog-1"></div>
-              <div class="calculator-progress-step" id="prog-2"></div>
-              <div class="calculator-progress-step" id="prog-3"></div>
+              <div class="calculator-progress-step active" id="prog-1">
+                <span class="prog-label">1. Bolig</span>
+              </div>
+              <div class="calculator-progress-step" id="prog-2">
+                <span class="prog-label">2. Kontakt</span>
+              </div>
+              <div class="calculator-progress-step" id="prog-3">
+                <span class="prog-label">3. Resultat</span>
+              </div>
             </div>
 
+            <!-- Step 1: Building Information -->
             <div id="calc-step-1" class="calculator-step">
-              <h2>Boliginformasjon</h2>
-              <p>Oppgi grunnleggende informasjon om boligen.</p>
+              <h2>Om din bolig</h2>
+              <p>Jo mer nøyaktig informasjon, desto bedre beregning. Alle felt er påkrevd.</p>
 
-              <div class="form-group">
-                <label class="form-label" for="calc-areal">Boligareal (m²)</label>
-                <input type="number" id="calc-areal" class="form-input" min="20" max="500" required>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="calc-areal">Boligareal (m²)</label>
+                  <input type="number" id="calc-areal" class="form-input" min="20" max="500" placeholder="F.eks. 120" required>
+                  <span class="form-hint">Oppvarmet areal</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="calc-boligtype">Boligtype</label>
+                  <select id="calc-boligtype" class="form-select" required>
+                    <option value="">Velg boligtype</option>
+                    <option value="enebolig">Enebolig</option>
+                    <option value="rekkehus">Rekkehus</option>
+                    <option value="tomannsbolig">Tomannsbolig</option>
+                    <option value="leilighet">Leilighet</option>
+                  </select>
+                </div>
               </div>
 
               <div class="form-row">
@@ -288,26 +328,48 @@ function renderCalculator() {
                     <option value="2000-2010">2000–2010</option>
                     <option value="post2010">Etter 2010</option>
                   </select>
+                  <span class="form-hint">Påvirker energibehov</span>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="calc-type">Oppvarmingstype</label>
+                  <label class="form-label" for="calc-type">Nåværende oppvarming</label>
                   <select id="calc-type" class="form-select" required>
                     <option value="">Velg type</option>
-                    <option value="electric">Elektrisk</option>
-                    <option value="oil">Olje</option>
+                    <option value="electric">Panelovner / elektrisk</option>
+                    <option value="oil">Oljefyr</option>
                     <option value="district">Fjernvarme</option>
-                    <option value="wood">Ved/pellets</option>
+                    <option value="wood">Ved / pellets</option>
                     <option value="gas">Gass</option>
+                    <option value="old_hp">Gammel varmepumpe (10+ år)</option>
                   </select>
                 </div>
               </div>
 
-              <button class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--space-4)" id="calc-next-1">Neste steg</button>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="calc-strompris">Strømpris (kr/kWh)</label>
+                  <input type="number" id="calc-strompris" class="form-input" min="0.5" max="5" step="0.1" value="1.50" required>
+                  <span class="form-hint">Inkl. nettleie og avgifter. Snitt 2026: ~1,50 kr</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="calc-etasjer">Antall etasjer</label>
+                  <select id="calc-etasjer" class="form-select" required>
+                    <option value="1">1 etasje</option>
+                    <option value="2" selected>2 etasjer</option>
+                    <option value="3">3 etasjer</option>
+                  </select>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--space-4)" id="calc-next-1">
+                Beregn besparelse
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:8px;vertical-align:middle"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
             </div>
 
+            <!-- Step 2: Contact Information -->
             <div id="calc-step-2" class="calculator-step" style="display:none">
-              <h2>Kontaktinformasjon</h2>
-              <p>Vi trenger kontaktinformasjonen din for å sende deg beregningen.</p>
+              <h2>Få din personlige beregning</h2>
+              <p>Fyll inn kontaktinfo under for å se din fullstendige besparelseberegning med anbefalt varmepumpe, tilbakebetalingstid og Enova-støtte.</p>
 
               <form id="calc-form" name="leads" method="POST" data-netlify="true" netlify-honeypot="bot-field">
                 <input type="hidden" name="form-name" value="leads">
@@ -318,43 +380,97 @@ function renderCalculator() {
 
                 <div class="form-group">
                   <label class="form-label" for="calc-navn">Navn</label>
-                  <input type="text" id="calc-navn" name="navn" class="form-input" required>
+                  <input type="text" id="calc-navn" name="navn" class="form-input" placeholder="Ditt fulle navn" required>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group">
                     <label class="form-label" for="calc-epost">E-post</label>
-                    <input type="email" id="calc-epost" name="epost" class="form-input" required>
+                    <input type="email" id="calc-epost" name="epost" class="form-input" placeholder="din@epost.no" required>
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="calc-telefon">Telefon</label>
-                    <input type="tel" id="calc-telefon" name="telefon" class="form-input" required>
+                    <input type="tel" id="calc-telefon" name="telefon" class="form-input" placeholder="Mobilnummer" required>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="form-label" for="calc-melding">Eventuell melding</label>
-                  <textarea id="calc-melding" name="melding" class="form-textarea" rows="3"></textarea>
+                  <textarea id="calc-melding" name="melding" class="form-textarea" rows="3" placeholder="F.eks. spesielle ønsker eller spørsmål"></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--space-4)">Send og se resultat</button>
+                <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--space-4)">Se full beregning</button>
+                <button type="button" class="btn btn-outline btn-sm" style="width:100%;margin-top:var(--space-2)" id="calc-back-1">Tilbake</button>
               </form>
             </div>
 
+            <!-- Step 3: Results -->
             <div id="calc-step-3" class="calculator-step" style="display:none">
-              <div class="success-state" style="padding:0">
-                <div class="success-icon">${icons.check}</div>
-                <h2>Takk for din henvendelse!</h2>
-                <p>Vi har mottatt informasjonen din og tar kontakt med deg.</p>
-              </div>
-
-              <div class="calc-results" id="calc-results"></div>
-
-              <div style="text-align:center;margin-top:var(--space-6)">
-                <a href="/butikk" class="btn btn-primary btn-lg" data-link>Se våre produkter</a>
-              </div>
+              <div class="calc-results-full" id="calc-results"></div>
             </div>
           </div>
+
+          <!-- Info Sections Below Calculator -->
+          <div class="calc-info-sections">
+
+            <div class="calc-info-section">
+              <div class="calc-info-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div>
+                <h3>Hva koster en varmepumpe i 2026?</h3>
+                <p>En <strong>luft-til-luft</strong> varmepumpe koster 15 000–45 000 kr inkl. montering og gir 30–60 % besparelse. <strong>Luft-til-vann</strong> koster 100 000–170 000 kr og dekker 70–80 % av varmebehovet, inkludert varmtvann. <strong>Bergvarme</strong> (væske-til-vann) koster 150 000–300 000 kr, men gir best ytelse og 20–30 års levetid.</p>
+              </div>
+            </div>
+
+            <div class="calc-info-section">
+              <div class="calc-info-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m8 17 4 4 4-4"/></svg>
+              </div>
+              <div>
+                <h3>Enova-støtte i 2026</h3>
+                <p>Enova gir <strong>opptil 40 000 kr</strong> for bergvarme og <strong>opptil 20 000 kr</strong> for luft-til-vann. Kombinerer du med akkumulatortank og energistyring, kan du få <strong>opptil 55 000 kr</strong> i tilskudd. Søknaden må sendes <em>før</em> du starter prosjektet. Luft-til-luft varmepumper får ikke Enova-støtte.</p>
+              </div>
+            </div>
+
+            <div class="calc-info-section">
+              <div class="calc-info-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div>
+                <h3>Hva er COP og SCOP?</h3>
+                <p><strong>COP</strong> (Coefficient of Performance) viser hvor mye varme du får per kWh strøm. En COP på 4 betyr 4 kWh varme for 1 kWh strøm. <strong>SCOP</strong> er gjennomsnittet over hele fyringssesongen – et mer realistisk mål. Velg alltid en varmepumpe med SCOP på minimum 3,5 for norske forhold. Moderne A+++ pumper kan ha SCOP opptil 5,5.</p>
+              </div>
+            </div>
+
+            <div class="calc-info-section">
+              <div class="calc-info-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
+              <div>
+                <h3>Hvilken type passer for deg?</h3>
+                <p><strong>Luft-til-luft:</strong> Best for leiligheter og mindre hus. Enkel og rimelig. <strong>Luft-til-vann:</strong> Ideell for boliger med vannbåren gulvvarme eller radiatorer – varmer også tappevann. <strong>Bergvarme:</strong> Best for store eneboliger med høyt forbruk – jevn effekt hele året, helt støyfri, og lengst levetid.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Trust Section -->
+          <div class="calc-trust-section">
+            <div class="calc-trust-item">
+              <div class="calc-trust-number">1 000 000+</div>
+              <div class="calc-trust-label">Varmepumper installert i Norge</div>
+            </div>
+            <div class="calc-trust-item">
+              <div class="calc-trust-number">50 %</div>
+              <div class="calc-trust-label">Av norske hjem bruker varmepumpe</div>
+            </div>
+            <div class="calc-trust-item">
+              <div class="calc-trust-number">15–20 år</div>
+              <div class="calc-trust-label">Forventet levetid ved godt vedlikehold</div>
+            </div>
+          </div>
+
         </div>
       </div>
     </main>
@@ -368,13 +484,16 @@ function renderCalculator() {
 function setupCalculator() {
   const nextBtn = document.getElementById('calc-next-1');
   const form = document.getElementById('calc-form');
+  const backBtn = document.getElementById('calc-back-1');
 
   nextBtn.addEventListener('click', () => {
     const areal = document.getElementById('calc-areal').value;
+    const boligtype = document.getElementById('calc-boligtype').value;
     const byggear = document.getElementById('calc-byggear').value;
     const type = document.getElementById('calc-type').value;
+    const strompris = document.getElementById('calc-strompris').value;
 
-    if (!areal || !byggear || !type) {
+    if (!areal || !boligtype || !byggear || !type) {
       showToast('Vennligst fyll inn alle felt');
       return;
     }
@@ -384,9 +503,18 @@ function setupCalculator() {
     document.getElementById('form-byggear').value = byggear;
     document.getElementById('form-type').value = type;
 
+    // No preview shown — contact info required before seeing any results
+
     document.getElementById('calc-step-1').style.display = 'none';
     document.getElementById('calc-step-2').style.display = 'block';
     document.getElementById('prog-2').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  backBtn.addEventListener('click', () => {
+    document.getElementById('calc-step-2').style.display = 'none';
+    document.getElementById('calc-step-1').style.display = 'block';
+    document.getElementById('prog-2').classList.remove('active');
   });
 
   form.addEventListener('submit', async (e) => {
@@ -395,6 +523,9 @@ function setupCalculator() {
     const areal = parseFloat(document.getElementById('form-areal').value);
     const byggear = document.getElementById('form-byggear').value;
     const type = document.getElementById('form-type').value;
+    const strompris = parseFloat(document.getElementById('calc-strompris').value);
+    const boligtype = document.getElementById('calc-boligtype').value;
+    const etasjer = parseInt(document.getElementById('calc-etasjer').value);
 
     // Submit to Netlify
     const formData = new FormData(form);
@@ -409,38 +540,160 @@ function setupCalculator() {
     }
 
     // Calculate results
-    const result = calculateHeatPump(areal, byggear);
+    const result = calculateHeatPump(areal, byggear, type, strompris, boligtype, etasjer);
 
     document.getElementById('calc-step-2').style.display = 'none';
     document.getElementById('calc-step-3').style.display = 'block';
     document.getElementById('prog-3').classList.add('active');
 
-    document.getElementById('calc-results').innerHTML = `
-      <h3>Din beregning</h3>
-      <div class="calc-result-grid">
-        <div class="calc-result-item">
-          <div class="label">Anbefalt effekt</div>
-          <div class="value">${result.kw} kW</div>
-        </div>
-        <div class="calc-result-item">
-          <div class="label">Estimert besparelse</div>
-          <div class="value">${result.savingsKwh.toLocaleString('nb-NO')} kWh/år</div>
-        </div>
-        <div class="calc-result-item">
-          <div class="label">Boligareal</div>
-          <div class="value">${areal} m²</div>
-        </div>
-        <div class="calc-result-item">
-          <div class="label">Pumpe-type</div>
-          <div class="value">${result.type}</div>
-        </div>
-      </div>
-    `;
+    document.getElementById('calc-results').innerHTML = renderCalcResults(result, areal, strompris);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
-function calculateHeatPump(areal, byggear) {
-  // Energy factor based on build year (kWh/m²)
+function renderCalcResults(r, areal, strompris) {
+  // Build comparison bars
+  const maxCost = r.currentCostNok;
+  const currentPct = 100;
+  const hpPct = Math.round((r.heatPumpCostNok / maxCost) * 100);
+
+  // Enova text
+  let enovaHTML = '';
+  if (r.enovaSupport > 0) {
+    enovaHTML = `
+      <div class="calc-enova-box">
+        <div class="calc-enova-badge">Enova-støtte</div>
+        <div class="calc-enova-amount">Opptil ${r.enovaSupport.toLocaleString('nb-NO')} kr</div>
+        <div class="calc-enova-desc">${r.enovaDesc}</div>
+        <div class="calc-enova-note">Med Enova-støtte synker nettoinvesteringen til <strong>${(r.investmentLow - r.enovaSupport > 0 ? r.investmentLow - r.enovaSupport : 0).toLocaleString('nb-NO')}–${(r.investmentHigh - r.enovaSupport).toLocaleString('nb-NO')} kr</strong></div>
+      </div>
+    `;
+  } else {
+    enovaHTML = `
+      <div class="calc-enova-box calc-enova-box--info">
+        <div class="calc-enova-badge">Info om Enova-støtte</div>
+        <div class="calc-enova-desc">Luft-til-luft varmepumper får ikke Enova-støtte, men er allerede en svært lønnsom investering med kort tilbakebetalingstid.</div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="calc-results-header">
+      <div class="success-icon">${icons.check}</div>
+      <h2>Din varmepumpeberegning</h2>
+      <p>Basert på ${areal} m², byggeår ${r.byggearLabel}, ${r.heatingLabel}</p>
+    </div>
+
+    <!-- Highlight Card: Annual Savings -->
+    <div class="calc-savings-highlight">
+      <div class="calc-savings-main">
+        <div class="calc-savings-amount">${r.savingsKwh.toLocaleString('nb-NO')} kWh</div>
+        <div class="calc-savings-period">estimert årlig besparelse</div>
+      </div>
+      <div class="calc-savings-detail">
+        <span>${r.co2Savings} kg CO₂ reduksjon per år</span>
+      </div>
+    </div>
+
+    <!-- Key Metrics Grid -->
+    <div class="calc-result-grid">
+      <div class="calc-result-item calc-result-item--accent">
+        <div class="calc-result-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="label">Anbefalt effekt</div>
+        <div class="value">${r.kw} kW</div>
+      </div>
+      <div class="calc-result-item">
+        <div class="calc-result-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="label">Anbefalt type</div>
+        <div class="value">${r.type}</div>
+      </div>
+      <div class="calc-result-item">
+        <div class="calc-result-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="label">Tilbakebetalingstid</div>
+        <div class="value">${r.paybackYears}</div>
+      </div>
+      <div class="calc-result-item">
+        <div class="calc-result-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="label">Estimert investering</div>
+        <div class="value">${r.investmentLabel}</div>
+      </div>
+    </div>
+
+    <!-- Cost Comparison -->
+    <div class="calc-comparison">
+      <h3>Sammenligning av årlige oppvarmingskostnader</h3>
+      <div class="calc-comparison-bars">
+        <div class="calc-bar-row">
+          <div class="calc-bar-label">I dag (${r.heatingLabel})</div>
+          <div class="calc-bar-track">
+            <div class="calc-bar-fill calc-bar-fill--current" style="width:${currentPct}%"></div>
+          </div>
+          <div class="calc-bar-value">${r.currentCostNok.toLocaleString('nb-NO')} kr/år</div>
+        </div>
+        <div class="calc-bar-row">
+          <div class="calc-bar-label">Med ${r.type}</div>
+          <div class="calc-bar-track">
+            <div class="calc-bar-fill calc-bar-fill--hp" style="width:${hpPct}%"></div>
+          </div>
+          <div class="calc-bar-value">${r.heatPumpCostNok.toLocaleString('nb-NO')} kr/år</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enova -->
+    ${enovaHTML}
+
+    <!-- Lifetime Savings -->
+    <div class="calc-lifetime-box">
+      <h3>Besparelse over levetiden</h3>
+      <div class="calc-lifetime-grid">
+        <div class="calc-lifetime-item">
+          <div class="calc-lifetime-value">${r.savingsKwh10yr.toLocaleString('nb-NO')} kWh</div>
+          <div class="calc-lifetime-label">Over 10 år</div>
+        </div>
+        <div class="calc-lifetime-item">
+          <div class="calc-lifetime-value">${r.savingsKwh15yr.toLocaleString('nb-NO')} kWh</div>
+          <div class="calc-lifetime-label">Over 15 år</div>
+        </div>
+        <div class="calc-lifetime-item calc-lifetime-item--highlight">
+          <div class="calc-lifetime-value">${r.savingsKwhLifetime.toLocaleString('nb-NO')} kWh</div>
+          <div class="calc-lifetime-label">Over levetiden (${r.lifetime} år)</div>
+        </div>
+      </div>
+      <div class="calc-lifetime-note">Faktisk besparelse avhenger av strømpris og bruksmønster.</div>
+    </div>
+
+    <!-- Type Description -->
+    <div class="calc-type-info">
+      <h3>Hvorfor ${r.type}?</h3>
+      <p>${r.typeDescription}</p>
+      <ul class="calc-type-features">
+        ${r.typeFeatures.map(f => `<li>${f}</li>`).join('')}
+      </ul>
+    </div>
+
+    <!-- CTA -->
+    <div class="calc-cta-box">
+      <h3>Klar for neste steg?</h3>
+      <p>Vi hjelper deg med å finne den perfekte varmepumpen for din bolig – fra rådgivning til ferdig installert anlegg.</p>
+      <div class="calc-cta-buttons">
+        <a href="tel:+4790280156" class="btn btn-primary btn-lg">Ring oss: 902 80 156</a>
+        <a href="mailto:post@therwatt.no" class="btn btn-outline btn-lg">Send e-post</a>
+      </div>
+    </div>
+  `;
+}
+
+function calculateHeatPump(areal, byggear, heatingType, strompris, boligtype, etasjer) {
+  // Energy factors (kWh/m² per year) based on building age - from Norwegian building standards
   const energyFactors = {
     'pre1960': 200,
     '1960-1980': 170,
@@ -449,22 +702,182 @@ function calculateHeatPump(areal, byggear) {
     'post2010': 80
   };
 
-  const energyNeed = areal * (energyFactors[byggear] || 140);
-  // COP of heat pump (typical)
-  const cop = 3.5;
-  const heatPumpEnergy = energyNeed / cop;
-  const savingsKwh = Math.round(energyNeed - heatPumpEnergy);
+  const byggearLabels = {
+    'pre1960': 'Før 1960',
+    '1960-1980': '1960–1980',
+    '1980-2000': '1980–2000',
+    '2000-2010': '2000–2010',
+    'post2010': 'Etter 2010'
+  };
 
-  // Required kW (peak load)
-  const kw = Math.round((energyNeed / 2000) * 10) / 10;
+  const heatingLabels = {
+    'electric': 'Panelovner',
+    'oil': 'Oljefyr',
+    'district': 'Fjernvarme',
+    'wood': 'Ved/pellets',
+    'gas': 'Gass',
+    'old_hp': 'Gammel varmepumpe'
+  };
 
-  // Pump type recommendation
-  let pumpType;
-  if (areal < 80) pumpType = 'Luft-luft';
-  else if (areal < 200) pumpType = 'Luft-vann';
-  else pumpType = 'Væske-vann';
+  // Cost per kWh for existing heating source
+  const heatingCostPerKwh = {
+    'electric': 1.0,
+    'oil': 1.1,
+    'district': 0.85,
+    'wood': 0.50,
+    'gas': 1.2,
+    'old_hp': 0.55
+  };
 
-  return { kw: Math.max(3, Math.min(20, kw)), savingsKwh: Math.max(0, savingsKwh), type: pumpType };
+  // Adjustment for building type (heat loss through shared walls)
+  const boligtypeFactors = {
+    'enebolig': 1.0,
+    'rekkehus': 0.85,
+    'tomannsbolig': 0.90,
+    'leilighet': 0.70
+  };
+
+  // Base energy need
+  const baseFactor = energyFactors[byggear] || 140;
+  const boligtypeFactor = boligtypeFactors[boligtype] || 1.0;
+  const energyNeed = Math.round(areal * baseFactor * boligtypeFactor);
+
+  // About 58% of total electricity goes to heating (SSB data)
+  const heatingShare = 0.58;
+  const heatingEnergy = Math.round(energyNeed * heatingShare);
+
+  // Determine pump type and SCOP based on area, building type, and floors
+  let pumpType, scop, investmentLow, investmentHigh, lifetime, enovaSupport, enovaDesc;
+  let typeDescription, typeFeatures;
+
+  if (areal < 70 || boligtype === 'leilighet') {
+    pumpType = 'Luft-til-luft';
+    scop = 3.5;
+    investmentLow = 15000;
+    investmentHigh = 45000;
+    lifetime = 15;
+    enovaSupport = 0;
+    enovaDesc = '';
+    typeDescription = 'Luft-til-luft er den mest kostnadseffektive varmepumpen og passer utmerket for din bolig. Den henter varme fra uteluften og leverer den direkte inn i rommet. Enkel installasjon og rask tilbakebetalingstid.';
+    typeFeatures = [
+      'Rimeligst å installere – rask tilbakebetalingstid',
+      'SCOP opptil 5,5 på moderne modeller',
+      'Gir også kjøling om sommeren',
+      'Enkel installasjon på 1 dag',
+      'Reduserer strømforbruk for oppvarming med 30–60 %'
+    ];
+  } else if (areal < 200 || boligtype === 'rekkehus') {
+    pumpType = 'Luft-til-vann';
+    scop = 3.0;
+    investmentLow = 100000;
+    investmentHigh = 170000;
+    lifetime = 20;
+    enovaSupport = 20000;
+    enovaDesc = 'Du kan søke Enova om opptil 20 000 kr i tilskudd for luft-til-vann varmepumpe. Legg til akkumulatortank (+5 000 kr) for totalt 25 000 kr.';
+    typeDescription = 'Luft-til-vann er ideell for boliger med vannbåren gulvvarme eller radiatorer. Den varmer både boligen og tappevannet, og dekker typisk 70–80 % av det årlige varmebehovet.';
+    typeFeatures = [
+      'Varmer hele huset via vannbårent anlegg',
+      'Produserer også varmtvann til dusj og tappepunkter',
+      'Dekker 70–80 % av årlig varmebehov',
+      'Kvalifiserer for Enova-støtte',
+      'SCOP 2,5–3,0 under norske forhold'
+    ];
+  } else {
+    pumpType = 'Bergvarme (væske-til-vann)';
+    scop = 3.5;
+    investmentLow = 200000;
+    investmentHigh = 350000;
+    lifetime = 25;
+    enovaSupport = 40000;
+    enovaDesc = 'Du kan søke Enova om opptil 40 000 kr for bergvarme. Med akkumulatortank og energistyring kan du få opptil 55 000 kr totalt.';
+    typeDescription = 'Bergvarme er det mest effektive og langvarige valget for store boliger. Varmepumpen henter stabil varme fra berggrunnen via en energibrønn, og gir jevn ytelse hele året – uavhengig av utetemperatur.';
+    typeFeatures = [
+      'Jevn, høy effekt hele året – uavhengig av utetemperatur',
+      'Lengst levetid: 20–30 år',
+      'Helt støyfri drift',
+      'Best langsiktig økonomi av alle typer',
+      'Høyest Enova-støtte – opptil 55 000 kr med tilleggstiltak'
+    ];
+  }
+
+  // Adjust SCOP for multi-story buildings (slightly lower efficiency for luft-luft)
+  if (pumpType === 'Luft-til-luft' && etasjer >= 2) {
+    scop = Math.max(2.8, scop - 0.3); // Reduced efficiency when warming multiple floors
+  }
+
+  // Calculate heat pump coverage
+  const hpCoverage = pumpType === 'Luft-til-luft' ? 0.55 : 0.80;
+  const hpHeatingEnergy = Math.round(heatingEnergy * hpCoverage);
+  const hpElectricity = Math.round(hpHeatingEnergy / scop);
+  const remainingElectric = heatingEnergy - hpHeatingEnergy;
+
+  // Current cost
+  const effectiveCostPerKwh = heatingCostPerKwh[heatingType] || 1.0;
+  const currentCostNok = Math.round(heatingEnergy * strompris * effectiveCostPerKwh);
+
+  // Heat pump cost
+  const heatPumpCostNok = Math.round((hpElectricity + remainingElectric) * strompris);
+
+  // Savings
+  const savingsKwh = Math.round(hpHeatingEnergy - hpElectricity);
+  const savingsNok = Math.max(0, currentCostNok - heatPumpCostNok);
+
+  // Required kW (peak load based on design temp)
+  const peakFactor = pumpType === 'Luft-til-luft' ? 2200 : 1800;
+  const rawKw = (heatingEnergy / peakFactor);
+  const kw = Math.max(3, Math.min(20, Math.round(rawKw * 10) / 10));
+
+  // Payback
+  const avgInvestment = (investmentLow + investmentHigh) / 2;
+  const netInvestment = avgInvestment - enovaSupport;
+  const paybackRaw = savingsNok > 0 ? netInvestment / savingsNok : 99;
+  const paybackYears = paybackRaw < 1 ? 'Under 1 år' :
+    paybackRaw > 20 ? 'Over 20 år' :
+    `${Math.round(paybackRaw * 10) / 10} år`;
+
+  // Lifetime savings (kWh)
+  const savingsKwh10yr = Math.round(savingsKwh * 10);
+  const savingsKwh15yr = Math.round(savingsKwh * 15);
+  const savingsKwhLifetime = Math.round(savingsKwh * lifetime);
+
+  // Lifetime savings (kr, for internal use)
+  const savings10yr = Math.round(savingsNok * 10 - netInvestment);
+  const savings15yr = Math.round(savingsNok * 15 - netInvestment);
+  const savingsLifetime = Math.round(savingsNok * lifetime - netInvestment);
+
+  // CO2 savings (Norwegian grid ~8g CO2/kWh, but total savings contribute to less fossil use)
+  const co2Savings = Math.round(savingsKwh * 0.132);
+
+  // Investment label
+  const investmentLabel = `${Math.round(investmentLow / 1000)}–${Math.round(investmentHigh / 1000)}k kr`;
+
+  return {
+    kw,
+    savingsKwh: Math.max(0, savingsKwh),
+    savingsNok: Math.max(0, savingsNok),
+    type: pumpType,
+    scop,
+    currentCostNok: Math.max(0, currentCostNok),
+    heatPumpCostNok: Math.max(0, heatPumpCostNok),
+    investmentLow,
+    investmentHigh,
+    investmentLabel,
+    paybackYears,
+    lifetime,
+    enovaSupport,
+    enovaDesc,
+    savings10yr: Math.max(0, savings10yr),
+    savings15yr: Math.max(0, savings15yr),
+    savingsLifetime: Math.max(0, savingsLifetime),
+    savingsKwh10yr,
+    savingsKwh15yr,
+    savingsKwhLifetime,
+    co2Savings: Math.max(0, co2Savings),
+    typeDescription,
+    typeFeatures,
+    byggearLabel: byggearLabels[byggear] || byggear,
+    heatingLabel: heatingLabels[heatingType] || heatingType
+  };
 }
 
 
